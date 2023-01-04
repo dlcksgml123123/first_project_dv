@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "member_info")
-public class MemberInfoEntity {
+@Builder
+public class MbMemberInfoEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mi_seq") private Long miSeq ;
     @Column(name = "mi_id") private String miId;
@@ -26,3 +28,4 @@ public class MemberInfoEntity {
     @Column(name = "mi_address") private String miAddress;
     @Column(name = "mi_status") private Integer miStatus;
 }
+
