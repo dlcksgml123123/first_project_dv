@@ -40,4 +40,10 @@ public class MbMemberAPIController {
     Map<String, Object> resultMap = mService.searchMemberId(data);
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
+
+  @PostMapping("/searchPwd")
+  public ResponseEntity<Object> memberSearchPwd(@RequestBody MbMemberVO data) throws Exception{
+    Map<String, Object> resultMap = mService.searchMemberPwd(data);
+    return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+  }
 }

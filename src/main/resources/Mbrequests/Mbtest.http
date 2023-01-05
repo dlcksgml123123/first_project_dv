@@ -25,3 +25,11 @@ content-type: application/json
 {
    "miPhone" : "010-5017-5017"
 }
+#################################################
+POST http://192.168.0.114:9244/member/searchPwd HTTP/1.1
+content-type: application/json
+
+{
+   "miId" : "user14",
+   "miPhone" : "010-5017-1234"
+}

@@ -81,4 +81,24 @@ public Map<String, Object> loginMember(MbLoginVO data) {
     }
     return resultMap;
   }
+
+  public Map<String, Object> searchMemberPwd(MbMemberVO data) throws Exception{
+    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    MbMemberInfoEntity User = null;
+    try {
+    User = m_repo.findByMiIdAndMiPhone(data.getMiId(),data.getMiPhone());
+   }catch(Exception e) {e.printStackTrace();}
+    if(User == null) {
+      resultMap.put("status", false);
+      resultMap.put("message", "해당하는 정보가 없습니다");
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else{
+      resultMap.put("status", true);
+      resultMap.put("message", "고객님의 비밀번호를 찾았습니다");
+      resultMap.put("code", HttpStatus.ACCEPTED);
+      resultMap.put("UserPwd", MbAESAlgorithm.Decrypt(User.getMiPwd()));
+    }
+    return resultMap;
+  }
 }
