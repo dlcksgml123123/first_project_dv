@@ -28,8 +28,8 @@ class MbYogioApplicationTests {
 	@Test
   @Transactional
 	void testLogin() { //로그인테스트, 암호화한건 안됨
-		String id = "user11";
-		String pwd = "4g9CwF3G17sk3kn/7DQTeQ==";
+		String id = "user001";
+		String pwd = "1233";
 		MbMemberInfoEntity loginUser = mRepo.findByMiIdAndMiPwd(id, pwd);
 		assertNotEquals(loginUser,null); 
 		}
@@ -38,6 +38,11 @@ class MbYogioApplicationTests {
 	void duplicatedTest() { //아이디 중복 테스트
 		Integer cnt = mRepo.countByMiId("user12");
 		assertEquals(cnt, 1);		
+	}
+
+	@Test
+	void searchMemberId() { //아이디 찾기
+		
 	}
 }	
 

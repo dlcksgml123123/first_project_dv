@@ -1,0 +1,27 @@
+POST http://192.168.0.114:9244/member/login HTTP/1.1
+content-type: application/json
+
+{
+   "miId" : "user11",
+   "miPwd" : "1234"
+}
+#################################################
+PUT http://192.168.0.114:9244/member/join HTTP/1.1
+content-type: application/json
+
+{
+  "miId" : "user15", 
+  "miPwd" : "57731244", 
+  "miEmail" : "user012@naver.com", 
+  "miPhone" : "010-5017-1234", 
+  "miNickname" : "차대민", 
+  "miAddress" : "대구시 중구 삼덕동1가 3-5", 
+  "miStatus" : "0"
+}
+#################################################
+POST http://192.168.0.114:9244/member/searchId HTTP/1.1
+content-type: application/json
+
+{
+   "miPhone" : "010-5017-5017"
+}
