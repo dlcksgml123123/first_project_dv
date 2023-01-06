@@ -1,5 +1,6 @@
 package com.greenart.yogio.member.api;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
@@ -44,6 +46,14 @@ public class MbMemberAPIController {
   @PostMapping("/searchPwd")
   public ResponseEntity<Object> memberSearchPwd(@RequestBody MbMemberVO data) throws Exception{
     Map<String, Object> resultMap = mService.searchMemberPwd(data);
+    return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+  }
+
+  @PostMapping("/deleteMember")
+  public ResponseEntity<Object> memberDelete(MbMemberVO data, HttpSession session) throws Exception{
+    Map <String ,Object> resultMap = new LinkedHashMap<String, Object>();
+    mService.deleteMember(data, session);
+    resultMap.put("status", true);
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 }

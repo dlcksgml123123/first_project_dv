@@ -1,5 +1,6 @@
 package com.greenart.yogio.member.service;
 
+import java.lang.reflect.Member;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,6 +13,9 @@ import com.greenart.yogio.member.repository.MbMemberInfoRepository;
 import com.greenart.yogio.member.vo.MbLoginVO;
 import com.greenart.yogio.member.vo.MbMemberVO;
 import com.greenart.yogio.utils.MbAESAlgorithm;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @Service
 public class MbMemberService {
@@ -98,6 +102,32 @@ public Map<String, Object> loginMember(MbLoginVO data) {
       resultMap.put("message", "고객님의 비밀번호를 찾았습니다");
       resultMap.put("code", HttpStatus.ACCEPTED);
       resultMap.put("UserPwd", MbAESAlgorithm.Decrypt(User.getMiPwd()));
+    }
+    return resultMap;
+  }
+  
+  @Transactional
+  public Map<String, Object> deleteMember(MbMemberVO data, HttpSession session) throws Exception{
+    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
+    MbMemberInfoEntity User = null;
+    User = m_repo.findByMiId(data.getMiId());
+    if(loginUser == null) {
+      resultMap.put("status", false);
+      resultMap.put("message", "로그인 후 사용가능합니다");
+      resultMap.put("code",HttpStatus.FORBIDDEN);
+      return resultMap;
+    }
+    else if(User == null) {
+      resultMap.put("status", false);
+      resultMap.put("message", "잘못된 비밀번호입니다");
+      resultMap.put("code",HttpStatus.FORBIDDEN);
+    }
+    else {
+      m_repo.deleteByMiId(User.getMiId());
+      resultMap.put("status", true);
+      resultMap.put("message", "회원정보가 삭제 되었습니다");
+      resultMap.put("code",HttpStatus.OK);
     }
     return resultMap;
   }
