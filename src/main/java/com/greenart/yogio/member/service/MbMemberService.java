@@ -111,7 +111,6 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     return resultMap;
   }
   
-  @Transactional
   public Map<String, Object> deleteMember(MbMemberVO data, HttpSession session) throws Exception{ //회원탈퇴
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
@@ -120,14 +119,19 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     if(loginUser == null) {
       resultMap.put("status", false);
       resultMap.put("message", "로그인 후 사용가능합니다");
-      resultMap.put("code",HttpStatus.FORBIDDEN);
+      resultMap.put("code",HttpStatus.BAD_REQUEST);
       return resultMap;
     }
-    else if(User == null) {
+    else if(User==null) {
       resultMap.put("status", false);
       resultMap.put("message", "잘못된 비밀번호입니다");
-      resultMap.put("code",HttpStatus.FORBIDDEN);
-    }
+      resultMap.put("code",HttpStatus.BAD_REQUEST);
+    } 
+    else if(!loginUser.getMiPwd().equals(User.getMiPwd())) {
+      resultMap.put("status", false);
+      resultMap.put("message", "잘못된 비밀번호입니다");
+      resultMap.put("code",HttpStatus.BAD_REQUEST);
+    } 
     else {
       loginUser.setMiStatus(3);
       m_repo.save(loginUser);

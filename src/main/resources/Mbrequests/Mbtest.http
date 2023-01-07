@@ -2,8 +2,8 @@ POST http://localhost:9244/member/login HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user18",
-   "miPwd" : "92449244"
+   "miId" : "user1",
+   "miPwd" : "12341234"
 }
 #################################################
 PUT http://localhost:9244/member/join HTTP/1.1
@@ -30,14 +30,14 @@ POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user17",
-   "miPhone" : "010-5773-5773"
+   "miId" : "user1",
+   "miPhone" : "010-5017-9244"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1
 content-type: application/json
 
 {
-  "miPwd" : "92449244"
+  "miPwd" : "0000"
 }
 
