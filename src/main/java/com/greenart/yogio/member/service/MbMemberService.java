@@ -20,9 +20,9 @@ import jakarta.transaction.Transactional;
 @Service
 public class MbMemberService {
    @Autowired MbMemberInfoRepository m_repo;
-   public Map<String, Object> addMember(MbMemberInfoEntity data) {
+   public Map<String, Object> addMember(MbMemberInfoEntity data) { //회원가입
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
-    if(m_repo.countByMiId(data.getMiId())==1) {
+    if(m_repo.countByMiId(data.getMiId())==1) { 
         resultMap.put("status", false);
         resultMap.put("message",data.getMiId()+"은/는 이미 등록된 사용자 입니다");
         resultMap.put("code", HttpStatus.BAD_REQUEST);
@@ -44,17 +44,22 @@ public class MbMemberService {
     }
     return resultMap;
 }
-public Map<String, Object> loginMember(MbLoginVO data) {
+public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
     MbMemberInfoEntity loginUser = null; 
     try {
-      loginUser = m_repo.findByMiIdAndMiPwd(
+      loginUser = m_repo.findTop1ByMiIdAndMiPwd(
       data.getMiId(), MbAESAlgorithm.Encrypt(data.getMiPwd())
       );
     }catch(Exception e) {e.printStackTrace();}
     if(loginUser == null) {
       resultMap.put("status", false);
       resultMap.put("message", "아이디 또는 비밀번호 오류입니다");
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else if(loginUser.getMiStatus()==3) {
+      resultMap.put("status", false);
+      resultMap.put("message", "탈퇴처리된 회원입니다");
       resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
     else {
@@ -67,7 +72,7 @@ public Map<String, Object> loginMember(MbLoginVO data) {
     return resultMap;
   }
 
-  public Map<String, Object> searchMemberId(MbMemberVO data) {
+  public Map<String, Object> searchMemberId(MbMemberVO data) { //아이디찾기
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
     // 사용자 전화번호 받아서 리스트에 있는 것과 비교하여 해당 전화번호에 맞는 아이디 찾기
     MbMemberInfoEntity User = null; 
@@ -86,7 +91,7 @@ public Map<String, Object> loginMember(MbLoginVO data) {
     return resultMap;
   }
 
-  public Map<String, Object> searchMemberPwd(MbMemberVO data) throws Exception{
+  public Map<String, Object> searchMemberPwd(MbMemberVO data) throws Exception{ //비밀번호찾기
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     MbMemberInfoEntity User = null;
     try {
@@ -107,18 +112,18 @@ public Map<String, Object> loginMember(MbLoginVO data) {
   }
   
   @Transactional
-  public Map<String, Object> deleteMember(MbMemberVO data, HttpSession session) throws Exception{
+  public Map<String, Object> deleteMember(MbMemberVO data, HttpSession session) throws Exception{ //회원탈퇴
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
     MbMemberInfoEntity User = null;
-    User = m_repo.findByMiPwd(MbAESAlgorithm.Encrypt(data.getMiPwd()));
+    User = m_repo.findTop1ByMiPwd(MbAESAlgorithm.Encrypt(data.getMiPwd()));
     if(loginUser == null) {
       resultMap.put("status", false);
       resultMap.put("message", "로그인 후 사용가능합니다");
       resultMap.put("code",HttpStatus.FORBIDDEN);
       return resultMap;
     }
-    if(User == null) {
+    else if(User == null) {
       resultMap.put("status", false);
       resultMap.put("message", "잘못된 비밀번호입니다");
       resultMap.put("code",HttpStatus.FORBIDDEN);

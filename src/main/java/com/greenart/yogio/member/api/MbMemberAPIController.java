@@ -25,31 +25,31 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/member")
 public class MbMemberAPIController {
     @Autowired MbMemberService mService;
-    @PutMapping("/join")
+    @PutMapping("/join") //회원가입
     public ResponseEntity<Object> memberJoin(@RequestBody MbMemberInfoEntity data) {
       Map<String, Object> resultMap = mService.addMember(data);
       return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
-    @PostMapping("/login")
+    @PostMapping("/login") //로그인
     public ResponseEntity<Object> memberLogin(@RequestBody MbLoginVO data, HttpSession session) {
     Map<String, Object> resultMap = mService.loginMember(data);
     session.setAttribute("loginUser", resultMap.get("loginUser"));
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
-  @PostMapping("/searchId")
+  @PostMapping("/searchId") //아이디찾기
   public ResponseEntity<Object> memberSearchId(@RequestBody MbMemberVO data) {
     Map<String, Object> resultMap = mService.searchMemberId(data);
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
-  @PostMapping("/searchPwd")
+  @PostMapping("/searchPwd") //비밀번호찾기
   public ResponseEntity<Object> memberSearchPwd(@RequestBody MbMemberVO data) throws Exception{
     Map<String, Object> resultMap = mService.searchMemberPwd(data);
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
-  @PostMapping("/deleteMember")
+  @PostMapping("/deleteMember") //회원탈퇴
   public ResponseEntity<Object> memberDelete(@RequestBody MbMemberVO data, HttpSession session) throws Exception{
     Map <String ,Object> resultMap = mService.deleteMember(data, session);
     // session.setAttribute("loginUser", resultMap.get("loginUser"));

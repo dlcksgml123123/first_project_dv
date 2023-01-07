@@ -9,9 +9,9 @@ import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 public interface MbMemberInfoRepository extends JpaRepository<MbMemberInfoEntity, Long>{
     public Integer countByMiId(String miId);
     public MbMemberInfoEntity findByMiId(String miId);
-    public MbMemberInfoEntity findByMiPwd(String miPwd);
+    public MbMemberInfoEntity findTop1ByMiPwd(String miPwd);
     public MbMemberInfoEntity findByMiPhone(String miPhone);
-    public MbMemberInfoEntity findByMiIdAndMiPwd(String miId, String miPwd);
+    public MbMemberInfoEntity findTop1ByMiIdAndMiPwd(String miId, String miPwd);
     public MbMemberInfoEntity findByMiIdAndMiPhone(String miId, String miPhone);
 }
   

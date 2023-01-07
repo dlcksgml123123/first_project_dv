@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.member.repository.MbMemberInfoRepository;
+import com.greenart.yogio.utils.MbAESAlgorithm;
 
 @SpringBootTest
 class MbYogioApplicationTests {
@@ -27,10 +28,10 @@ class MbYogioApplicationTests {
 
 	@Test
   @Transactional
-	void testLogin() { //로그인테스트, 암호화한건 안됨
-		String id = "user001";
-		String pwd = "1233";
-		MbMemberInfoEntity loginUser = mRepo.findByMiIdAndMiPwd(id, pwd);
+	void testLogin() throws Exception{ //로그인테스트
+		String id = "user17";
+		String pwd = "92449244";
+		MbMemberInfoEntity loginUser = mRepo.findTop1ByMiIdAndMiPwd(id, MbAESAlgorithm.Encrypt(pwd));
 		assertNotEquals(loginUser,null); 
 		}
 		
@@ -41,7 +42,8 @@ class MbYogioApplicationTests {
 	}
 
 	@Test
-	void searchMemberId() { //아이디 찾기
+	@Transactional
+	void deleteTest() { //삭제 테스트
 		
 	}
 }	
