@@ -111,20 +111,21 @@ public Map<String, Object> loginMember(MbLoginVO data) {
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
     MbMemberInfoEntity User = null;
-    User = m_repo.findByMiId(data.getMiId());
+    User = m_repo.findByMiPwd(MbAESAlgorithm.Encrypt(data.getMiPwd()));
     if(loginUser == null) {
       resultMap.put("status", false);
       resultMap.put("message", "로그인 후 사용가능합니다");
       resultMap.put("code",HttpStatus.FORBIDDEN);
       return resultMap;
     }
-    else if(User == null) {
+    if(User == null) {
       resultMap.put("status", false);
       resultMap.put("message", "잘못된 비밀번호입니다");
       resultMap.put("code",HttpStatus.FORBIDDEN);
     }
     else {
-      m_repo.deleteByMiId(User.getMiId());
+      loginUser.setMiStatus(3);
+      m_repo.save(loginUser);
       resultMap.put("status", true);
       resultMap.put("message", "회원정보가 삭제 되었습니다");
       resultMap.put("code",HttpStatus.OK);

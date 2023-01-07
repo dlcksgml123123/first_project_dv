@@ -1,43 +1,43 @@
-POST http://192.168.0.114:9244/member/login HTTP/1.1
+POST http://localhost:9244/member/login HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user16",
-   "miPwd" : "12341234"
+   "miId" : "user17",
+   "miPwd" : "92449244"
 }
 #################################################
-PUT http://192.168.0.114:9244/member/join HTTP/1.1
+PUT http://localhost:9244/member/join HTTP/1.1
 content-type: application/json
 
 {
-  "miId" : "user16", 
-  "miPwd" : "12341234", 
-  "miEmail" : "user016@naver.com", 
-  "miPhone" : "010-5017-5773", 
-  "miNickname" : "차대연", 
-  "miAddress" : "대구시 중구 삼덕동1가 2-5", 
+  "miId" : "user17", 
+  "miPwd" : "92449244", 
+  "miEmail" : "user017@naver.com", 
+  "miPhone" : "010-5773-5773", 
+  "miNickname" : "차대준", 
+  "miAddress" : "대구시 중구 삼덕동1가 1-5", 
   "miStatus" : "0"
 }
 #################################################
-POST http://192.168.0.114:9244/member/searchId HTTP/1.1
+POST http://localhost:9244/member/searchId HTTP/1.1
 content-type: application/json
 
 {
-   "miPhone" : "010-5017-5017"
-}
-#################################################
-POST http://192.168.0.114:9244/member/searchPwd HTTP/1.1
-content-type: application/json
-
-{
-   "miId" : "user14",
    "miPhone" : "010-5017-1234"
 }
 #################################################
-POST http://192.168.0.114:9244/member/deleteMember HTTP/1.1
+POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-  "miPwd" : "12341234"
+   "miId" : "user15",
+   "miPhone" : "010-5017-1234"
+}
+#################################################
+POST http://localhost:9244/member/deleteMember HTTP/1.1
+content-type: application/json
+
+{
+  "miPwd" : "92449244"
 }
 

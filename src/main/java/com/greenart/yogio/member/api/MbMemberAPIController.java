@@ -50,10 +50,9 @@ public class MbMemberAPIController {
   }
 
   @PostMapping("/deleteMember")
-  public ResponseEntity<Object> memberDelete(MbMemberVO data, HttpSession session) throws Exception{
-    Map <String ,Object> resultMap = new LinkedHashMap<String, Object>();
-    mService.deleteMember(data, session);
-    resultMap.put("status", true);
+  public ResponseEntity<Object> memberDelete(@RequestBody MbMemberVO data, HttpSession session) throws Exception{
+    Map <String ,Object> resultMap = mService.deleteMember(data, session);
+    // session.setAttribute("loginUser", resultMap.get("loginUser"));
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 }
