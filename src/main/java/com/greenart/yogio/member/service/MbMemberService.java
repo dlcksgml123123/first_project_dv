@@ -133,8 +133,9 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
       resultMap.put("code",HttpStatus.BAD_REQUEST);
     } 
     else {
-      loginUser.setMiStatus(3);
-      m_repo.save(loginUser);
+      // loginUser.setMiStatus(3); //상태값 변경
+      // m_repo.save(loginUser); //변경한 값 저장
+      m_repo.delete(loginUser);
       resultMap.put("status", true);
       resultMap.put("message", "회원정보가 삭제 되었습니다");
       resultMap.put("code",HttpStatus.OK);

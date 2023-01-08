@@ -38,6 +38,6 @@ POST http://localhost:9244/member/deleteMember HTTP/1.1
 content-type: application/json
 
 {
-  "miPwd" : "0000"
+  "miPwd" : "12341234"
 }
 
