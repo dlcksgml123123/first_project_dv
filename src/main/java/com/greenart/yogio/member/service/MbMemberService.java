@@ -22,9 +22,19 @@ public class MbMemberService {
    @Autowired MbMemberInfoRepository m_repo;
    public Map<String, Object> addMember(MbMemberInfoEntity data) { //회원가입
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
-    if(m_repo.countByMiId(data.getMiId())==1) { 
+    if(m_repo.countByMiId(data.getMiId())>=1) { 
         resultMap.put("status", false);
         resultMap.put("message",data.getMiId()+"은/는 이미 등록된 사용자 입니다");
+        resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else if(m_repo.countByMiEmail(data.getMiEmail())>=1) { 
+        resultMap.put("status", false);
+        resultMap.put("message",data.getMiEmail()+"은/는 이미 등록된 이메일입니다");
+        resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else if(m_repo.countByMiPhone(data.getMiPhone())>=1) { 
+        resultMap.put("status", false);
+        resultMap.put("message",data.getMiPhone()+"은/는 이미 등록된 전화번호입니다");
         resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
     else if(data.getMiPwd().length()<8) {

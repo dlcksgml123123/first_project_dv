@@ -8,6 +8,8 @@ import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 @Repository
 public interface MbMemberInfoRepository extends JpaRepository<MbMemberInfoEntity, Long>{
     public Integer countByMiId(String miId);
+    public Integer countByMiEmail(String miEmail);
+    public Integer countByMiPhone(String miPhone);
     public MbMemberInfoEntity findByMiId(String miId);
     public MbMemberInfoEntity findTop1ByMiPwd(String miPwd);
     public MbMemberInfoEntity findByMiPhone(String miPhone);
