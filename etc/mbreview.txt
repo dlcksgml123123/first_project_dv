@@ -1,0 +1,17 @@
+<리뷰 조인>
+메뉴이름
+추천 및 평가 별 *
+리뷰내용 *
+사진 *
+
+review_info
+(ri_re_seq)
+review_img
+
+review_info
+(re_oi_seq)
+order_info
+
+order_info
+(oi_mni_seq)
+menu_info
