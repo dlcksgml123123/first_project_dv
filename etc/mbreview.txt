@@ -15,3 +15,10 @@ order_info
 order_info
 (oi_mni_seq)
 menu_info
+
+create view view_review
+as (
+select * from review_info as a
+join review_img as b
+on a.re_seq = b.ri_re_seq
+);

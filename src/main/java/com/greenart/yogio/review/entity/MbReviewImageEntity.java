@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 public class MbReviewImageEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ri_seq") private Long riSeq; 
-  @Column(name = "ri_re_seq") private Long riReSeq; 
   @Column(name = "ri_name") private String riName; 
   @Column(name = "ri_order") private Integer riOrder; 
+  @Column(name = "ri_re_seq") private Long riReSeq; 
   @ManyToOne
-  @JoinColumn(name = "ri_re_seq") MbReviewEntity review;
+  @JoinColumn(name = "re_seq") MbReviewEntity review;
 }
