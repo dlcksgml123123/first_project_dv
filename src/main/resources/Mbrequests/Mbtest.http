@@ -40,4 +40,11 @@ content-type: application/json
 {
   "miPwd" : "92449244"
 }
+#################################################
+POST http://localhost:9244/review/write HTTP/1.1
+content-type: application/json
+
+{
+  
+}
 
