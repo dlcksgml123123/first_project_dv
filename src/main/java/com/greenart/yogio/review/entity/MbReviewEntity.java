@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "review_info")
+@Builder
 public class MbReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "re_seq") private Long reSeq;

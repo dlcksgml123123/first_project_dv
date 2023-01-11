@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
 public class MbReviewController {
     @Autowired MbReviewService rService;
     @PutMapping("/write") //리뷰쓰기
-    public ResponseEntity<Object> writeReview(@RequestBody MbViewEntity data, HttpSession session) {
+    public ResponseEntity<Object> writeReview(@RequestBody MbReviewVO data, HttpSession session) {
         Map<String, Object> resultMap = rService.addReview(data, session);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }

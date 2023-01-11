@@ -45,15 +45,15 @@ PUT http://localhost:9244/review/write HTTP/1.1
 content-type: application/json
 
 {
-"reRegDt" : "2023-01-10", 
-"reScore" : 5, 
-"reContent" : "맛있어요", 
-"reOiSeq" : 4, 
-"reTasteScore" : 5, 
-"reQuantityScore" : 5, 
-"reDeliveryScore" : 5, 
-"riReSeq" : 4,
-"riName" : "image3.jpg",
-"riOrder" : 1 
+"regDt" : "2023-01-10", 
+"score" : 4, 
+"content" : "그럭저럭", 
+"oiSeq" : 5, 
+"tasteScore" : 4, 
+"quantityScore" : 4, 
+"deliveryScore" : 4, 
+"reSeq" : 5,
+"name" : "image4.jpg",
+"order" : 1 
 }
 
