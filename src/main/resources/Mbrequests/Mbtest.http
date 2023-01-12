@@ -13,9 +13,9 @@ content-type: application/json
   "miId" : "user17", 
   "miPwd" : "92449244", 
   "miEmail" : "user017@naver.com", 
-  "miPhone" : "010-2000-9244", 
-  "miNickname" : "차대준", 
-  "miAddress" : "대구시 중구 삼덕동1가 1-5", 
+  "miPhone" : "010-9000-9244", 
+  "miNickname" : "차대희", 
+  "miAddress" : "대구시 중구 삼덕동1가 1-2", 
   "miStatus" : "0"
 }
 #################################################
