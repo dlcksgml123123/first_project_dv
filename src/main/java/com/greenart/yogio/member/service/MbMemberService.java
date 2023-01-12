@@ -42,6 +42,14 @@ public class MbMemberService {
       resultMap.put("message", "비밀번호는 8자리 이상입니다");
       resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
+    else if(data.getMiPwd().replaceAll(" ", "").length() == 0) {
+      resultMap.put("status", false);
+      resultMap.put("message", "비밀번호에 공백문자를 사용 할 수 없습니다");
+    }
+    else if(data.getMiId().replaceAll(" ", "").length() == 0) {
+      resultMap.put("status", false);
+      resultMap.put("message", "아이디에 공백문자를 사용 할 수 없습니다");
+    }
     else {
       try {
         String encPwd = MbAESAlgorithm.Encrypt(data.getMiPwd());
