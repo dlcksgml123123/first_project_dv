@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.yogio.review.entity.MbReviewEntity;
 import com.greenart.yogio.review.entity.MbReviewImageEntity;
-import com.greenart.yogio.review.entity.MbViewEntity;
+// import com.greenart.yogio.review.entity.MbViewEntity;
 import com.greenart.yogio.review.service.MbReviewService;
 import com.greenart.yogio.review.vo.MbReviewVO;
 
