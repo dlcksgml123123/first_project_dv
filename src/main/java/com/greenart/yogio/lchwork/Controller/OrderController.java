@@ -19,24 +19,24 @@ import com.greenart.yogio.lchwork.repository.OiMemberInfoRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentInfoRepository;
 import com.greenart.yogio.lchwork.service.PaymentInfoService;
 
-@RestController
-@RequestMapping("/paymentpage")
-public class OrderController {
-    // @Autowired PaymentInfoService pService;
-    @Autowired OiPaymentInfoRepository piRepo;
-    @Autowired OiMemberInfoRepository miRepo;
-    // @RequestParam @Nullable String piRequirement,
-    // @RequestParam Integer piPayWay,,@RequestParam Long piOiSeq
-    @PutMapping("/input")
-    public Map<String, Object> putPaymentInfo(
-        @RequestBody OiPaymentInfoEntity data
-    ){
-        Map<String, Object> map = new LinkedHashMap<>();
-        piRepo.save(data);
-        map.put("data", data);
-        return map;
-    }
-    @GetMapping("deliveryinfo")
-    public Map<String, Object> getDeliveryInfo(
+// @RestController
+// @RequestMapping("/paymentpage")
+// public class OrderController {
+//     // @Autowired PaymentInfoService pService;
+//     @Autowired OiPaymentInfoRepository piRepo;
+//     @Autowired OiMemberInfoRepository miRepo;
+//     // @RequestParam @Nullable String piRequirement,
+//     // @RequestParam Integer piPayWay,,@RequestParam Long piOiSeq
+//     @PutMapping("/input")
+//     public Map<String, Object> putPaymentInfo(
+//         @RequestBody OiPaymentInfoEntity data
+//     ){
+//         Map<String, Object> map = new LinkedHashMap<>();
+//         piRepo.save(data);
+//         map.put("data", data);
+//         return map;
+//     }
+//     @GetMapping("deliveryinfo")
+//     public Map<String, Object> getDeliveryInfo(
     
-}
+// }
