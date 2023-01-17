@@ -2,18 +2,18 @@ POST http://localhost:9244/member/login HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user14",
-   "miPwd" : "92449244"
+   "miId" : "user19",
+   "miPwd" : "92449244!"
 }
 #################################################
 PUT http://localhost:9244/member/join HTTP/1.1
 content-type: application/json
 
 {
-  "miId" : "user17", 
+  "miId" : "user18", 
   "miPwd" : "92449244", 
-  "miEmail" : "user017@naver.com", 
-  "miPhone" : "010-9000-9244", 
+  "miEmail" : "user018@naver.com", 
+  "miPhone" : "010-9001-9244", 
   "miNickname" : "차대희", 
   "miAddress" : "대구시 중구 삼덕동1가 1-2", 
   "miStatus" : "0"
@@ -30,8 +30,8 @@ POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user14",
-   "miPhone" : "010-5017-1234"
+   "miId" : "user19",
+   "miPhone" : "010-9002-9244"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1
@@ -45,14 +45,13 @@ PUT http://localhost:9244/review/write HTTP/1.1
 content-type: application/json
 
 {
-"regDt" : "2023-01-11", 
+"regDt" : "2023-01-16", 
 "score" : 5, 
-"content" : "배달이 조금 늦는데 맛있어요", 
-"oiSeq" : 5, 
-"tasteScore" : 4, 
+"content" : "적당해요", 
+"oiSeq" : 6, 
+"tasteScore" : 5, 
 "quantityScore" : 5, 
-"deliveryScore" : 4, 
-"reSeq" : 6,
+"deliveryScore" : 5, 
 "name" : "image1.jpg",
 "order" : 1 
 }

@@ -3,6 +3,7 @@ package com.greenart.yogio.member.service;
 import java.lang.reflect.Member;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class MbMemberService {
    @Autowired MbMemberInfoRepository m_repo;
    public Map<String, Object> addMember(MbMemberInfoEntity data) { //회원가입
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
+    String id_pattern = "^[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$";
+    String pwd_pattern = "^[a-zA-Z0-9!@#$%^&*()-_=+]*$";
     if(m_repo.countByMiId(data.getMiId())>=1) { 
         resultMap.put("status", false);
         resultMap.put("message",data.getMiId()+"은/는 이미 등록된 사용자 입니다");
@@ -42,14 +45,16 @@ public class MbMemberService {
       resultMap.put("message", "비밀번호는 8자리 이상입니다");
       resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
-    else if(data.getMiPwd().replaceAll(" ", "").length() == 0) {
-      resultMap.put("status", false);
+    else if(!Pattern.matches(pwd_pattern, data.getMiPwd())) {
+      resultMap.put("status", false); 
       resultMap.put("message", "비밀번호에 공백문자를 사용 할 수 없습니다");
-    }
-    else if(data.getMiId().replaceAll(" ", "").length() == 0) {
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+    } 
+    else if(!Pattern.matches(id_pattern, data.getMiId())) {
       resultMap.put("status", false);
-      resultMap.put("message", "아이디에 공백문자를 사용 할 수 없습니다");
-    }
+      resultMap.put("message", "아이디에 공백문자나 특수문자를 사용 할 수 없습니다");
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+    } 
     else {
       try {
         String encPwd = MbAESAlgorithm.Encrypt(data.getMiPwd());
@@ -75,11 +80,11 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
       resultMap.put("message", "아이디 또는 비밀번호 오류입니다");
       resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
-    else if(loginUser.getMiStatus()==3) {
-      resultMap.put("status", false);
-      resultMap.put("message", "탈퇴처리된 회원입니다");
-      resultMap.put("code", HttpStatus.BAD_REQUEST);
-    }
+    // else if(loginUser.getMiStatus()==3) {
+    //   resultMap.put("status", false);
+    //   resultMap.put("message", "탈퇴처리된 회원입니다");
+    //   resultMap.put("code", HttpStatus.BAD_REQUEST);
+    // }
     else {
       resultMap.put("status", true);
       resultMap.put("message", "로그인 되었습니다");
@@ -103,7 +108,7 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     else{
       resultMap.put("status", true);
       resultMap.put("message", "고객님의 아이디를 찾았습니다");
-      resultMap.put("code", HttpStatus.ACCEPTED);
+      resultMap.put("code", HttpStatus.OK);
       resultMap.put("UserId", User.getMiId());
     }
     return resultMap;
@@ -123,7 +128,7 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     else{
       resultMap.put("status", true);
       resultMap.put("message", "고객님의 비밀번호를 찾았습니다");
-      resultMap.put("code", HttpStatus.ACCEPTED);
+      resultMap.put("code", HttpStatus.OK);
       resultMap.put("UserPwd", MbAESAlgorithm.Decrypt(User.getMiPwd()));
     }
     return resultMap;

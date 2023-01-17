@@ -1,4 +1,4 @@
-package com.greenart.yogio.review.entity;
+package com.greenart.yogio.member.review.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,5 +26,5 @@ public class MbReviewImageEntity {
   @Column(name = "ri_order") private Integer riOrder; 
   // @Column(name = "ri_re_seq") private Long riReSeq; 
   @ManyToOne
-  @JoinColumn(name = "ri_re_seq") MbReviewEntity review;
+  @JoinColumn(name = "ri_re_seq") MbReviewEntity riReSeq;
 }

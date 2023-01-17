@@ -1,9 +1,10 @@
-package com.greenart.yogio.review.vo;
+package com.greenart.yogio.member.review.vo;
 
 import java.time.LocalDate;
 
-import com.greenart.yogio.review.entity.MbReviewEntity;
-import com.greenart.yogio.review.entity.MbReviewImageEntity;
+import com.greenart.yogio.member.review.entity.MbOrderInfoEntity;
+import com.greenart.yogio.member.review.entity.MbReviewEntity;
+import com.greenart.yogio.member.review.entity.MbReviewImageEntity;
 
 import lombok.Data;
 
@@ -16,7 +17,6 @@ public class MbReviewVO {
   private Integer   tasteScore;    //reTasteScore;
   private Integer   quantityScore; //reQuantityScore;
   private Integer   deliveryScore; //reDeliveryScore;
-  private Long      reSeq;         //riReSeq; image
   private String    name;          //riName; image
   private Integer   order;         //riOrder; image
   public MbReviewVO(MbReviewEntity rentity, MbReviewImageEntity ientity) {
@@ -27,7 +27,6 @@ public class MbReviewVO {
     this.tasteScore = rentity.getReTasteScore();
     this.quantityScore = rentity.getReQuantityScore();
     this.deliveryScore = rentity.getReDeliveryScore();
-    // this.reSeq = ientity.getRiReSeq();
     this.name = ientity.getRiName();
     this.order = ientity.getRiOrder();
   }

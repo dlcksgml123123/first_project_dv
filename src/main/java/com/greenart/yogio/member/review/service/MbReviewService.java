@@ -1,4 +1,4 @@
-package com.greenart.yogio.review.service;
+package com.greenart.yogio.member.review.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,13 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
-import com.greenart.yogio.review.entity.MbReviewEntity;
-import com.greenart.yogio.review.entity.MbReviewImageEntity;
-// import com.greenart.yogio.review.entity.MbViewEntity;
-import com.greenart.yogio.review.repository.MbReviewImageRepository;
-import com.greenart.yogio.review.repository.MbReviewRepository;
-// import com.greenart.yogio.review.repository.MbViewRepository;
-import com.greenart.yogio.review.vo.MbReviewVO;
+import com.greenart.yogio.member.review.entity.MbOrderInfoEntity;
+import com.greenart.yogio.member.review.entity.MbReviewEntity;
+import com.greenart.yogio.member.review.entity.MbReviewImageEntity;
+import com.greenart.yogio.member.review.repository.MbReviewImageRepository;
+import com.greenart.yogio.member.review.repository.MbReviewRepository;
+import com.greenart.yogio.member.review.vo.MbReviewVO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -31,6 +30,7 @@ public class MbReviewService {
         resultMap.put("code",HttpStatus.BAD_REQUEST);
         return resultMap;
      }
+    //  MbOrderInfoEntity order = MbOrderInfoEntity.builder().build();
      MbReviewEntity review = MbReviewEntity.builder()
      .reRegDt(data.getRegDt())
      .reScore(data.getScore())
@@ -38,12 +38,15 @@ public class MbReviewService {
      .reOiSeq(data.getOiSeq())
      .reTasteScore(data.getTasteScore())
      .reQuantityScore(data.getQuantityScore())
-     .reDeliveryScore(data.getDeliveryScore()).build();
+     .reDeliveryScore(data.getDeliveryScore())
+     .build();
      r_repo.save(review);
 
      MbReviewImageEntity image = MbReviewImageEntity.builder()
      .riName(data.getName())
-     .riOrder(data.getOrder()).review(review).build();
+     .riOrder(data.getOrder())
+     .riReSeq(review)
+     .build();
       i_repo.save(image);
 
       resultMap.put("status", true);
