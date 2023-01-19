@@ -22,3 +22,22 @@ select * from review_info as a
 join review_img as b
 on a.re_seq = b.ri_re_seq
 );
+
+리뷰는 주문날짜에서 2주까지만 작성가능
+주문테이블에서 주문날짜를 가져온다
+
+주문번호에 따른 리뷰를 쓴다
+
+리뷰테이블의 re_oi_seq와 같은 번호를
+주문정보테이블에서 가져온다
+
+주문날짜에서 2주가 지났을시 리뷰작성불가
+if(oi_finish_dt + 14 > now())
+{
+resultMap.put("status", false);
+      resultMap.put("message", "잘못된 접근입니다");
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+} 
+
+
+
