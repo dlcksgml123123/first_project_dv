@@ -28,9 +28,11 @@ on a.re_seq = b.ri_re_seq
 
 주문번호에 따른 리뷰를 쓴다
 
-리뷰테이블의 re_oi_seq와 같은 번호를
-주문정보테이블에서 가져온다
+리뷰테이블의 re_oi_seq와 같은 oi_seq번호를
+주문정보테이블에서 가져온다 
+MbOrderInfoEntity.getOiSeq
 
+주문정보seq당 리뷰 1개
 주문날짜에서 2주가 지났을시 리뷰작성불가
 if(oi_finish_dt + 14 > now())
 {

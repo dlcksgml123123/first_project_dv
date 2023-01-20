@@ -2,7 +2,7 @@ POST http://localhost:9244/member/login HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user19",
+   "miId" : "user18",
    "miPwd" : "92449244!"
 }
 #################################################
@@ -11,9 +11,9 @@ content-type: application/json
 
 {
   "miId" : "user18", 
-  "miPwd" : "92449244", 
+  "miPwd" : "92449244!", 
   "miEmail" : "user018@naver.com", 
-  "miPhone" : "010-9001-9244", 
+  "miPhone" : "01090019244", 
   "miNickname" : "차대희", 
   "miAddress" : "대구시 중구 삼덕동1가 1-2", 
   "miStatus" : "0"
@@ -23,15 +23,15 @@ POST http://localhost:9244/member/searchId HTTP/1.1
 content-type: application/json
 
 {
-   "miPhone" : "010-9000-9244"
+   "miPhone" : "01090009244"
 }
 #################################################
 POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user19",
-   "miPhone" : "010-9002-9244"
+   "miId" : "user18",
+   "miPhone" : "01090019244"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1
@@ -45,7 +45,7 @@ PUT http://localhost:9244/review/write HTTP/1.1
 content-type: application/json
 
 {
-"regDt" : "2023-01-16", 
+"regDt" : "2023-01-20", 
 "score" : 5, 
 "content" : "적당해요", 
 "oiSeq" : 6, 
