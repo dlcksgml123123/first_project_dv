@@ -50,7 +50,7 @@ public class MbReviewService {
       resultMap.put("message", "주문일에서 2주까지만 리뷰 등록이 가능합니다.");
       resultMap.put("code",HttpStatus.BAD_REQUEST);
     }
-
+else {
      MbReviewEntity review = MbReviewEntity.builder()
      .reRegDt(data.getRegDt())
      .reScore(data.getScore())
@@ -72,6 +72,7 @@ public class MbReviewService {
       resultMap.put("status", true);
       resultMap.put("message", "리뷰가 등록되었습니다");
       resultMap.put("code", HttpStatus.CREATED);
-      return resultMap;
+    }
+    return resultMap;
     }
 }

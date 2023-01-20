@@ -1,6 +1,7 @@
 package com.greenart.yogio.member.review.entity;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.hibernate.annotations.Immutable;
 
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class MbReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "re_seq") private Long reSeq;
-    @Column(name = "re_reg_dt") private LocalDate reRegDt;
+    @Column(name = "re_reg_dt") private Date reRegDt;
     @Column(name = "re_score") private Integer reScore;
     @Column(name = "re_content") private String reContent;
     @Column(name = "re_oi_seq") private Long reOiSeq;
