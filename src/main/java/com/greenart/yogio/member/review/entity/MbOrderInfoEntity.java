@@ -1,6 +1,7 @@
 package com.greenart.yogio.member.review.entity;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
@@ -28,7 +29,6 @@ public class MbOrderInfoEntity {
     @Column(name = "oi_menu_amount") private Integer oiMenuAmount;
     @Column(name = "oi_status") private Integer oiStatus;
     @Column(name = "oi_order_num") private Integer oiOrderNum;
-    @Column(name = "oi_order_dt") private LocalDate oiOrderDt;
-    @Column(name = "oi_finish_dt") private LocalDate oiFinishDt;
-
+    @Column(name = "oi_order_dt") private Date oiOrderDt;
+    @Column(name = "oi_finish_dt") private Date oiFinishDt;
 }
