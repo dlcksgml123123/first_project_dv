@@ -17,6 +17,7 @@ public class SiStoreInfoReviewService {
     public Map<String,Object> getStoreReview (Long siseq, Pageable pageable) {
        Page<SiStoreInfoReviewEntity> page = siStoreInfoReviewRepository.findBySiSeq(siseq, pageable);
        Map<String,Object> map = new LinkedHashMap<String, Object>();
+       map.put("status",true);
        map.put("list", page.getContent());
        map.put("total", page.getTotalElements());
        map.put("totalpage", page.getTotalPages());

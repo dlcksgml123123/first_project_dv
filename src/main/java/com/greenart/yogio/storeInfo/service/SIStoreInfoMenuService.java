@@ -8,14 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.storeInfo.entity.SiStoreInfoListEntity;
-import com.greenart.yogio.storeInfo.repository.SiStoreInfoListRepository;
+import com.greenart.yogio.storeInfo.entity.SiStoreInfoMenuEntity;
+import com.greenart.yogio.storeInfo.repository.SiStoreInfoMenuRepository;
 
 @Service
-public class SiStoreInfoListService {
-    @Autowired SiStoreInfoListRepository siStoreInfoListRepository;
-    public Map<String,Object> getStoreList (String keyword, Pageable pageable) {
-       Page<SiStoreInfoListEntity> page = siStoreInfoListRepository.findByScNameContains(keyword, pageable) ;
+public class SIStoreInfoMenuService {
+     @Autowired SiStoreInfoMenuRepository siStoreInfoMenuRepository;
+    public Map<String,Object> getStoreMenu (Long siseq, Pageable pageable) {
+       Page<SiStoreInfoMenuEntity> page = siStoreInfoMenuRepository.findBySiSeq(siseq, pageable);
        Map<String,Object> map = new LinkedHashMap<String, Object>();
        map.put("status",true);
        map.put("list", page.getContent());
@@ -23,4 +23,5 @@ public class SiStoreInfoListService {
        map.put("totalpage", page.getTotalPages());
        return map;
     }
+    
 }

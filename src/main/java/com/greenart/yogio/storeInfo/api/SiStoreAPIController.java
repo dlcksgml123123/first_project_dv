@@ -34,13 +34,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoEntity;
+import com.greenart.yogio.storeInfo.entity.SiStoreInfoMainMenuEntity;
+import com.greenart.yogio.storeInfo.entity.SiStoreInfoPlusMenuEntity;
 import com.greenart.yogio.storeInfo.entity.SiMenuPlusJoinEntity;
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoDetailEntity;
 import com.greenart.yogio.storeInfo.repository.SiMenuPlusJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoDetailRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoListRepository;
+import com.greenart.yogio.storeInfo.repository.SiStoreInfoMainMenuRepository;
+import com.greenart.yogio.storeInfo.repository.SiStoreInfoPlusMenuRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoReviewRepository;
+import com.greenart.yogio.storeInfo.service.SIStoreInfoMenuService;
+import com.greenart.yogio.storeInfo.service.SiStoreInfoDetailService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoListService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoReviewService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoService;
@@ -51,6 +57,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class SiStoreAPIController {
+    @Autowired SiStoreInfoMainMenuRepository siStoreInfoMainMenuRepository;
+    @Autowired SiStoreInfoPlusMenuRepository siStoreInfoPlusMenuRepository;
+    @Autowired SiStoreInfoDetailService siStoreInfoDetailService;
+    @Autowired SIStoreInfoMenuService siStoreInfoMenuService;
     @Autowired SiMenuPlusJoinRepository siMenuPlusJoinRepository;
     @Autowired SiStoreInfoReviewService siStoreInfoReviewService;
     @Autowired SiStoreInfoListService siStoreInfoListService;
@@ -100,16 +110,16 @@ public class SiStoreAPIController {
       return new ResponseEntity<>(map,HttpStatus.OK);
 
     }
-    @GetMapping("/store/detail/")
-    public Map<String, Object> getStoreDetail(
-    @PageableDefault(size=5) Pageable pageable) {
-    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    Page<SiStoreInfoDetailEntity> page = vrRepo.getStoreDetail(pageable);
-    resultMap.put("total", page.getTotalPages());
-    resultMap.put("curentpage",page.getNumber());
-    resultMap.put("list",page);
-    return resultMap;
-  }
+  //   @GetMapping("/store/detail/")
+  //   public Map<String, Object> getStoreDetail(
+  //   @PageableDefault(size=5) Pageable pageable) {
+  //   Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+  //   Page<SiStoreInfoDetailEntity> page = vrRepo.getStoreDetail(pageable);
+  //   resultMap.put("total", page.getTotalPages());
+  //   resultMap.put("curentpage",page.getNumber());
+  //   resultMap.put("list",page);
+  //   return resultMap;
+  // }
   //   @GetMapping("/store/list/")
   //   public Map<String, Object> getStoreList(
   //   @PageableDefault(size=5) Pageable pageable, @RequestParam @Nullable String keyword) {
@@ -128,11 +138,24 @@ public class SiStoreAPIController {
     resultMap.put("result",siStoreInfoListService.getStoreList(keyword, pageable));
     return resultMap;
   }
+    @GetMapping("/store/detail")
+  public Map<String, Object> getStoreDetail(@RequestParam @Nullable Long siseq, @PageableDefault (size=5,sort = "siSeq" ,direction = Sort.Direction.ASC) Pageable pageable) {
+    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    resultMap.put("result",siStoreInfoDetailService.getStoreDetail(siseq, pageable));
+    return resultMap;
+  }
   @GetMapping("/store/review")
   public Map<String, Object> getStoreReview(@RequestParam @Nullable Long siseq, Pageable pageable) {
     // if (seq == null ) seq = 1L;
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("result",siStoreInfoReviewService.getStoreReview(siseq, pageable));
+    return resultMap;
+  }
+    @GetMapping("/store/menu")
+  public Map<String, Object> getStoreMenu(@RequestParam @Nullable Long siseq,@PageableDefault (size=1,sort = "siSeq" ,direction = Sort.Direction.ASC) Pageable pageable) {
+    // if (seq == null ) seq = 1L;
+    Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    resultMap.put("result",siStoreInfoMenuService.getStoreMenu(siseq, pageable));
     return resultMap;
   }
   //   @GetMapping("/store/review/")
@@ -183,24 +206,35 @@ public class SiStoreAPIController {
     .body(r);
     }
   //  int i = 0; i < page.size(); i++
+
     @GetMapping("/menu/list")
     public Map<String,Object> getMenuList(@PageableDefault(size=5) Pageable pageable) {
       Map<String,Object>  map = new LinkedHashMap<String, Object>();
-      List <SiMenuPlusJoinEntity> page = siMenuPlusJoinRepository.findAll();
+      Page <SiMenuPlusJoinEntity> page = siMenuPlusJoinRepository.findAll(pageable);
       List<SiMenuListVO> menuList = new ArrayList<>();
-     
-      System.out.println(page);
-      // for(SiMenuPlusJoinEntity a : page) {
-      // }
-        // menuList.add(new SiMenuListVO(page));
-    
+      for(SiMenuPlusJoinEntity a : page.getContent()) {
+        menuList.add(new SiMenuListVO(a));
+        }
+
       System.out.println(menuList);
       map.put("status", true);
-      map.put("list", menuList);
-      // map.put("page",page);
-
+      map.put("list", menuList); 
       return map;
+    }
 
+    @GetMapping("/menu")
+    public Map<String, Object> getMenu(@RequestParam Long siSeq) {
+      Map<String,Object> map = new LinkedHashMap<>();
+      List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siSeq);
+      List<Object> list = new ArrayList<Object>();
+      for (int i=0; i<mList.size(); i ++){
+        list.add(mList.get(i));
+        List<SiStoreInfoPlusMenuEntity> pList = siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq());
+        list.add(pList);
+      }
+      map.put("list", list);
+      return map;
+        
     }
   
     

@@ -13,4 +13,6 @@ public interface SiStoreInfoDetailRepository extends JpaRepository <SiStoreInfoD
   @Query (value = "select * from store_info_detail order by si_seq", nativeQuery = true)
   Page<SiStoreInfoDetailEntity> getStoreDetail(Pageable page);
 
+  public Page<SiStoreInfoDetailEntity> findBySiSeq(Long siSeq, Pageable pageable);
+
 }
