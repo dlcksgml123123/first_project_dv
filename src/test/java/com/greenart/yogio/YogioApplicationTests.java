@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.greenart.yogio.storeInfo.repository.SiMenuCateJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiMenuPlusJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoRepository;
 
@@ -11,14 +12,18 @@ import com.greenart.yogio.storeInfo.repository.SiStoreInfoRepository;
 class YogioApplicationTests {
 @Autowired SiMenuPlusJoinRepository siMenuPlusJoinRepository;
 @Autowired SiStoreInfoRepository siStoreInfoRepository;
+@Autowired SiMenuCateJoinRepository siMenuCateJoinRepository;
 @Test
 void findstore() {
 	System.out.println(siMenuPlusJoinRepository.findAll());
 }
 @Test
-void findstor() {
+void findstoreInfo() {
 	System.out.println(siStoreInfoRepository.findAll());
 }
-
+@Test
+void findmenu () {
+	System.out.println(siMenuCateJoinRepository.findAll());
+}
 
 }

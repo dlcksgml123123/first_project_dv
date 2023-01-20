@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "ment_cate_join")
+@Table(name = "menu_cate_join")
 public class SiMenuCateJoinEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "mcj_seq") private Long mcjSeq;

@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="menu_plus_join")
-@DynamicInsert
 public class SiMenuPlusJoinEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="mpj_seq") private Long mpjSeq;
     // @Column(name="mpj_mni_seq") private Long mpjMniSeq;
     // @Column(name="mpj_pm_seq") private Long mpjPmSeq;
-    @OneToOne @JoinColumn(name = "mpj_mni_seq") SiMenuInfoEntity menu;
-    @OneToOne @JoinColumn(name = "mpj_pm_seq") SiPlusMenuEntity pmenu;
+    @OneToOne @JoinColumn(name = "mpj_mcj_seq") SiMenuCateJoinEntity menuj;
+    @OneToOne @JoinColumn(name = "mpj_pcj_seq") SiPlusCateJoinEntity pmenuj;
+    
 }
