@@ -1,6 +1,7 @@
 package com.greenart.yogio.member.review.vo;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.greenart.yogio.member.review.entity.MbOrderInfoEntity;
 import com.greenart.yogio.member.review.entity.MbReviewEntity;
@@ -10,7 +11,7 @@ import lombok.Data;
 
 @Data
 public class MbReviewVO {
-  private LocalDate regDt;         //regDt;
+  private Date regDt;         //regDt;
   private Integer   score;         //reScore;
   private String    content;       //reContent;
   private Long      oiSeq;         //reOiSeq;
