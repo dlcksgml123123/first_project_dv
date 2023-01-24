@@ -44,6 +44,9 @@ public class MbReviewService {
         resultMap.put("code",HttpStatus.BAD_REQUEST);
         return resultMap;
      }
+     
+     //로그인한 유저의 번호와 주문정보의 회원번호가 다를시 잘못된 접근이라고 출력
+     
 
      else if(r_repo.countByReOiSeq(data.getOiSeq())>=1) {
         resultMap.put("status", false);

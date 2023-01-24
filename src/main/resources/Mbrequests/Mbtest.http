@@ -48,7 +48,7 @@ content-type: application/json
 "regDt" : "2023-01-01", 
 "score" : 5, 
 "content" : "적당해요", 
-"oiSeq" : 4, 
+"oiSeq" : 6, 
 "tasteScore" : 5, 
 "quantityScore" : 5, 
 "deliveryScore" : 5, 
