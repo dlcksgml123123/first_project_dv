@@ -8,5 +8,6 @@ import com.greenart.yogio.member.review.entity.MbReviewEntity;
 @Repository
 public interface MbReviewRepository extends JpaRepository<MbReviewEntity, Long>{
     public MbReviewEntity findByReOiSeq(Long reOiSeq);
+    public Integer countByReOiSeq(Long reOiSeq); 
     
 }

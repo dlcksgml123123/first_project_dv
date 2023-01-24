@@ -30,8 +30,8 @@ POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user18",
-   "miPhone" : "01090019244"
+   "miId" : "user10",
+   "miPhone" : "01099951234"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1
@@ -45,10 +45,10 @@ PUT http://localhost:9244/review/write HTTP/1.1
 content-type: application/json
 
 {
-"regDt" : "2023-01-20", 
+"regDt" : "2023-01-01", 
 "score" : 5, 
 "content" : "적당해요", 
-"oiSeq" : 6, 
+"oiSeq" : 4, 
 "tasteScore" : 5, 
 "quantityScore" : 5, 
 "deliveryScore" : 5, 

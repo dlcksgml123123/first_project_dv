@@ -45,34 +45,40 @@ public class MbReviewService {
         return resultMap;
      }
 
-     else if (diffDay > 14) {
+     else if(r_repo.countByReOiSeq(data.getOiSeq())>=1) {
+        resultMap.put("status", false);
+        resultMap.put("message", "이미 리뷰가 등록되었습니다");
+        resultMap.put("code",HttpStatus.BAD_REQUEST);
+     }
+
+     else if (diffDay > 7) {
       resultMap.put("status", false);
-      resultMap.put("message", "주문일에서 2주까지만 리뷰 등록이 가능합니다.");
+      resultMap.put("message", "주문이 완료된 날짜에서 1주까지만 리뷰 등록이 가능합니다.");
       resultMap.put("code",HttpStatus.BAD_REQUEST);
     }
-else {
-     MbReviewEntity review = MbReviewEntity.builder()
-     .reRegDt(data.getRegDt())
-     .reScore(data.getScore())
-     .reContent(data.getContent())
-     .reOiSeq(data.getOiSeq())
-     .reTasteScore(data.getTasteScore())
-     .reQuantityScore(data.getQuantityScore())
-     .reDeliveryScore(data.getDeliveryScore())
-     .build();
-     r_repo.save(review);
+     else {
+        MbReviewEntity review = MbReviewEntity.builder()
+        .reRegDt(data.getRegDt())
+        .reScore(data.getScore())
+        .reContent(data.getContent())
+        .reOiSeq(data.getOiSeq())
+        .reTasteScore(data.getTasteScore())
+        .reQuantityScore(data.getQuantityScore())
+        .reDeliveryScore(data.getDeliveryScore())
+        .build();
+        r_repo.save(review);
 
-     MbReviewImageEntity image = MbReviewImageEntity.builder()
-     .riName(data.getName())
-     .riOrder(data.getOrder())
-     .riReSeq(review)
-     .build();
-      i_repo.save(image);
+        MbReviewImageEntity image = MbReviewImageEntity.builder()
+        .riName(data.getName())
+        .riOrder(data.getOrder())
+        .riReSeq(review)
+        .build();
+          i_repo.save(image);
 
-      resultMap.put("status", true);
-      resultMap.put("message", "리뷰가 등록되었습니다");
-      resultMap.put("code", HttpStatus.CREATED);
-    }
-    return resultMap;
+          resultMap.put("status", true);
+          resultMap.put("message", "리뷰가 등록되었습니다");
+          resultMap.put("code", HttpStatus.CREATED);
+        }
+        return resultMap;
     }
 }
