@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+// import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentCompleteEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentEndEntity;
 import com.greenart.yogio.lchwork.repository.OiDeliveryInfoRepository;
@@ -24,6 +24,7 @@ import com.greenart.yogio.lchwork.repository.OiPlusCategoryRepository;
 import com.greenart.yogio.lchwork.repository.OiPlusMenuChoiceRepository;
 import com.greenart.yogio.lchwork.repository.OiPlusMenuRepository;
 import com.greenart.yogio.lchwork.repository.OiStoreInfoRepository;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -60,7 +61,7 @@ public class PaymentInfoService {
     }
     public Map<String, Object> showPayEndInfo(HttpSession session, String orderNum ){
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        OiMemberInfoEntity loginMember = (OiMemberInfoEntity)session.getAttribute("loginUser");
+        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
         OiPaymentEndEntity data = payEndRepo.findByOiOrderNumAndMiSeq(orderNum, loginMember.getMiSeq());
         if(data == null) {
             map.put("message", "조회할 결제정보가 없음");

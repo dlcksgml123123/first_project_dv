@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+// import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.repository.OiMemberInfoRepository;
 import com.greenart.yogio.lchwork.vo.OiLoginMemberVO;
 import com.greenart.yogio.lchwork.vo.OiLoginVO;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.utils.MbAESAlgorithm;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,7 +19,7 @@ import jakarta.servlet.http.HttpSession;
 @Service
 public class OiMemberService {
     @Autowired OiMemberInfoRepository oimRepo;
-    public Map<String, Object> addMember(OiMemberInfoEntity data) {
+    public Map<String, Object> addMember(MbMemberInfoEntity data) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
         if(oimRepo.countByMiId(data.getMiId()) >= 1) {
@@ -42,7 +43,7 @@ public class OiMemberService {
     }
     public Map<String, Object> LoginMember(OiLoginVO data) throws Exception {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        OiMemberInfoEntity loginUser = null;
+        MbMemberInfoEntity loginUser = null;
         loginUser = oimRepo.findByMiIdAndMiPwd(data.getMiId(), MbAESAlgorithm.Encrypt(data.getMiPwd()));
         if(loginUser == null) {
             resultMap.put("status", false);

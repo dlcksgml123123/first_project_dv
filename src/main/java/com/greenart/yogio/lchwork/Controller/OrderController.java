@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.yogio.lchwork.entity.OiDeliveryInfoEntity;
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+// import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentCompleteEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentEndEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentInfoEntity;
@@ -24,6 +24,7 @@ import com.greenart.yogio.lchwork.repository.OiPaymentCompleteRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentEndRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentInfoRepository;
 import com.greenart.yogio.lchwork.service.PaymentInfoService;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.member.service.MbMemberService;
 import com.greenart.yogio.mypage.member.service.MpMemberService;
 
@@ -69,7 +70,7 @@ public class OrderController {
     @GetMapping("/end")
     public Map<String, Object> showPayEndInfo(HttpSession session,  @RequestParam String orderNum ){
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        OiMemberInfoEntity loginMember = (OiMemberInfoEntity)session.getAttribute("loginUser");
+        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
         OiPaymentEndEntity data = peRepo.findByOiOrderNumAndMiSeq(orderNum, loginMember.getMiSeq());
         if(data == null) {
             map.put("message", "조회할 결제정보가 없음");
