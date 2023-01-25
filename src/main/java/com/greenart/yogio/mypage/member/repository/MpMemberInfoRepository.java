@@ -3,15 +3,16 @@ package com.greenart.yogio.mypage.member.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
 
 @Repository
-public interface MpMemberInfoRepository extends JpaRepository<MpMemberInfoEntity, Long>{
-  MpMemberInfoEntity findByMiIdAndMiPwd(String miId, String miPwd);
+public interface MpMemberInfoRepository extends JpaRepository<MbMemberInfoEntity, Long>{
+  MbMemberInfoEntity findByMiIdAndMiPwd(String miId, String miPwd);
 
-  MpMemberInfoEntity findByMiSeq(Long miSeq);
+  MbMemberInfoEntity findByMiSeq(Long miSeq);
 
-  MpMemberInfoEntity findByMiId(String miId);
+  MbMemberInfoEntity findByMiId(String miId);
 
   
 }

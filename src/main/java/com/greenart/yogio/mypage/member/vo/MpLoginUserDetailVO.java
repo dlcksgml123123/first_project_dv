@@ -1,6 +1,6 @@
 package com.greenart.yogio.mypage.member.vo;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class MpLoginUserDetailVO {
   private String email;
   private String phone;
 
-  public MpLoginUserDetailVO(MpMemberInfoEntity entity) {
+  public MpLoginUserDetailVO(MbMemberInfoEntity entity) {
     this.id = entity.getMiId();
     this.nickname = entity.getMiNickname();
     this.address = entity.getMiAddress();

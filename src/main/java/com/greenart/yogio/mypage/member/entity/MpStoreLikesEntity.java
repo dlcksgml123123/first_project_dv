@@ -2,6 +2,7 @@ package com.greenart.yogio.mypage.member.entity;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
 
 import jakarta.persistence.Column;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class MpStoreLikesEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "sl_seq")    private Long slSeq;
-  @ManyToOne @JoinColumn(name = "sl_mi_seq") MpMemberInfoEntity member;
+  @ManyToOne @JoinColumn(name = "sl_mi_seq") MbMemberInfoEntity member;
   // @Column(name = "sl_mi_seq") private Long slMiSeq;
   @ManyToOne @JoinColumn(name = "sl_si_seq") MpStoreInfoEntity store;
   // @Column(name = "sl_si_seq") private Long slSiSeq;

@@ -10,14 +10,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.order.service.MpMemberOrderService;
-import com.greenart.yogio.mypage.review.entity.MpReviewInfoEntity;
 import com.greenart.yogio.mypage.review.service.MpReviewService;
 import com.greenart.yogio.mypage.store.entity.MpStoreCategoryEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
@@ -46,7 +44,7 @@ public class MpStoreController {
   
   // 주문 내역 출력
   @GetMapping("/order")
-  public ResponseEntity<Object> getOrderList(HttpSession session, MpMemberInfoEntity memberInfo, Pageable pageable) {
+  public ResponseEntity<Object> getOrderList(HttpSession session, MbMemberInfoEntity memberInfo, Pageable pageable) {
     Map<String, Object> map = order.showOrderList(memberInfo, session, pageable);
     // map.put("order", order.showOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -54,17 +52,17 @@ public class MpStoreController {
   
   // 내가쓴 리뷰 출력
   @GetMapping("/review")
-  public ResponseEntity<Object> getReviewList(HttpSession session, MpMemberInfoEntity memberInfo,
+  public ResponseEntity<Object> getReviewList(HttpSession session, MbMemberInfoEntity memberInfo,
       Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    memberInfo = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    memberInfo = (MbMemberInfoEntity) session.getAttribute("loginUser");
     map.put("review", rService.showReviewList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   // 리뷰 삭제
   @GetMapping("/deleteReview")
-   public ResponseEntity<Object> deleteReview ( HttpSession session, MpMemberInfoEntity memberInfo, @RequestParam Long reSeq) {
+   public ResponseEntity<Object> deleteReview ( HttpSession session, MbMemberInfoEntity memberInfo, @RequestParam Long reSeq) {
     Map<String, Object> map = rService.deleteReview(session, memberInfo, reSeq); 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
@@ -88,10 +86,10 @@ public class MpStoreController {
 
   // 간단한 주문 내역 출력
   @GetMapping("/briefOrder")
-  public ResponseEntity<Object> getBriefOrderList(HttpSession session, MpMemberInfoEntity memberInfo,
+  public ResponseEntity<Object> getBriefOrderList(HttpSession session, MbMemberInfoEntity memberInfo,
       Pageable pageable) {
     Map<String, Object> map = order.showBriefOrderList(memberInfo, session, pageable);
-    memberInfo = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    memberInfo = (MbMemberInfoEntity) session.getAttribute("loginUser");
 
     // map.put("order", order.showBriefOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);

@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.member.repository.MbMemberInfoRepository;
 import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.member.service.MpMemberService;
 import com.greenart.yogio.mypage.member.vo.MpLoginUserVO;
@@ -29,6 +30,7 @@ public class MpMemberInfoController {
   @Autowired MpMemberInfoRepository mRepo;
   @Autowired MpMemberService mService;
   @Autowired MpMemberOrderService order;
+  @Autowired MbMemberInfoRepository mbRepo;
   
   // 로그인
   @PostMapping("/login")
@@ -53,8 +55,8 @@ public class MpMemberInfoController {
   @GetMapping("/memberlist")
   public ResponseEntity<Object> updateMember() {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    List<MpMemberInfoEntity> mlist = new ArrayList<MpMemberInfoEntity>();
-    mlist = mRepo.findAll();
+    List<MbMemberInfoEntity> mlist = new ArrayList<MbMemberInfoEntity>();
+    mlist = mbRepo.findAll();
     map.put("list", mlist);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
