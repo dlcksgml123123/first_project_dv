@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
@@ -26,14 +24,12 @@ import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOrderNumRe
 import com.greenart.yogio.mypage.order.repository.MpOrderInfoRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuChoiceRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuRepository;
-import com.greenart.yogio.mypage.page.page;
 import com.greenart.yogio.mypage.store.entity.MpMenuCategoryEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
 import com.greenart.yogio.mypage.store.repository.MpMenuCategoryRepository;
 import com.greenart.yogio.mypage.store.repository.MpStoreInfoRepository;
 
 import jakarta.servlet.http.HttpSession;
-import net.bytebuddy.TypeCache.Sort;
 
 @Service
 public class MpMemberOrderService {
