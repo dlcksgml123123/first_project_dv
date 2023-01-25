@@ -30,8 +30,8 @@ POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user10",
-   "miPhone" : "01099951234"
+   "miId" : "user002",
+   "miPhone" : "01099666666"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1

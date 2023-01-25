@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageMenuChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOptionChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOrderPriceByOiSeqEntity;
@@ -44,9 +44,9 @@ public class MpMemberOrderService {
   @Autowired MpMypageOrderPriceByOiSeqRepository priceOiSeqRepo;
   
   // 멤버별 상세한 주문 내역 출력
-  public Map<String, Object> showOrderList(MpMemberInfoEntity memberInfo, HttpSession session, Pageable pageable) {
+  public Map<String, Object> showOrderList(MbMemberInfoEntity memberInfo, HttpSession session, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MpMemberInfoEntity member = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -156,9 +156,9 @@ public class MpMemberOrderService {
   
 
   // 멤버별 간단한 주문 내역 출력
-  public Map<String, Object> showBriefOrderList(MpMemberInfoEntity memberInfo, HttpSession session, @PageableDefault (size = 8) Pageable page) {
+  public Map<String, Object> showBriefOrderList(MbMemberInfoEntity memberInfo, HttpSession session, @PageableDefault (size = 8) Pageable page) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MpMemberInfoEntity member = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -308,7 +308,7 @@ public class MpMemberOrderService {
   // 주문 번호를 통해 주문표 출력
   public Map<String, Object> showWishList (HttpSession session) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MpMemberInfoEntity member = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");

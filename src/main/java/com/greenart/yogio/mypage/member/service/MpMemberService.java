@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.member.vo.MpLoginUserDetailVO;
 import com.greenart.yogio.mypage.member.vo.MpLoginUserVO;
@@ -24,7 +24,7 @@ public class MpMemberService {
   public Map<String, Object> updateMember(MpUpdateMemberVO data, HttpSession session) throws Exception{
     Map<String, Object> map = new LinkedHashMap<String, Object>();
     // session의 loginUser 값을 login으로 저장
-    MpMemberInfoEntity login = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
     // 로그인 데이터 없음 = 로그인 한 적이 없다.
     if (login == null) {
       map.put("status", false);
@@ -39,8 +39,8 @@ public class MpMemberService {
           // null 값인 데이터 없는 경우
           if (data.getNickname() != null && data.getAddress() != null && data.getPhone() != null) {
             // 바로 입력된 데이터 저장
-            MpMemberInfoEntity member = mRepo.findByMiId(login.getMiId());
-            MpMemberInfoEntity modify = MpMemberInfoEntity.builder()
+            MbMemberInfoEntity member = mRepo.findByMiId(login.getMiId());
+            MbMemberInfoEntity modify = MbMemberInfoEntity.builder()
                 .miId(member.getMiId()).miStatus(member.getMiStatus()).miPwd(member.getMiPwd())
                 .miSeq(member.getMiSeq()).miAddress(data.getAddress()).miNickname(data.getNickname())
                 .miEmail(member.getMiEmail()).miPhone(data.getPhone()).build();
@@ -81,8 +81,8 @@ public class MpMemberService {
             // null 값인 데이터 없는 경우
             if (data.getNickname() != null && data.getAddress() != null && data.getPhone() != null) {
               // 바로 입력된 데이터 저장
-              MpMemberInfoEntity member = mRepo.findByMiId(login.getMiId());
-              MpMemberInfoEntity modify = MpMemberInfoEntity.builder()
+              MbMemberInfoEntity member = mRepo.findByMiId(login .getMiId());
+              MbMemberInfoEntity modify = MbMemberInfoEntity.builder()
                   .miId(member.getMiId()).miStatus(member.getMiStatus())
                   .miSeq(member.getMiSeq()).miAddress(data.getAddress()).miNickname(data.getNickname())
                   .miEmail(member.getMiEmail()).miPhone(data.getPhone()).miPwd(AESAlgorithm.Encrypt(data.getNewPwd())).build();
@@ -117,7 +117,7 @@ public class MpMemberService {
   // 로그인 서비스
   public Map<String, Object> loginMember(MpLoginUserVO data) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    MpMemberInfoEntity loginUser = null;
+    MbMemberInfoEntity loginUser = null;
     try {
       loginUser = mRepo.findByMiIdAndMiPwd(data.getId(), AESAlgorithm.Encrypt(data.getPwd()));
     } catch (Exception e) {
@@ -145,7 +145,7 @@ public class MpMemberService {
   // 마이페이지 정보 출력
   public Map<String, Object> showMemberInfo(HttpSession session) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    MpMemberInfoEntity loginMember = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity loginMember = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (loginMember == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용가능한 서비스입니다.");

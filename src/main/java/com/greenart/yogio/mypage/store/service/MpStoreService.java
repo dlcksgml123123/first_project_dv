@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.member.repository.MpStoreLikesRepository;
 import com.greenart.yogio.mypage.store.entity.MpMypageStoreLikesViewEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreCategoryEntity;
@@ -26,7 +26,7 @@ public class MpStoreService {
   // 찜한 가게 목록 출력하는 메서드
   public Map<String, Object> showLikedStore(HttpSession session, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    MpMemberInfoEntity login = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (login == null) {
       map.put("stauts", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");

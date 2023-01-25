@@ -2,7 +2,7 @@ package com.greenart.yogio.mypage.order.entity;
 
 import java.util.Date;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.store.entity.MpMenuInfoEntity;
 
 import jakarta.persistence.Column;
@@ -28,7 +28,7 @@ public class MpOrderInfoEntity {
   private Long oiSeq;
   @ManyToOne @JoinColumn(name = "oi_mni_seq") MpMenuInfoEntity menu;
   // @Column(name = "oi_mni_seq") private Long oiMniSeq;
-  @ManyToOne @JoinColumn(name = "oi_mi_seq") MpMemberInfoEntity member;  
+  @ManyToOne @JoinColumn(name = "oi_mi_seq") MbMemberInfoEntity member;  
   // @Column(name = "oi_mi_seq")             private Long oiMiSeq;  
   @Column(name = "oi_menu_amount")        private Integer oiMenuAmount;  
   @Column(name = "oi_status")             private Integer oiStatus;  

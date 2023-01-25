@@ -13,7 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.mypage.review.entity.MpMypageReviewViewEntity;
 import com.greenart.yogio.mypage.review.entity.MpReviewInfoEntity;
 import com.greenart.yogio.mypage.review.repository.MpMypageReviewViewRepository;
@@ -32,10 +32,10 @@ public class MpReviewService {
   MpReviewInfoRepository reivewRepo;
   
   // review 리스트 출력 (등록일 내림차순)
-  public Map<String, Object> showReviewList(MpMemberInfoEntity memberInfo, HttpSession session,
+  public Map<String, Object> showReviewList(MbMemberInfoEntity memberInfo, HttpSession session,
   @PageableDefault(size=8, sort = "reRegDt", direction = Sort.Direction.DESC) Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MpMemberInfoEntity member = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -58,9 +58,9 @@ public class MpReviewService {
   }
   
   @Transactional
-  public Map<String, Object> deleteReview(HttpSession session, MpMemberInfoEntity memberInfo, Long reSeq) {
+  public Map<String, Object> deleteReview(HttpSession session, MbMemberInfoEntity memberInfo, Long reSeq) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MpMemberInfoEntity member = (MpMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     MpReviewInfoEntity review = reivewRepo.findByReSeq(reSeq);
 
     Date day = new Date();
