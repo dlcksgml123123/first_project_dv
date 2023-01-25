@@ -1,5 +1,7 @@
 package com.greenart.yogio.lchwork.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,4 +26,5 @@ public class OiMenuInfoEntity {
     @Column(name = "mni_name") private String mniName;
     @Column(name = "mni_discount") private Double mniDiscount;
     @Column(name = "mni_price") private Integer mniPrice;
+    @Column(name = "mni_filename")  @JsonIgnore private String mniFilename;
 }

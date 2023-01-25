@@ -36,8 +36,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoEntity;
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoMainMenuEntity;
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoPlusMenuEntity;
+import com.greenart.yogio.storeInfo.entity.SiDeliveryInfoEntity;
 import com.greenart.yogio.storeInfo.entity.SiMenuPlusJoinEntity;
 import com.greenart.yogio.storeInfo.entity.SiStoreInfoDetailEntity;
+import com.greenart.yogio.storeInfo.repository.SiDeliveryInfoRepository;
 import com.greenart.yogio.storeInfo.repository.SiMenuPlusJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoDetailRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoListRepository;
@@ -51,12 +53,14 @@ import com.greenart.yogio.storeInfo.service.SiStoreInfoListService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoReviewService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoService;
 import com.greenart.yogio.storeInfo.vo.SiMenuListVO;
+import com.greenart.yogio.storeInfo.vo.SiStoreInfoVO;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class SiStoreAPIController {
+    @Autowired SiDeliveryInfoRepository siDeliveryInfoRepository;
     @Autowired SiStoreInfoMainMenuRepository siStoreInfoMainMenuRepository;
     @Autowired SiStoreInfoPlusMenuRepository siStoreInfoPlusMenuRepository;
     @Autowired SiStoreInfoDetailService siStoreInfoDetailService;
@@ -72,22 +76,10 @@ public class SiStoreAPIController {
     @Value("${file.image.store}") String store_img_path;
     @Value("${file.image.menu}") String menu_img_path;
 
-    @PutMapping("/{type}/add") 
-    public ResponseEntity<Object> putStoreInfo(@ModelAttribute SiStoreInfoEntity data
-    ,@PathVariable String type,@RequestPart MultipartFile file) {
+    @PutMapping("/store/add") 
+    public ResponseEntity<Object> putStoreInfo(SiStoreInfoVO data ,@RequestPart MultipartFile file) {
         Map<String, Object>  map = new LinkedHashMap<String, Object>();
-        Path folderLocation = null;
-        if (type.equals("store")) {
-            folderLocation = Paths.get(store_img_path);
-        }
-        else if (type.equals("menu")) {
-            folderLocation = Paths.get(menu_img_path);
-        }
-        else {
-        map.put("status", false);
-        map.put("message","타입 정보가 잘못되었습니다.(ex : /store/add, /menu/add");
-        return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
-      }
+        Path folderLocation =  Paths.get(store_img_path);
         String originFileName = file.getOriginalFilename();
         String [] split = originFileName.split("\\."); 
         String ext = split[split.length -1];
@@ -95,7 +87,7 @@ public class SiStoreAPIController {
         for (int i = 0; i<split.length-1; i++ ){
             filename += split[i];
         }
-        String saveFilename = type+"_";
+        String saveFilename = "store_";
         Calendar c = Calendar.getInstance();
         saveFilename += c.getTimeInMillis()+"."+ext;
         Path targetFile = folderLocation.resolve(saveFilename);
@@ -106,7 +98,18 @@ public class SiStoreAPIController {
       }
       data.setSiUri(filename);
       data.setSiFileName(saveFilename);
-      sService.addStoreInfo(data);
+
+      SiDeliveryInfoEntity deliveryEntity = new SiDeliveryInfoEntity(null, data.getDiDistance()
+      ,data.getDiDeliveryPrice(), data.getDiTime());
+      siDeliveryInfoRepository.save(deliveryEntity);
+
+      data.setSiDiSeq(deliveryEntity.getDiSeq());
+      SiStoreInfoEntity storeEntity = new SiStoreInfoEntity(null, data.getSiName(), data.getSiUri(),
+      data.getSiMinOrderPrice(),data.getSiDiscountPrice(),data.getSiDiscountCondition(),data.getSiDiSeq(),data.getSiCleanInfo(),
+      data.getSiFileName());
+      siStoreInfoRepository.save(storeEntity);
+      map.put("message", "가게등록이 완료됐습니다.");
+      
       return new ResponseEntity<>(map,HttpStatus.OK);
 
     }
@@ -237,5 +240,5 @@ public class SiStoreAPIController {
         
     }
   
-    
+      
 }
