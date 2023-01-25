@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableArgumentResolver;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
@@ -31,11 +30,12 @@ public class MpStoreService {
     if (login == null) {
       map.put("stauts", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
-    } else {
+    } 
+    else {
       // 멤버 seq로 찜한 가게 목록 들고오기
       Page<MpMypageStoreLikesViewEntity> store = sLikeViewRepo.findByMiSeq(login.getMiSeq(), pageable);
       // 찜한 가게가 없다면, 메세지 출력
-      if (store == null) {
+      if (store.isEmpty()) {
         map.put("status", false);
         map.put("message", "찜한 가게가 없습니다.");
       }

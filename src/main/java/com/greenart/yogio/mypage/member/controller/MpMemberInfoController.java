@@ -1,6 +1,5 @@
 package com.greenart.yogio.mypage.member.controller;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.yogio.mypage.member.entity.MpMemberInfoEntity;
@@ -20,6 +20,7 @@ import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.member.service.MpMemberService;
 import com.greenart.yogio.mypage.member.vo.MpLoginUserVO;
 import com.greenart.yogio.mypage.member.vo.MpUpdateMemberVO;
+import com.greenart.yogio.mypage.order.service.MpMemberOrderService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +28,7 @@ import jakarta.servlet.http.HttpSession;
 public class MpMemberInfoController {
   @Autowired MpMemberInfoRepository mRepo;
   @Autowired MpMemberService mService;
+  @Autowired MpMemberOrderService order;
   
   // 로그인
   @PostMapping("/login")
@@ -74,6 +76,14 @@ public class MpMemberInfoController {
   @GetMapping("/loginuser")
   public ResponseEntity<Object> getLoginMember(HttpSession session) {
     Map<String, Object> map = mService.showMemberInfo(session);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+    // 주문번호를 통한 주문 내역 조회
+  @GetMapping("/order") 
+  public ResponseEntity<Object> getOrderList(@RequestParam String orderNum) {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    map.put("order", order.showOrder(orderNum));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }
