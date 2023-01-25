@@ -14,5 +14,6 @@ public interface SsStoreSearchViewRepository extends JpaRepository<SsStoreSearch
 
     Page<SsStoreSearchViewEntity> findByScNameContains(String scName,Pageable pageable);
 
+    // Page<SsStoreSearchViewEntity> findByMniNameContains(String mniName,Pageable pageable);
     
 }

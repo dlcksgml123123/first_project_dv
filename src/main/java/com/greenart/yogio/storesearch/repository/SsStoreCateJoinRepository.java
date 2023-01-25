@@ -14,5 +14,6 @@ import com.greenart.yogio.storesearch.entity.SsCategoryList;
 public interface SsStoreCateJoinRepository extends JpaRepository<SsCategoryList,Long>{
     Page<SsCategoryList> findByScNameContains(String keyword, Pageable pageable);
 
+    
    
 }

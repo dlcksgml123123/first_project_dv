@@ -14,9 +14,7 @@ import com.greenart.yogio.storesearch.entity.SsMenucateJoinEntity;
 
 @Repository
 public interface SsMenucateJoinRepository extends JpaRepository<SsMenucateJoinEntity, Long>{
-    // List<SsMenucateJoinEntity> findAll();
-    // List<SsMenucateJoinEntity> findByScnameContains(String scName);
-    
+  
     
 
 
