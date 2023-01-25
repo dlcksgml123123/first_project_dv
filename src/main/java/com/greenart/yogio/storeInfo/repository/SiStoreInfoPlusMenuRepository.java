@@ -10,5 +10,6 @@ import com.greenart.yogio.storeInfo.entity.SiStoreInfoPlusMenuEntity;
 @Repository
 public interface SiStoreInfoPlusMenuRepository extends JpaRepository<SiStoreInfoPlusMenuEntity,Long>{
    public List<SiStoreInfoPlusMenuEntity> findByMniSeq (Long mniSeq);
+   
     
 }

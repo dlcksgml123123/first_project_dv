@@ -30,6 +30,7 @@ public class MenuVO {
     private String mni_name;
     private Double mni_discount;
     private Integer mni_price;
+    private String mni_filename;
 // 메뉴 카테 연결 5
 // mcj_seq
 // mcj_mc_seq

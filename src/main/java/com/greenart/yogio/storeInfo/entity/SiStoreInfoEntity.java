@@ -3,6 +3,8 @@ package com.greenart.yogio.storeInfo.entity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,5 +33,5 @@ public class SiStoreInfoEntity {
     @Column(name = "si_discount_condition") private String siDiscountCondition;
     @Column(name = "si_di_seq") private Long siDiSeq;
     @Column(name = "si_clean_info") @ColumnDefault("1") private Integer siCleanInfo;
-    @Column(name = "si_file_name") private String siFileName;
+    @Column(name = "si_file_name") @JsonIgnore private String siFileName;
 }
