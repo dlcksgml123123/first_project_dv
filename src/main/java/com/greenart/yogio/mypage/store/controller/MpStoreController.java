@@ -46,10 +46,9 @@ public class MpStoreController {
   
   // 주문 내역 출력
   @GetMapping("/order")
-  public ResponseEntity<Object> getOrderList(HttpSession session, MpMemberInfoEntity memberInfo) {
-    Map<String, Object> map = new LinkedHashMap<String, Object>();
-    memberInfo = (MpMemberInfoEntity) session.getAttribute("loginUser");
-    map.put("order", order.showOrderList(memberInfo, session));
+  public ResponseEntity<Object> getOrderList(HttpSession session, MpMemberInfoEntity memberInfo, Pageable pageable) {
+    Map<String, Object> map = order.showOrderList(memberInfo, session, pageable);
+    // map.put("order", order.showOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
@@ -70,7 +69,7 @@ public class MpStoreController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
-
+  // 리뷰 수 출력
   @GetMapping("/reviewCnt")
   public ResponseEntity<Object> showReviewCnt(MpStoreInfoEntity store) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
@@ -78,11 +77,30 @@ public class MpStoreController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
+  // 가게 카테고리 출력
   @GetMapping("/storecate")
   public ResponseEntity<Object> getStoreCate(MpStoreCategoryEntity storeCate, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
     map.put("status", true);
     map.put("storeCate", sService.showStoreCate(pageable));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  // 간단한 주문 내역 출력
+  @GetMapping("/briefOrder")
+  public ResponseEntity<Object> getBriefOrderList(HttpSession session, MpMemberInfoEntity memberInfo,
+      Pageable pageable) {
+    Map<String, Object> map = order.showBriefOrderList(memberInfo, session, pageable);
+    memberInfo = (MpMemberInfoEntity) session.getAttribute("loginUser");
+
+    // map.put("order", order.showBriefOrderList(memberInfo, session, pageable));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
+  @GetMapping("/wishList")
+  public ResponseEntity<Object> getWishList(HttpSession session) {
+    Map<String, Object> map = order.showWishList(session);
+    // map.put("order", order.showBriefOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
