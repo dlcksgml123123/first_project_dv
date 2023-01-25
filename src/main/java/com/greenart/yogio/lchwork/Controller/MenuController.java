@@ -18,16 +18,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.greenart.yogio.lchwork.entity.OiDeliveryInfoEntity;
 import com.greenart.yogio.lchwork.entity.OiMenuCateJoinEntity;
 import com.greenart.yogio.lchwork.entity.OiMenuCategoryEntity;
 import com.greenart.yogio.lchwork.entity.OiMenuInfoEntity;
@@ -79,7 +76,8 @@ public class MenuController {
       
       data.setMni_img(filename);
       data.setMni_filename(saveFilename);
-        OiMenuCategoryEntity mcEntity = mcRepo.findByMcNameAndMcSiSeq(data.getMc_name(), data.getMc_si_seq());
+      
+      OiMenuCategoryEntity mcEntity = mcRepo.findByMcNameAndMcSiSeq(data.getMc_name(), data.getMc_si_seq());
         if(mcEntity == null) {
             OiStoreInfoEntity store = (OiStoreInfoEntity)siRepo.findBySiSeq(data.getMc_si_seq());
             if(store == null) {
@@ -90,21 +88,41 @@ public class MenuController {
                 null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
             );
             mcRepo.save(mcEntity);
-            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
-                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(),data.getMni_filename()
-                );
-                mniRepo.save(mniEntity);
         
-                
-                OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-                    null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-                    );
-                    mcjRepo.save(mcjEntity);  
-                }
+            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+            );
+            mniRepo.save(mniEntity);
+            
+            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+            );
+            mcjRepo.save(mcjEntity);
+            
+            map.put("mcEntity", mcjEntity);
+            map.put("mniEntity", mniEntity);
+            map.put("mcEntity", mcEntity);
             }
-            map.put("message", "메뉴등록이 완료됐습니다.");
+        }
+        else{
+            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+            );
+            mniRepo.save(mniEntity);
+            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+            );
+            mcjRepo.save(mcjEntity);
+            
+            map.put("mcjEntity", mcjEntity);
+            map.put("mniEntity", mniEntity);
+            map.put("mcEntity", mcEntity);
+            
+        }
         return map;
     }
+
+
      @GetMapping("/images/{uri}") 
    public ResponseEntity<Resource> getImage ( @PathVariable String uri, 
             HttpServletRequest request ) throws Exception { 
