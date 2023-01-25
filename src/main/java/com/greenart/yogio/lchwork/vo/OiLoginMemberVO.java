@@ -1,7 +1,8 @@
 package com.greenart.yogio.lchwork.vo;
 
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+// import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.entity.OiStoreInfoEntity;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class OiLoginMemberVO {
     private String miAddress;
     private String siName;
 
-    public OiLoginMemberVO(OiMemberInfoEntity entity) {
+    public OiLoginMemberVO(MbMemberInfoEntity entity) {
         this.miPhone = entity.getMiPhone();
         this.miAddress = entity.getMiAddress();
     }

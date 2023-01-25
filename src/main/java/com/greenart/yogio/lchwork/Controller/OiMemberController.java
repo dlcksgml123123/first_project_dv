@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+// import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.service.OiMemberService;
 import com.greenart.yogio.lchwork.vo.OiLoginMemberVO;
 import com.greenart.yogio.lchwork.vo.OiLoginVO;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -28,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 public class OiMemberController {
     @Autowired OiMemberService oimService;
     @PutMapping("/join")
-    public ResponseEntity<Object> memberJoin(@RequestBody OiMemberInfoEntity data) {
+    public ResponseEntity<Object> memberJoin(@RequestBody MbMemberInfoEntity data) {
         Map<String, Object> resultMap = oimService.addMember(data);
         return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
@@ -54,7 +55,7 @@ public class OiMemberController {
     @GetMapping("/info")
     public Map<String, Object> memberInfo(HttpSession session) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        OiMemberInfoEntity loginMember = (OiMemberInfoEntity)session.getAttribute("loginUser");
+        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
         if(loginMember == null) {
             map.put("status", false);
             map.put("message", "로그인 후 이용 가능 서비스");
