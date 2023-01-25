@@ -7,5 +7,6 @@ import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 
 @Repository
 public interface OiMemberInfoRepository extends JpaRepository<OiMemberInfoEntity, Long> {
-    
+    public OiMemberInfoEntity findByMiIdAndMiPwd(String miId, String miPwd);
+    public Integer countByMiId(String miId);
 }

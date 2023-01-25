@@ -59,27 +59,44 @@ public class MenuController {
         OiMenuCategoryEntity mcEntity = mcRepo.findByMcNameAndMcSiSeq(data.getMc_name(), data.getMc_si_seq());
         if(mcEntity == null) {
             OiStoreInfoEntity store = (OiStoreInfoEntity)siRepo.findBySiSeq(data.getMc_si_seq());
-             if(store == null) {
+            if(store == null) {
                 map.put("message", "등록된 가게가 없습니다.");
-             }
-             else {
+            }
+            else {
             mcEntity = new OiMenuCategoryEntity(
                 null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
             );
             mcRepo.save(mcEntity);
         
-        OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
-            null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price()
-        );
-        mniRepo.save(mniEntity);
-        OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-            null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-        );
-        mcjRepo.save(mcjEntity);
-    }
-    }
-        map.put("mcEntity", mcEntity);
-
+            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price()
+            );
+            mniRepo.save(mniEntity);
+            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+            );
+            mcjRepo.save(mcjEntity);
+            
+            map.put("mcEntity", mcjEntity);
+            map.put("mniEntity", mniEntity);
+            map.put("mcEntity", mcEntity);
+            }
+        }
+        else{
+            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price()
+            );
+            mniRepo.save(mniEntity);
+            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+            );
+            mcjRepo.save(mcjEntity);
+            
+            map.put("mcjEntity", mcjEntity);
+            map.put("mniEntity", mniEntity);
+            map.put("mcEntity", mcEntity);
+            
+        }
         return map;
     }
 }
