@@ -21,7 +21,7 @@ public class MbReviewVO {
   private String    name;          //riName; image
   private Integer   order;         //riOrder; image
   public MbReviewVO(MbReviewEntity rentity, MbReviewImageEntity ientity) {
-    this.regDt = rentity.getReRegDt();
+    this.regDt = new Date();
     this.score = rentity.getReScore();
     this.content = rentity.getReContent();
     this.oiSeq = rentity.getReOiSeq();

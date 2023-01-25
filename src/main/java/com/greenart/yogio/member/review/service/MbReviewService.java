@@ -61,7 +61,7 @@ public class MbReviewService {
     }
      else {
         MbReviewEntity review = MbReviewEntity.builder()
-        .reRegDt(data.getRegDt())
+        .reRegDt(day)
         .reScore(data.getScore())
         .reContent(data.getContent())
         .reOiSeq(data.getOiSeq())
