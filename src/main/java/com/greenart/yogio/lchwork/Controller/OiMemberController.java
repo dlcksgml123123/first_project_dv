@@ -1,0 +1,69 @@
+package com.greenart.yogio.lchwork.Controller;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+import com.greenart.yogio.lchwork.service.OiMemberService;
+import com.greenart.yogio.lchwork.vo.OiLoginMemberVO;
+import com.greenart.yogio.lchwork.vo.OiLoginVO;
+
+import jakarta.servlet.http.HttpSession;
+
+// import com.greenart.yogio.member.repository.MemberInfoRepository;
+
+@RestController
+@RequestMapping("/lch/member")
+public class OiMemberController {
+    @Autowired OiMemberService oimService;
+    @PutMapping("/join")
+    public ResponseEntity<Object> memberJoin(@RequestBody OiMemberInfoEntity data) {
+        Map<String, Object> resultMap = oimService.addMember(data);
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<Object> memberLogin(@RequestBody OiLoginVO data, HttpSession session) throws Exception {
+        Map<String, Object> resultMap = oimService.LoginMember(data);
+        session.setAttribute("loginUser", resultMap.get("loginUser"));
+        return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+
+    }
+    // @GetMapping("/logout")
+    // public ResponseEntity<Object> memberLogout(HttpSession session) {
+    //     session.invalidate();
+    //     return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
+    // }
+    @GetMapping("/logout")
+    public HashMap<String, Object> memberLogout(HttpSession session) {
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        session.invalidate();
+        hashMap.put("message", "로그아웃 성공");
+        return hashMap;
+    }
+    @GetMapping("/info")
+    public Map<String, Object> memberInfo(HttpSession session) {
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        OiMemberInfoEntity loginMember = (OiMemberInfoEntity)session.getAttribute("loginUser");
+        if(loginMember == null) {
+            map.put("status", false);
+            map.put("message", "로그인 후 이용 가능 서비스");
+        }
+        else {
+            OiLoginMemberVO memberDetail = new OiLoginMemberVO(loginMember);
+            map.put("status", true);
+            map.put("memberInfo", memberDetail);
+        }
+        return map;
+    }
+}
