@@ -24,6 +24,8 @@ import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOrderNumRe
 import com.greenart.yogio.mypage.order.repository.MpOrderInfoRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuChoiceRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuRepository;
+import com.greenart.yogio.mypage.order.vo.MpOrderInfoVO;
+import com.greenart.yogio.mypage.order.vo.MpWishListVO;
 import com.greenart.yogio.mypage.store.entity.MpMenuCategoryEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
 import com.greenart.yogio.mypage.store.repository.MpMenuCategoryRepository;
@@ -42,7 +44,7 @@ public class MpMemberOrderService {
   @Autowired MpMenuCategoryRepository menuCateRepo;
   @Autowired MpMypageOrderPriceByOrderNumRepository priceRepo;
   @Autowired MpMypageOrderPriceByOiSeqRepository priceOiSeqRepo;
-  
+
   // 멤버별 상세한 주문 내역 출력
   public Map<String, Object> showOrderList(MbMemberInfoEntity memberInfo, HttpSession session, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
@@ -76,7 +78,7 @@ public class MpMemberOrderService {
           if (mList.get(m).getOiStatus() == 2) {
             // 주문번호를 통해 주문한 메뉴정보를 조회해서 meList에 다시 저장 (주문 번호 별로 엮여있음)
             List<MpMypageMenuChoiceEntity> meList = menuChoiceRepo.findByOiOrderNum(mList.get(m).getOiOrderNum());
-
+            
             // 임의의 변수를 지정
             int count = 0;
             // 반복문을 통해, 리스트 안에 저장된 값의 주문번호가 새로 저장될 값의 주문번호가 일치하는 경우가 있다면,
@@ -90,26 +92,47 @@ public class MpMemberOrderService {
             // 반복문을 다 돌고 나온 후, 만약 변수의 값이 1이 아니라면, 같은 주문번호의 주문이 없는 것이므로 
             // list에 저장
             if (count != 1) {
-              // oi_seq가 같은 주문메뉴와 옵션리스트를 저장할 리스트를 생성
-              List<Object> list = new ArrayList<Object>();
+              List<MpOrderInfoVO> orderMenu = new ArrayList<MpOrderInfoVO>();
 
-              // 반복문을 통해서 하나의 메뉴 저장하고, 그 메뉴의 옵션을 저장
+              // 반복문을 통해서 하나의 메뉴를 vo에 저장하고, 그 메뉴의 옵션을 저장
               for (int j = 0; j < meList.size(); j++) {
-                // 리스트에 메뉴를 저장하고, 
-                list.add(meList.get(j));
-                // 그 메뉴의 주문번호와 일치하는 옵션리스트를 만들어서
-                List<MpMypageOptionChoiceEntity> oList = optionChoiceRepo.findByOiSeq(meList.get(j).getOiSeq());
-                // 옵션 리스트가 존재한다면, 옵션 선택사항이 있는 것이므로
-                if (!oList.isEmpty()) {
-                  // 리스트에 옵션을 저장
-                  list.add(oList);
+                List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(meList.get(j).getOiSeq());
+                MpOrderInfoVO vo = new MpOrderInfoVO();
+                if (option.isEmpty()) {
+                  vo = MpOrderInfoVO.builder()
+                  .oiSeq(meList.get(j).getOiSeq())
+                  .oiOrderNum(meList.get(j).getOiOrderNum())
+                  .miSeq(meList.get(j).getMiSeq())
+                  .mniName(meList.get(j).getMniName())
+                  .menuAmount(meList.get(j).getMenuAmount())
+                  .menuPrice(meList.get(j).getMenuPrice())
+                  .mcSeq(meList.get(j).getMcSeq())
+                  .oiStatus(meList.get(j).getOiStatus())
+                  .optionList(null)
+                  .build();
                 }
+                else {
+                  vo = MpOrderInfoVO.builder()
+                  .oiSeq(meList.get(j).getOiSeq())
+                  .oiOrderNum(meList.get(j).getOiOrderNum())
+                  .miSeq(meList.get(j).getMiSeq())
+                  .mniName(meList.get(j).getMniName())
+                  .menuAmount(meList.get(j).getMenuAmount())
+                  .menuPrice(meList.get(j).getMenuPrice())
+                  .mcSeq(meList.get(j).getMcSeq())
+                  .oiStatus(meList.get(j).getOiStatus())
+                  .optionList(optionChoiceRepo.findByOiSeq(meList.get(j).getOiSeq()))
+                  .build();
+                }
+                // 리스트에 메뉴와 옵션을 저장
+                orderMenu.add(vo);
+               
                 // 만약 주문번호별 리스트의 마지막 주문이라면, orderlist에 저장함으로써 주문번호별로 구분해줌.
                 if (j == meList.size() - 1) {
                   // 반복문이 돌때 마다 map3가 새로 생성될 수 있도록, 반복문안에 생성문 작성
                   Map<String, Object> map3 = new LinkedHashMap<String, Object>();
                   // map에 메뉴와 옵션정보가 저장된 list를 저장
-                  map3.put("orderList", list);
+                  map3.put("orderMenu", orderMenu);
 
                   // 주문 번호 별 가게 이름, 주문 일자, 주문 금액
                   // 메뉴 리스트의 카테고리 번호를 조회해서 메뉴 카테고리 정보를 가져오고
@@ -305,6 +328,7 @@ public class MpMemberOrderService {
     return map;
   }
 
+
   // 주문 번호를 통해 주문표 출력
   public Map<String, Object> showWishList (HttpSession session) {
     Map<String, Object> map = new LinkedHashMap<>();
@@ -333,19 +357,36 @@ public class MpMemberOrderService {
           // 카테고리 정보를 통해 가게 정보 저장
           MpStoreInfoEntity store = storeRepo.findBySiSeq(menuCate.getStore().getSiSeq());
           map2.put("storeName", store.getSiName());
-          // 가격 정보를 출력할 수 있는 엔터티 들고와서
-          
-          // 주문한 메뉴 리스트에 저장
-          list.add(mlist.get(m));
-          // 저장된 메뉴의 옵션 리스트에 저장해서
-          List<MpMypageOptionChoiceEntity> olist = optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq());
-          // 옵션 선택이 있는 경우, 옵션리스트 리스트에 저장
-          if (!olist.isEmpty()) {
-            list.add(olist);
-          }
+          // 첫번째 주문의 oiSeq를 통해 옵션을 찾아서 리스트에 저장하고
+          List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq());
+          // 첫번째 주문의 oiSeq를 통해 가격정보를 찾아서 변수에 저장한다
           MpMypageOrderPriceByOiSeqEntity price = priceOiSeqRepo.findByOiSeq(mlist.get(m).getOiSeq());
+          MpWishListVO wish = new MpWishListVO();
+          // 만약 옵션리스트가 비어있다면 옵션이 선택되지 않았으므로, 
+          // 옵션은 null로 저장하고, 가격도 메뉴 가격만 저장한다
+          if (option.isEmpty()) {
+            wish = MpWishListVO.builder().oiSeq(mlist.get(m).getOiSeq())
+            .oiOrderNum(mlist.get(m).getOiOrderNum())
+            .mniName(mlist.get(m).getMniName())
+            .menuPrice(mlist.get(m).getMenuPrice())
+            .menuAmount(mlist.get(m).getMenuAmount())
+            .option(null)
+            .menuOrderPrice(price.getOiSeqPrice()).build(); 
+          }
+          // 만약 옵션리스트가 있다면 저장하고
+          // 가격은 메뉴와 옵션의 가격이 더해진 가격을 저장한다.
+          else {
+            wish = MpWishListVO.builder().oiSeq(mlist.get(m).getOiSeq())
+            .oiOrderNum(mlist.get(m).getOiOrderNum())
+            .mniName(mlist.get(m).getMniName())
+            .menuPrice(mlist.get(m).getMenuPrice())
+            .menuAmount(mlist.get(m).getMenuAmount())
+            .option(optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq()))
+            .menuOrderPrice(price.getOiSeqPrice()).build(); 
+          }
+          // 리스트에 저장한다.
+          list.add(wish);
           // 합계 금액을 출력
-          list.add(price);
           totalPrice += price.getOiSeqPrice();
         }
         // 만약 list가 비어있다면, 장바구니상태인 주문 내역이 없는 것이므로 
@@ -355,7 +396,8 @@ public class MpMemberOrderService {
           map3.put("message", "주문표가 비어있습니다.");
           return map3;
         }
-        map2.put("order", list);
+        // map에 주문정보를 저장한다.
+        map2.put("menu", list);
       }
       map2.put("totalPrice", totalPrice);
       // 주문메뉴와 옵션이 저장된 리스트 map 에 저장

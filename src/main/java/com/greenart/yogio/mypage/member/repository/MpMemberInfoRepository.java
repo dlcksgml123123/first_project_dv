@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
-
 @Repository
 public interface MpMemberInfoRepository extends JpaRepository<MbMemberInfoEntity, Long>{
   MbMemberInfoEntity findByMiIdAndMiPwd(String miId, String miPwd);
@@ -13,6 +12,9 @@ public interface MpMemberInfoRepository extends JpaRepository<MbMemberInfoEntity
   MbMemberInfoEntity findByMiSeq(Long miSeq);
 
   MbMemberInfoEntity findByMiId(String miId);
+  
+
+
 
   
 }
