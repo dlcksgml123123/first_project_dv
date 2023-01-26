@@ -21,7 +21,6 @@
               <input type="text" name="id" id="id">
             </th:block>
           </td>
-          <td> <button type="button" id="dup_chk">중복체크</button></td>
         </tr>
         <th:block th:if="${message != null}">
           <tr>
@@ -31,6 +30,28 @@
         <tr>
           <td>비밀번호</td>
           <td colspan="2"><input type="password" name="pwd" id="pwd"></td>
+        </tr>
+        <tr>
+          <td>이메일</td>
+          <td colspan="2">
+            <th:block th:if="${inputdata != null}">
+              <input type="text" name="email" id="email" th:value="${inputdata.email}">
+            </th:block>
+            <th:block th:if="${inputdata == null}">
+              <input type="text" name="email" id="email">
+            </th:block>
+          </td>
+        </tr>
+        <tr>
+          <td>전화번호</td>
+          <td colspan="2">
+            <th:block th:if="${inputdata != null}">
+              <input type="text" name="phone" id="phone" th:value="${inputdata.phone}">
+            </th:block>
+            <th:block th:if="${inputdata == null}">
+              <input type="text" name="phone" id="phone">
+            </th:block>
+          </td>
         </tr>
         <tr>
           <td>이름</td>
@@ -44,24 +65,14 @@
           </td>
         </tr>
         <tr>
-          <td>관리자 유형</td>
+          <td>주소</td>
           <td colspan="2">
-            <select name="type" id="type">
             <th:block th:if="${inputdata != null}">
-              <option value="1" th:selected="${inputdata.type == 1}">일반관리자</option>
-              <option value="99" th:selected="${inputdata.type == 99}">마스터관리자</option>
+              <input type="text" name="address" id="address" th:value="${inputdata.address}">
             </th:block>
             <th:block th:if="${inputdata == null}">
-              <option value="1">일반관리자</option>
-              <option value="99">마스터관리자</option>
+              <input type="text" name="address" id="address">
             </th:block>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>이미지파일</td>
-          <td colspan="2">
-            <input type="file" name="adminImg">
           </td>
         </tr>
         <tr>
