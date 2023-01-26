@@ -343,11 +343,11 @@ public class MpMemberOrderService {
           if (!olist.isEmpty()) {
             list.add(olist);
           }
+          MpMypageOrderPriceByOiSeqEntity price = priceOiSeqRepo.findByOiSeq(mlist.get(m).getOiSeq());
+          // 합계 금액을 출력
+          list.add(price);
+          totalPrice += price.getOiSeqPrice();
         }
-        MpMypageOrderPriceByOiSeqEntity price = priceOiSeqRepo.findByOiSeq(mlist.get(m).getOiSeq());
-        // 합계 금액을 출력
-        list.add(price);
-        totalPrice += price.getOiSeqPrice();
         // 만약 list가 비어있다면, 장바구니상태인 주문 내역이 없는 것이므로 
         if (list.isEmpty()) {
           Map<String, Object> map3 = new LinkedHashMap<String, Object>();
@@ -363,6 +363,5 @@ public class MpMemberOrderService {
       }    
     return map;
   }
-  
   
 }
