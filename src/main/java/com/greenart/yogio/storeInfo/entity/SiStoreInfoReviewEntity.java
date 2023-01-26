@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "store_info_review")
 public class SiStoreInfoReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "re_seq")                private Long reSeq;
     @Column(name = "si_seq")                private Long siSeq;
     @Column(name = "mi_nickname")           private String miNickname;
     @Column(name = "re_reg_dt")             private Date reRegDt;

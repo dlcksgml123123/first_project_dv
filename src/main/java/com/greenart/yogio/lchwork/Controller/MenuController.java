@@ -84,14 +84,9 @@ public class MenuController {
             OiStoreInfoEntity store = (OiStoreInfoEntity)siRepo.findBySiSeq(data.getMc_si_seq());
             if(store == null) {
                 map.put("message", "등록된 가게가 없습니다.");
-<<<<<<< HEAD
-            }
-            else {
-=======
              }
 
              else {
->>>>>>> chacha
             mcEntity = new OiMenuCategoryEntity(
                 null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
             );
@@ -101,37 +96,6 @@ public class MenuController {
                 );
                 mniRepo.save(mniEntity);
         
-<<<<<<< HEAD
-            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
-                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price()
-            );
-            mniRepo.save(mniEntity);
-            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-            );
-            mcjRepo.save(mcjEntity);
-            
-            map.put("mcEntity", mcjEntity);
-            map.put("mniEntity", mniEntity);
-            map.put("mcEntity", mcEntity);
-            }
-        }
-        else{
-            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
-                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price()
-            );
-            mniRepo.save(mniEntity);
-            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-            );
-            mcjRepo.save(mcjEntity);
-            
-            map.put("mcjEntity", mcjEntity);
-            map.put("mniEntity", mniEntity);
-            map.put("mcEntity", mcEntity);
-            
-        }
-=======
                 
                 OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
                     null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
@@ -140,7 +104,6 @@ public class MenuController {
                 }
             }
             map.put("message", "메뉴등록이 완료됐습니다.");
->>>>>>> chacha
         return map;
     }
      @GetMapping("/images/{uri}") 
