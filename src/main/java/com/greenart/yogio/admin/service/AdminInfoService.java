@@ -1,4 +1,4 @@
-package com.greenart.admin.service;
+package com.greenart.yogio.admin.service;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,14 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.greenart.admin.entity.AdminInfoEntity;
-import com.greenart.admin.entity.StoreCategoryEntity;
-import com.greenart.admin.repository.AdminInfoRepository;
-import com.greenart.admin.repository.StoreCategoryRepository;
-import com.greenart.admin.vo.AdminAddVO;
-import com.greenart.admin.vo.AdminLoginVO;
-import com.greenart.admin.vo.AdminVO;
-import com.greenart.admin.vo.StoreCategoryVO;
+import com.greenart.yogio.admin.entity.AdminInfoEntity;
+import com.greenart.yogio.admin.entity.StoreCategoryEntity;
+import com.greenart.yogio.admin.repository.AdminInfoRepository;
+import com.greenart.yogio.admin.repository.StoreCategoryRepository;
+import com.greenart.yogio.admin.vo.AdminAddVO;
+import com.greenart.yogio.admin.vo.AdminLoginVO;
+import com.greenart.yogio.admin.vo.AdminVO;
+import com.greenart.yogio.admin.vo.StoreCategoryVO;
 
 @Service
 public class AdminInfoService {

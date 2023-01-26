@@ -1,4 +1,4 @@
-package com.greenart.admin.controller;
+package com.greenart.yogio.admin.controller;
 
 
 import java.util.Map;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.greenart.admin.service.AdminInfoService;
-import com.greenart.admin.service.OwnerInfoService;
-import com.greenart.admin.vo.AdminAddVO;
-import com.greenart.admin.vo.AdminLoginVO;
-import com.greenart.admin.vo.StoreCategoryVO;
+import com.greenart.yogio.admin.service.AdminInfoService;
+import com.greenart.yogio.admin.service.OwnerInfoService;
+import com.greenart.yogio.admin.vo.AdminAddVO;
+import com.greenart.yogio.admin.vo.AdminLoginVO;
+import com.greenart.yogio.admin.vo.StoreCategoryVO;
 
 import jakarta.servlet.http.HttpSession;
 import net.bytebuddy.TypeCache.Sort;
