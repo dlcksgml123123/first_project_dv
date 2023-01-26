@@ -22,7 +22,7 @@ public class SsStoreNameSearchService {
       Map<String,Object> resultMap = new LinkedHashMap<String,Object>();
       resultMap.put("status", true);
       resultMap.put("message", "전체 메뉴를 조회했습니다.");
-      resultMap.put("list", searchRepo.findAll(pageable));
+      resultMap.put("list", searchRepo.findAll());
       resultMap.put("code", HttpStatus.OK);
       return resultMap;
       } 
@@ -56,19 +56,7 @@ else {
   }
       return resultMap;
    }
-//    public Map<String, Object> MenuJoinInfo(@RequestParam @Nullable String keyword, Pageable pageable) {
-//     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-//     Page<SsStoreSearchViewEntity> page = searchRepo.findByScNameContains(keyword ,pageable);
-//     if(page.isEmpty()){
-//     resultMap.put("status", false);
-//     resultMap.put("message", "입력하신 메뉴가 없습니다.");
-//     }else{
-//     resultMap.put("list", page.getContent());
-//     resultMap.put("message","검색하신 메뉴 목록입니다.");
-//     resultMap.put("code",HttpStatus.OK);
-//    }
-//   return resultMap;
-// }
+
 }
 
 
