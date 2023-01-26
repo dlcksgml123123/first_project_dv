@@ -148,14 +148,14 @@ public class SiStoreAPIController {
     return resultMap;
   }
   @GetMapping("/store/review")
-  public Map<String, Object> getStoreReview(@RequestParam @Nullable Long siseq, Pageable pageable) {
+  public Map<String, Object> getStoreReview(@RequestParam @Nullable Long siseq, @PageableDefault(size=5)Pageable pageable) {
     // if (seq == null ) seq = 1L;
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("result",siStoreInfoReviewService.getStoreReview(siseq, pageable));
     return resultMap;
   }
     @GetMapping("/store/menu")
-  public Map<String, Object> getStoreMenu(@RequestParam @Nullable Long siseq,@PageableDefault (size=1,sort = "siSeq" ,direction = Sort.Direction.ASC) Pageable pageable) {
+  public Map<String, Object> getStoreMenu(@RequestParam @Nullable Long siseq,@PageableDefault (size=5,sort = "siSeq" ,direction = Sort.Direction.ASC) Pageable pageable) {
     // if (seq == null ) seq = 1L;
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("result",siStoreInfoMenuService.getStoreMenu(siseq, pageable));
@@ -210,22 +210,22 @@ public class SiStoreAPIController {
     }
   //  int i = 0; i < page.size(); i++
 
+    // @GetMapping("/menu/list")
+    // public Map<String,Object> getMenuList(@PageableDefault(size=5) Pageable pageable) {
+    //   Map<String,Object>  map = new LinkedHashMap<String, Object>();
+    //   Page <SiMenuPlusJoinEntity> page = siMenuPlusJoinRepository.findAll(pageable);
+    //   List<SiMenuListVO> menuList = new ArrayList<>();
+    //   for(SiMenuPlusJoinEntity a : page.getContent()) {
+    //     menuList.add(new SiMenuListVO(a));
+    //     }
+
+    //   System.out.println(menuList);
+    //   map.put("status", true);
+    //   map.put("list", menuList); 
+    //   return map;
+    // }
+
     @GetMapping("/menu/list")
-    public Map<String,Object> getMenuList(@PageableDefault(size=5) Pageable pageable) {
-      Map<String,Object>  map = new LinkedHashMap<String, Object>();
-      Page <SiMenuPlusJoinEntity> page = siMenuPlusJoinRepository.findAll(pageable);
-      List<SiMenuListVO> menuList = new ArrayList<>();
-      for(SiMenuPlusJoinEntity a : page.getContent()) {
-        menuList.add(new SiMenuListVO(a));
-        }
-
-      System.out.println(menuList);
-      map.put("status", true);
-      map.put("list", menuList); 
-      return map;
-    }
-
-    @GetMapping("/menu")
     public Map<String, Object> getMenu(@RequestParam Long siSeq) {
       Map<String,Object> map = new LinkedHashMap<>();
       List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siSeq);

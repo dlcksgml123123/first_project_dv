@@ -82,8 +82,9 @@ public class MenuController {
             OiStoreInfoEntity store = (OiStoreInfoEntity)siRepo.findBySiSeq(data.getMc_si_seq());
             if(store == null) {
                 map.put("message", "등록된 가게가 없습니다.");
-            }
-            else {
+             }
+
+             else {
             mcEntity = new OiMenuCategoryEntity(
                 null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
             );

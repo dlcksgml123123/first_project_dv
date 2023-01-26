@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
+
 import com.greenart.yogio.lchwork.entity.OiMenuInfoEntity;
 import com.greenart.yogio.lchwork.repository.OiMemberInfoRepository;
 import com.greenart.yogio.lchwork.repository.OiMenuInfoRepository;
