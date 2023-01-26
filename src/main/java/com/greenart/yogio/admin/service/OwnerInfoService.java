@@ -1,4 +1,4 @@
-package com.greenart.admin.service;
+package com.greenart.yogio.admin.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.greenart.admin.entity.OwnerInfoEntity;
-import com.greenart.admin.repository.OwnerInfoRepostitory;
-import com.greenart.admin.vo.OwnerInfoVO;
+import com.greenart.yogio.admin.entity.OwnerInfoEntity;
+import com.greenart.yogio.admin.repository.OwnerInfoRepostitory;
+import com.greenart.yogio.admin.vo.OwnerInfoVO;
 
 @Service
 public class OwnerInfoService {

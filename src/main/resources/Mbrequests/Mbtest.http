@@ -45,7 +45,6 @@ PUT http://localhost:9244/review/write HTTP/1.1
 content-type: application/json
 
 {
-"regDt" : "2023-01-01", 
 "score" : 5, 
 "content" : "적당해요", 
 "oiSeq" : 6, 
