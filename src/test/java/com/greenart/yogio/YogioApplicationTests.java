@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.greenart.yogio.chacha.repository.StoreInfoRepository;
+import com.greenart.yogio.admin.repository.StoreInfoRepository;
 import com.greenart.yogio.storeInfo.repository.SiMenuCateJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiMenuPlusJoinRepository;
 import com.greenart.yogio.storeInfo.repository.SiStoreInfoRepository;
