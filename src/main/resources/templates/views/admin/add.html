@@ -7,19 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>사장님 등록</h1>
+    <h1>관리자 등록</h1>
     <div>
-        <form action="/owner/add" method="post" id="add_form">
+        <form action="/admin/add" method="post" id="add_form">
             <table border="1">
                 <tbody>
                     <tr>
                         <td>아이디</td>
                         <td>
                             <th:block th:if="${inputdata != null}">
-                            <input type="text" name="owiId" id="owiId" th:value="${inputdata.owiId}">
+                            <input type="text" name="id" id="id" th:value="${inputdata.id}">
                             </th:block>
                             <th:block th:if="${inputdata == null}">
-                            <input type="text" name="owiId" id="owiId"></td>
+                            <input type="text" name="id" id="id"></td>
                             </th:block>
                         </td>   
                         <td><button type="button" id="dup_chk">중복체크</button></td>
@@ -31,27 +31,16 @@
                     </th:block>
                     <tr>
                         <td>비밀번호</td>
-                        <td colspan="2"><input type="password" name="owiPwd" id="owiPwd"></td>
+                        <td colspan="2"><input type="password" name="pwd" id="pwd"></td>
                     </tr>
                     <tr>
-                        <td>전화번호</td>
+                        <td>이름</td>
                         <td colspan="2">
                             <th:block th:if="${inputdata !=null}">
-                            <input type="text" name="owiPhone" id="owiPhone" th:value="${inputdata.owiPhone}">
+                            <input type="text" name="name" id="name" th:value="${inputdata.name}">
                             </th:block>
                             <th:block th:if="${inputdata == null}">
-                            <input type="text" name="owiPhone" id="owiPhone">
-                            </th:block>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>이메일</td>
-                        <td colspan="2">
-                            <th:block th:if="${inputdata !=null}">
-                            <input type="text" name="owiEmail" id="owiEmail" th:value="${inputdata.owiEmail}">
-                            </th:block>
-                            <th:block th:if="${inputdata == null}">
-                            <input type="text" name="owiEmail" id="owiEmail">
+                            <input type="text" name="name" id="name">
                             </th:block>
                         </td>
                     </tr>
@@ -59,13 +48,30 @@
                         <td>닉네임</td>
                         <td colspan="2">
                             <th:block th:if="${inputdata !=null}">
-                            <input type="text" name="owiNickname" id="owiNickname" th:value="${inputdata.owiNickname}">
+                            <input type="text" name="nickname" id="nickname" th:value="${inputdata.nickname}">
                             </th:block>
                             <th:block th:if="${inputdata == null}">
-                            <input type="text" name="owiNickname" id="owiNickname">
+                            <input type="text" name="nickname" id="nickname">
                             </th:block>
                         </td>
                     </tr>
+                    <tr>
+                        <td>관리자 유형</td>
+                        <!-- 셀렉박스 -->
+                        <td colspan="2"> 
+                            <select name="type" id="type">
+                                <th:block th:if="${inputdata != null}">
+                                    <option value="1" th:selected="${inputdata.type ==1}">일반관리자</option>
+                                    <option value="99" th:selected="${inputdata.type ==99}">마스터관리자</option>
+                                </th:block>
+                                <th:block th:if="${inputdata == null}">
+                                    <option value="1">일반관리자</option>
+                                    <option value="99">마스터관리자</option>
+                                </th:block>
+                            </select>
+                        </td>
+                    </tr>
+                    <!-- 파일 업로드 -->
                     <tr>
                         <td colspan="3">
                             <input type="submit" value="등록">

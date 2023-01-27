@@ -4,17 +4,17 @@ import lombok.Data;
 
 @Data
 public class SiStoreInfoVO {
-   private String siName;
-   private String siUri;
+   private String  siName;
+   private String  siUri;
    private Integer siMinOrderPrice;
    private Integer siDiscountPrice;
-   private String siDiscountCondition;
-   private Long siDiSeq;
+   private String  siDiscountCondition;
+   private Long    siDiSeq;
    private Integer siCleanInfo;
-   private String siFileName;
+   private String  siFileName;
    private Integer diDistance;
    private Integer diDeliveryPrice;
-   private String diTime;
+   private String  diTime;
 
     
 }

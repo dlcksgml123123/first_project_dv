@@ -1,5 +1,8 @@
 package com.greenart.yogio.admin.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -9,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +21,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="owner_info")
+@DynamicInsert
+@Builder
 public class OwnerInfoEntity {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="owi_seq") private Long owiSeq;
@@ -25,6 +31,7 @@ public class OwnerInfoEntity {
     @Column(name="owi_email") private String owiEmail;
     @Column(name="owi_phone") private String owiPhone;
     @Column(name="owi_nickname") private String owiNickname;
-    @Column(name="owi_si_seq") private Integer owiSiSeq;
+    @Column(name="owi_si_seq") private Long owiSiSeq;
+    @Column(name="owi_status") @ColumnDefault ("2") private Integer owiStatus;
     
 }

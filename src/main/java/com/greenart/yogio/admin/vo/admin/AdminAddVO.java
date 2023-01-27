@@ -1,4 +1,5 @@
-package com.greenart.yogio.admin.vo;
+package com.greenart.yogio.admin.vo.admin;
+
 
 import lombok.Data;
 

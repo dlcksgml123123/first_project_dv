@@ -7,6 +7,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,16 +16,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.greenart.yogio.admin.entity.AdminInfoEntity;
 import com.greenart.yogio.admin.entity.StoreCategoryEntity;
 import com.greenart.yogio.admin.repository.AdminInfoRepository;
 import com.greenart.yogio.admin.repository.StoreCategoryRepository;
-import com.greenart.yogio.admin.vo.AdminAddVO;
-import com.greenart.yogio.admin.vo.AdminLoginVO;
-import com.greenart.yogio.admin.vo.AdminVO;
 import com.greenart.yogio.admin.vo.StoreCategoryVO;
+import com.greenart.yogio.admin.vo.admin.AdminAddVO;
+import com.greenart.yogio.admin.vo.admin.AdminLoginVO;
+import com.greenart.yogio.admin.vo.admin.AdminUpateVO;
+import com.greenart.yogio.admin.vo.admin.AdminVO;
+import com.greenart.yogio.admin.vo.admin.AdminLoginVO;
+import com.greenart.yogio.admin.vo.admin.AdminUpateVO;
+import com.greenart.yogio.admin.vo.admin.AdminVO;
 
 @Service
 public class AdminInfoService {
@@ -73,7 +78,7 @@ public class AdminInfoService {
         }
         else {
             AdminInfoEntity entity = AdminInfoEntity.builder().aiId(data.getId()).aiPwd(data.getPwd()).
-            aiName(data.getName()).aiGrade(data.getType()).aiGrade(2).build();
+            aiName(data.getName()).aiGrade(data.getType()).aiGrade(1).build();
             adminInfoRepository.save(entity);
             map.put("status", true);
             map.put("message", "관리자 계정 등록 신청 완료");
@@ -81,39 +86,58 @@ public class AdminInfoService {
 
         return map;
     }
-        public Map<String,Object> getCateList(Pageable pageable){
-        Page<StoreCategoryEntity> page= storeCategoryRepository.findAll(pageable);
+
+    public Map<String,Object> getAdminList(Pageable pageable){
+        Page<AdminInfoEntity> page= adminInfoRepository.findAll(pageable);
         Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
         resultMap.put("status", true);
-        resultMap.put("cateList", page);
+        resultMap.put("list", page.getContent());
         resultMap.put("total", page.getTotalElements());
         resultMap.put("totalpage", page.getTotalPages());
         resultMap.put("currentPage", page.getNumber());
+        resultMap.put("adminList", page);
         return resultMap;
     }
-
-    public void addCate (StoreCategoryVO data){
-        MultipartFile file = data.getFile();
-    Path folderLocation = Paths.get(cate_img_path);
-    String originFileName = file.getOriginalFilename();
-    String [] split = originFileName.split("\\.");
-    String ext = split[split.length - 1];
-    String filename = " ";
-    for(int i = 0; i<split.length-1; i++) {
-        filename += split[i];
+      public void updateAdminStatus(Integer value, Long admin_no) {
+        AdminInfoEntity entity = adminInfoRepository.findById(admin_no).get();
+        entity.setAiStatus(value);
+        adminInfoRepository.save(entity);
     }
-
-    String saveFilename = " ";
-    Calendar c = Calendar.getInstance();
-    saveFilename += c.getTimeInMillis()+"."+ext;
-    Path targetFile = folderLocation.resolve(saveFilename);
-    try{
-    Files.copy(file.getInputStream(), targetFile,StandardCopyOption.REPLACE_EXISTING);
-    } catch (Exception e) {
-      e.printStackTrace();
+      public void deleteAdmin (Long admin_no) {
+        adminInfoRepository.deleteById(admin_no);
     }
-    StoreCategoryEntity entity = StoreCategoryEntity.builder().scName(data.getScName()).scImage(filename).build();
-    storeCategoryRepository.save(entity);
+     public AdminInfoEntity getAdminInfo (Long admin_no){
+        return adminInfoRepository.findById(admin_no).get();
+    }
+     public Map<String, Object> updateAdminInfo(AdminUpateVO data) {
+        Map <String,Object> resultMap = new LinkedHashMap<String, Object>();
+        Optional <AdminInfoEntity> entity = adminInfoRepository.findById(data.getSeq());
+        String pattern = "^[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$"; // 특수문자 ,공백제외하고 허용(정규표현식)
+ 
 
+        if(entity.isEmpty()) {
+            resultMap.put("status", false);
+            resultMap.put("message", "잘못된 사용자 번호가 입력되었습니다.");
+        }
+        else if (data.getPwd().length() > 16 || data.getPwd().length() < 8) {
+            resultMap.put("status", false);
+            resultMap.put("message", "비밀번호는  8 ~16자로 입력해주세요");
+        }
+        else if(data.getPwd().replaceAll(" ","").length() == 0 || !Pattern.matches(pattern,data.getPwd())) {
+            resultMap.put("status", false);
+            resultMap.put("message", "비밀번에 특수문자 또는 공백을 사용 할 수 없습니다.");  
+        }
+        else if (data.getName().replaceAll(" ","").length() == 0 || !Pattern.matches(pattern,data.getName())) {
+            resultMap.put("status", false);
+            resultMap.put("message", "관리자이름에 특수문자 또는 공백을 사용 할 수 없습니다.");  
+        }
+        else { 
+            AdminInfoEntity e  =  entity.get();
+            e.setAiPwd(data.getPwd());
+            e.setAiName(data.getName());
+            adminInfoRepository.save(e);
+            resultMap.put("status", true);
+        }
+        return resultMap;
     }
 }
