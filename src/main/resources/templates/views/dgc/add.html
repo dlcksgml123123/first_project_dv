@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>회원 등록</h1>
-  <form action="/dgc/add" method="post" id="add_form">
+  <form action="/admember/add" method="post" id="add_form">
     <table border="1">
       <tbody>
         <tr>
@@ -57,7 +57,7 @@
           <td>이름</td>
           <td colspan="2">
             <th:block th:if="${inputdata != null}">
-              <input type="text" name="name" id="name" th:value="${inputdata.name}">
+              <input type="text" name="nickname" id="nickname" th:value="${inputdata.nickname}">
             </th:block>
             <th:block th:if="${inputdata == null}">
               <input type="text" name="name" id="name">
@@ -76,6 +76,23 @@
           </td>
         </tr>
         <tr>
+          <tr>
+            <td>회원 유형</td>
+            <td colspan="2">
+              <select name="status" id="status">
+              <th:block th:if="${inputdata != null}">
+                <option value="0" th:selected="${inputdata.status == 0}">일반</option>
+                <option value="1" th:selected="${inputdata.status == 1}">정지</option>
+                <option value="2" th:selected="${inputdata.status == 2}">탈퇴</option>
+              </th:block>
+              <th:block th:if="${inputdata == null}">
+                <option value="0">일반</option>
+                <option value="1">정지</option>
+                <option value="2">탈퇴</option>
+              </th:block>
+              </select>
+            </td>
+          </tr>
           <td colspan="2">
             <button id="save">등록</button>
             <a href="/">메인으로</a>

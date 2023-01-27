@@ -20,35 +20,53 @@ public class ADMemberService {
    Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
    String id_pattern = "^[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$";
    String pwd_pattern = "^[a-zA-Z0-9!@#$%^&*()-_=+]*$";
-   if(m_repo.countByMiId(data.getId())>=1) { 
+   if(m_repo.countByMiId(data.getId())!=0) { 
        resultMap.put("status", false);
        resultMap.put("message",data.getId()+"은/는 이미 등록된 사용자 입니다");
-       resultMap.put("code", HttpStatus.BAD_REQUEST);
    }
+   else if(data.getId() == null || data.getId().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "아이디를 입력하세요");
+  }
+   else if(data.getPwd() == null || data.getPwd().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "비밀번호를 입력하세요");
+  }
+   else if(data.getEmail() == null || data.getEmail().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "이메일을 입력하세요");
+  }
+   else if(data.getPhone() == null || data.getPhone().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "전화번호를 입력하세요");
+  }
+   else if(data.getNickname() == null || data.getNickname().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "이름을 입력하세요");
+  }
+   else if(data.getAddress() == null || data.getAddress().equals("")) {
+    resultMap.put("status",false);
+    resultMap.put("message", "주소를 입력하세요");
+  }
    else if(m_repo.countByMiEmail(data.getEmail())>=1) { 
        resultMap.put("status", false);
        resultMap.put("message",data.getEmail()+"은/는 이미 등록된 이메일입니다");
-       resultMap.put("code", HttpStatus.BAD_REQUEST);
    }
    else if(m_repo.countByMiPhone(data.getPhone())>=1) { 
        resultMap.put("status", false);
        resultMap.put("message",data.getPhone()+"은/는 이미 등록된 전화번호입니다");
-       resultMap.put("code", HttpStatus.BAD_REQUEST);
    }
    else if(data.getPwd().length()<8) {
      resultMap.put("status", false);
      resultMap.put("message", "비밀번호는 8자리 이상입니다");
-     resultMap.put("code", HttpStatus.BAD_REQUEST);
    }
    else if(!Pattern.matches(pwd_pattern, data.getPwd())) {
      resultMap.put("status", false); 
      resultMap.put("message", "비밀번호에 공백문자를 사용 할 수 없습니다");
-     resultMap.put("code", HttpStatus.BAD_REQUEST);
    } 
    else if(!Pattern.matches(id_pattern, data.getId())) {
      resultMap.put("status", false);
      resultMap.put("message", "아이디에 공백문자나 특수문자를 사용 할 수 없습니다");
-     resultMap.put("code", HttpStatus.BAD_REQUEST);
    } 
    else {
      try {
@@ -62,8 +80,17 @@ public class ADMemberService {
      m_repo.save(entity);
      resultMap.put("status", true);
      resultMap.put("message", "회원이 등록되었습니다");
-     resultMap.put("code", HttpStatus.CREATED);
    }
    return resultMap;
   }
+
+  // public Map<String, Object> getMemberList(String keyword, Pageable pageable) {
+  //   Page<MbMemberInfoEntity> page = adminRepository.findByAdminIdContains(keyword, pageable);
+  //   Map<String , Object> map = new LinkedHashMap<String, Object>();
+  //   map.put("list", page.getContent());
+  //   map.put("total", page.getTotalElements());
+  //   map.put("totalPage", page.getTotalPages());
+  //   map.put("currentPage", page.getNumber());
+  //   return map;
+  // }
 }
