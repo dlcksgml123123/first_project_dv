@@ -1,5 +1,7 @@
 package com.greenart.yogio.member.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,6 @@ public class MbMemberInfoEntity {
     @Column(name = "mi_phone") private String miPhone;
     @Column(name = "mi_nickname") private String miNickname;
     @Column(name = "mi_address") private String miAddress;
-    @Column(name = "mi_status") private Integer miStatus;
+    @Column(name = "mi_status") @ColumnDefault("0") private Integer miStatus;
 }
 
