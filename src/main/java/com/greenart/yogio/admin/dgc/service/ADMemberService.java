@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -84,13 +86,15 @@ public class ADMemberService {
    return resultMap;
   }
 
-  // public Map<String, Object> getMemberList(String keyword, Pageable pageable) {
-  //   Page<MbMemberInfoEntity> page = adminRepository.findByAdminIdContains(keyword, pageable);
-  //   Map<String , Object> map = new LinkedHashMap<String, Object>();
-  //   map.put("list", page.getContent());
-  //   map.put("total", page.getTotalElements());
-  //   map.put("totalPage", page.getTotalPages());
-  //   map.put("currentPage", page.getNumber());
-  //   return map;
-  // }
+  public Map<String,Object> getMemberList(Pageable pageable){
+    Page<MbMemberInfoEntity> page = m_repo.findAll(pageable);
+    Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
+    resultMap.put("status", true);
+    resultMap.put("list", page.getContent());
+    resultMap.put("total", page.getTotalElements());
+    resultMap.put("totalpage", page.getTotalPages());
+    resultMap.put("currentPage", page.getNumber());
+    resultMap.put("memberList", page);
+    return resultMap;
+  }
 }

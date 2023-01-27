@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.greenart.yogio.admin.dgc.service.ADMemberService;
 import com.greenart.yogio.admin.dgc.vo.ADMemberAddVO;
-import com.greenart.yogio.admin.vo.AdminVO;
+import com.greenart.yogio.admin.vo.admin.AdminVO;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpSession;
@@ -38,26 +38,40 @@ public class ADMemberController {
     model.addAttribute("message", map.get("message"));
     return "/dgc/add";
   }
-  // @GetMapping("/list")
-  // public String getMemberList(Model model, @RequestParam @Nullable String keyword,
-  // @PageableDefault(size=10, sort="miSeq", direction = Sort.Direction.DESC) Pageable pageable
-  // , HttpSession session
-  // ) {
-  //   // session.setAttribute("update_result", null);
-  //   // AdminVO admin = (AdminVO)session.getAttribute("loginUser");
-  //   // if(admin == null) {
-  //   //   return "redirect:/";
-  //   // }
-  //   // else if(admin.ai_grade() != 99) {
-  //   //   return "redirect:/main";
-  //   // }
-  //   // size : 한 페이지 당 출력 할 row 수
-  //   // sort : 정렬 기준이 될 엔터티 변수 명
-  //   // direction : 정렬 방향 (오름차순, 내림차순)
-  //   // model.addAttribute("list", adminService.getAdminList());
-  //   if(keyword==null) keyword= "";
-  //   // model.addAttribute("result", aService.getMemberList(keyword, pageable));
-  //   model.addAttribute("keyword", keyword);
-  //   return "/admin/list";
-  // }
+  @GetMapping("/list")
+    public String getAdminList(Model model, Pageable pageable){
+        model.addAttribute("result",aService.getMemberList(pageable));
+        return "/dgc/list";
+    }
+    // @GetMapping("/update/status")
+    // public String getMemberUpdateStatus (@RequestParam Integer value ,@RequestParam Long member_no,
+    // @RequestParam Integer page, @RequestParam @Nullable String keyword , HttpSession session) {
+    //      AdminVO admin = (AdminVO)session.getAttribute("loginUser");
+    //     if(admin == null) { // 로그인 상태가 아니라면
+    //         return "redirect:/"; // 로그인 페이지로
+    //     }
+    //     else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
+    //         return "redirect:/main"; // 메인페이지로
+    //     }
+    //     aService.updateMemberStatus(value,member_no);
+    //     String returnValue = "";
+    //     if(keyword == null || keyword.equals("")) returnValue = "redirect:/admin/list?page="+page;
+    //     else returnValue = "redirect:/admin/list?page="+page+"&keyword="+keyword;
+    //     return returnValue;
+    // }
+    // @GetMapping ("/delete") 
+    // public String getMemberDelete(@RequestParam Long admin_no,@RequestParam Integer page, @RequestParam @Nullable String keyword,HttpSession session) {
+    //     AdminVO admin = (AdminVO)session.getAttribute("loginUser");
+    //     if(admin == null) { // 로그인 상태가 아니라면
+    //         return "redirect:/"; // 로그인 페이지로
+    //     }
+    //     else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
+    //         return "redirect:/main"; // 메인페이지로
+    //     }
+    //     adminInfoService.deleteAdmin(admin_no);
+    //     String returnValue = "";
+    //     if(keyword == null || keyword.equals("")) returnValue = "redirect:/admin/list?page="+page;
+    //     else returnValue = "redirect:/admin/list?page="+page+"&keyword="+keyword;
+    //     return returnValue;
+    // }
 }
