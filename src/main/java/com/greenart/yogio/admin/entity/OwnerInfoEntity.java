@@ -1,4 +1,4 @@
-package com.greenart.admin.entity;
+package com.greenart.yogio.admin.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

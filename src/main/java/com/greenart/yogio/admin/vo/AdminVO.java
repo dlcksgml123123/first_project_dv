@@ -1,6 +1,6 @@
-package com.greenart.admin.vo;
+package com.greenart.yogio.admin.vo;
 
-import com.greenart.admin.entity.AdminInfoEntity;
+import com.greenart.yogio.admin.entity.AdminInfoEntity;
 
 import lombok.Data;
 

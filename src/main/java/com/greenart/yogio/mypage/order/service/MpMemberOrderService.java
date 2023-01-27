@@ -357,6 +357,7 @@ public class MpMemberOrderService {
           // 카테고리 정보를 통해 가게 정보 저장
           MpStoreInfoEntity store = storeRepo.findBySiSeq(menuCate.getStore().getSiSeq());
           map2.put("storeName", store.getSiName());
+          
           // 첫번째 주문의 oiSeq를 통해 옵션을 찾아서 리스트에 저장하고
           List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq());
           // 첫번째 주문의 oiSeq를 통해 가격정보를 찾아서 변수에 저장한다
