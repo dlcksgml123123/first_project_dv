@@ -1,6 +1,4 @@
-package com.greenart.yogio.storeInfo.entity;
-
-import org.hibernate.annotations.DynamicInsert;
+package com.greenart.yogio.chacha.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,14 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name= "menu_info")
-@DynamicInsert
-public class SiMenuInfoEntity {
+@Table(name = "store_category")
+public class StoreCategoryEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="mni_seq") private Long mniSeq;
-    @Column(name ="mni_img") private String mniImg;
-    @Column(name ="mni_name") private String mniName;
-    @Column(name ="mni_discount") private Double mniDiscount;
-    @Column(name ="mni_price") private Integer mniPrice;
+    @Column(name = "sc_seq")  private Long scSeq;
+    @Column(name = "sc_name") private String scName;
+    @Column(name = "sc_image") private String scImage;
     
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>관리자 로그인</h1>
+    <div>
+        <form action="/admin/login" method="post">
+            <table border="1">
+            <tbody>
+            <tr>
+            <td>Adimin ID </td>
+            <td><input type="text" name="ai_id" id="ai_id" ></td>
+            </tr>
+            <tr>
+            <td>Password</td>
+            <td><input type="password" name="ai_pwd" id="ai_pwd" ></td>
+            </tr>  
+            <tr>
+            <td colspan="3">
+                <button id="admin_login">로그인</button>
+            <a href="/admin/add">관리자 추가</a>
+        </td>
+            <p th:text="${message}"></p>
+            </tr>
+                </tbody>
+            </table>
+        </form>
+ 
+        <h1>사장님 로그인</h1>
+        <form action="/owner/login" method="post">
+             <table border="1">
+                <tbody>
+                    <tr>
+            <td>Owner ID</td>
+            <td><input type="text" name="owi_id" id="owi_id" ></td>
+            </tr>
+            <tr>
+            <td>Password</td>
+            <td><input type="password" name="owi_pwd" id="owi_pwd" ></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+            <button id="owner_login">로그인</button>
+            <a href="/owner/add">사장님 추가</a>
+            </td>
+            </tr>
+            <p th:text="${message}"></p>
+            </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

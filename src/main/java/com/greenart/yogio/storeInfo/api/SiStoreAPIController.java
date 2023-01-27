@@ -171,20 +171,11 @@ public class SiStoreAPIController {
   //   resultMap.put("list",page);
   //   return resultMap;
   // }
-  @GetMapping("/images/{type}/{uri}") 
-   public ResponseEntity<Resource> getImage ( @PathVariable String uri, 
-            @PathVariable String type , HttpServletRequest request ) throws Exception { 
-    Path folderLocation = null;
-    String filename = null;
-    if (type.equals("store")) {
-      folderLocation = Paths.get(store_img_path);
-      filename = sService.getFilenameByUri(uri);
-    }
-    else if (type.equals("menu")) {
-      folderLocation = Paths.get(menu_img_path);
-      filename = sService.getFilenameByUri(uri);
-    }
-    System.out.println(sService.getFilenameByUri(uri));
+  @GetMapping("/images/{uri}") 
+   public ResponseEntity<Resource> getImage ( @PathVariable String uri,  HttpServletRequest request ) throws Exception { 
+    Path folderLocation = Paths.get(store_img_path);
+    String filename = sService.getFilenameByUri(uri);
+   
     String[] split = filename.split("\\.");
     String ext = split[split.length-1];
     String exportName = uri+"."+ext; 
@@ -224,16 +215,21 @@ public class SiStoreAPIController {
     //   map.put("list", menuList); 
     //   return map;
     // }
+    // List<SiStoreInfoPlusMenuEntity> pList = siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq());
 
     @GetMapping("/menu/list")
-    public Map<String, Object> getMenu(@RequestParam Long siSeq) {
+    public Map<String, Object> getMenu(@RequestParam Long siseq) {
       Map<String,Object> map = new LinkedHashMap<>();
-      List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siSeq);
+      List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siseq);
       List<Object> list = new ArrayList<Object>();
       for (int i=0; i<mList.size(); i ++){
-        list.add(mList.get(i));
-        List<SiStoreInfoPlusMenuEntity> pList = siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq());
-        list.add(pList);
+        // List<SiStoreInfoPlusMenuEntity> pList = siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq());
+        SiMenuListVO vo = SiMenuListVO.builder().mniSeq(mList.get(i).getMniSeq()).mcName(mList.get(i).getMcName()).
+        mcExplanation(mList.get(i).getMcExplanation()).
+        mniImg(mList.get(i).getMniImg()).mniName(mList.get(i).getMniName()).
+        mniDisCount(mList.get(i).getMniDiscount()).mniPrice(mList.get(i).getMniPrice()).
+        plusmenu(siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq())).build();
+        list.add(vo);
       }
       map.put("list", list);
       return map;
