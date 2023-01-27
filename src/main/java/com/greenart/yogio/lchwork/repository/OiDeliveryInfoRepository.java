@@ -8,4 +8,5 @@ import com.greenart.yogio.lchwork.entity.OiDeliveryInfoEntity;
 @Repository
 public interface OiDeliveryInfoRepository extends JpaRepository<OiDeliveryInfoEntity, Long>{
     OiDeliveryInfoEntity findByDiDistanceAndDiDeliveryPriceAndDiTime(Integer diDistance, Integer diDeliveryPrice, String diTime);
+    OiDeliveryInfoEntity findByDiSeq(Long diSeq);
 }
