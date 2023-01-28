@@ -97,4 +97,12 @@ public class ADMemberService {
     resultMap.put("memberList", page);
     return resultMap;
   }
+  public void updateMemberStatus(Integer value, Long member_no) {
+    MbMemberInfoEntity entity = m_repo.findById(member_no).get();
+    entity.setMiStatus(value);
+    m_repo.save(entity);
+}
+  public void deleteMember (Long member_no) {
+    m_repo.deleteById(member_no);
+}
 }

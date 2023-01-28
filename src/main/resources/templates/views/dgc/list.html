@@ -9,18 +9,18 @@
         h1 {text-align: center;}
         th {background-color: rgb(43, 28, 28); color: aliceblue; padding: 10px;}
         td {text-align: center; border-bottom: 1px solid #ccc; padding: 10px;}
-        table {border-collapse: collapse; width: 1100px; margin: 10px auto;}
+        table {border-collapse: collapse; width: 1500px; margin: 10px auto;}
         .search_area, .pager_area {text-align: center;}
         .box {border-radius: 5px; display: inline-block; padding: 5px; font-size: 12px; color: aqua;}
-        .wait {background-color: rgb(255, 165, 80); display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
-        .normal {background-color: rgb(70, 208, 70);display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
-        .banned {background-color: rgb(228, 86, 86); display: inline-block;padding:5px;font-size: 12px;color: #fff;}
+        .normal {background-color: rgb(8, 197, 222); display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
+        .banned {background-color: rgb(247, 5, 5);display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
+        .leave {background-color: rgb(16, 16, 16); display: inline-block;padding:5px;font-size: 12px;color: #fff;}
         .admin {background-color: rgb(2, 155, 243);display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
         .master {background-color: rgb(69, 3, 252);display: inline-block;padding: 5px;font-size: 12px;color: #fff;}   
     </style>
 </head>
 <body>
-    <h1>회원 정보</h1>
+    <h1>회원 관리</h1>
     <table> 
         <thead>
             <th>번호</th>
@@ -42,24 +42,24 @@
                 <td th:text="${member.miPhone}"></td>
                 <td th:text="${member.miNickname}"></td>
                 <td th:text="${member.miAddress}"></td>
-                <td th:text="${member.miStatus}"></td>
+                <!-- <td th:text="${member.miStatus}"></td> -->
                 <td>
-                    <th:block th:if="${member.miStatus ==0}"><span class="box wait">일반</span></th:block>
-                    <th:block th:if="${member.miStatus ==1}"><span class="box normal">정지</span></th:block>
-                    <th:block th:if="${member.miStatus ==2}"><span class="box banned">탈퇴</span></th:block>
-                </td>
-                <!-- <td>
-                    <a th:href="@{/admin/update/status?value=1(admin_no=${admin.aiSeq}, page=${result.currentPage},keyword=${keyword})}">
-                        <button style="font-weight: bolder; font-style:unset ;">정상 사용으로 변경</button></a>
-                    <a th:href="@{/admin/update/status?value=2(admin_no=${admin.aiSeq}, page=${result.currentPage},keyword=${keyword})}">
-                        <button style="font-weight: bold;">승인 대기로 변경</button></a> 
-                    <a th:href="@{/admin/update/status?value=3(admin_no=${admin.aiSeq}, page=${result.currentPage},keyword=${keyword})}">
-                        <button style="color: red; font-weight: bolder;">이용 정지로 변경</button></a>
+                    <th:block th:if="${member.miStatus ==0}"><span class="box normal">정상사용</span></th:block>
+                    <th:block th:if="${member.miStatus ==1}"><span class="box banned">활동정지</span></th:block>
+                    <th:block th:if="${member.miStatus ==2}"><span class="box leave">탈퇴처리</span></th:block>
                 </td>
                 <td>
-                    <a th:href="@{/admin/delete(admin_no=${admin.aiSeq}, page=${result.currentPage},keyword=${keyword})}">
+                    <a th:href="@{/admember/update/status?value=0(member_no=${member.miSeq}, page=${result.currentPage},keyword=${keyword})}">
+                        <button style="font-weight: bolder; font-style:unset ;">정상사용으로 변경</button></a>
+                    <a th:href="@{/admember/update/status?value=1(member_no=${member.miSeq}, page=${result.currentPage},keyword=${keyword})}">
+                        <button style="font-weight: bold;">활동정지로 변경</button></a> 
+                    <a th:href="@{/admember/update/status?value=2(member_no=${member.miSeq}, page=${result.currentPage},keyword=${keyword})}">
+                        <button style="font-weight: bolder;">탈퇴처리로 변경</button></a>
+                </td>
+                <td>
+                    <a th:href="@{/admember/delete(member_no=${member.miSeq}, page=${result.currentPage},keyword=${keyword})}">
                         <button id="btn" style="color: red; font-size: large; font-weight: bold;">계정 삭제</button></a>
-                </td> -->
+                </td>
             </tr>
         </tbody>
     </table>
@@ -73,7 +73,7 @@
                 return; // 종료
             }
             if(confirm("정말 삭제하시겠습니까?")){
-                alert("고생하셧습니다.")
+                alert("회원정보가 삭제되었습니다")
                 document.getElementById("leave").submit();
             }
         })
@@ -83,7 +83,8 @@
             <input type="text" name="keyword" placeholder="아이디" th:value="${keyword}"><button>검색</button>
         </form>
     </div>
-    <a href="/">메인페이지로</a>
+    <a href="/main">메인화면</a>
+    <a href="/admember/add">회원추가</a>
     <div class="pager_area">
         <th:block th:each="i : ${#numbers.sequence(0,result.totalpage -1)}">
             <th:block th:if="${result.totalpage > 0}">

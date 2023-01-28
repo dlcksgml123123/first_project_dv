@@ -31,9 +31,9 @@ public class ADMemberController {
   @PostMapping("/add")
   public String postAddMember(ADMemberAddVO data, Model model) {
     Map<String,Object> map = aService.addMember(data);
-    if((boolean)map.get("status")) {
-      return "redirect:/";
-    }
+    // if((boolean)map.get("status")) {
+    //   return "redirect:/";
+    // }
     model.addAttribute("inputdata", data);
     model.addAttribute("message", map.get("message"));
     return "/dgc/add";
@@ -43,35 +43,35 @@ public class ADMemberController {
         model.addAttribute("result",aService.getMemberList(pageable));
         return "/dgc/list";
     }
-    // @GetMapping("/update/status")
-    // public String getMemberUpdateStatus (@RequestParam Integer value ,@RequestParam Long member_no,
-    // @RequestParam Integer page, @RequestParam @Nullable String keyword , HttpSession session) {
-    //      AdminVO admin = (AdminVO)session.getAttribute("loginUser");
-    //     if(admin == null) { // 로그인 상태가 아니라면
-    //         return "redirect:/"; // 로그인 페이지로
-    //     }
-    //     else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
-    //         return "redirect:/main"; // 메인페이지로
-    //     }
-    //     aService.updateMemberStatus(value,member_no);
-    //     String returnValue = "";
-    //     if(keyword == null || keyword.equals("")) returnValue = "redirect:/admin/list?page="+page;
-    //     else returnValue = "redirect:/admin/list?page="+page+"&keyword="+keyword;
-    //     return returnValue;
-    // }
-    // @GetMapping ("/delete") 
-    // public String getMemberDelete(@RequestParam Long admin_no,@RequestParam Integer page, @RequestParam @Nullable String keyword,HttpSession session) {
-    //     AdminVO admin = (AdminVO)session.getAttribute("loginUser");
-    //     if(admin == null) { // 로그인 상태가 아니라면
-    //         return "redirect:/"; // 로그인 페이지로
-    //     }
-    //     else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
-    //         return "redirect:/main"; // 메인페이지로
-    //     }
-    //     adminInfoService.deleteAdmin(admin_no);
-    //     String returnValue = "";
-    //     if(keyword == null || keyword.equals("")) returnValue = "redirect:/admin/list?page="+page;
-    //     else returnValue = "redirect:/admin/list?page="+page+"&keyword="+keyword;
-    //     return returnValue;
-    // }
+    @GetMapping("/update/status")
+    public String getMemberUpdateStatus (@RequestParam Integer value ,@RequestParam Long member_no,
+    @RequestParam Integer page, @RequestParam @Nullable String keyword , HttpSession session) {
+         AdminVO admin = (AdminVO)session.getAttribute("loginUser");
+        if(admin == null) { // 로그인 상태가 아니라면
+            return "redirect:/"; // 로그인 페이지로
+        }
+        else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
+            return "redirect:/main"; // 메인페이지로
+        }
+        aService.updateMemberStatus(value,member_no);
+        String returnValue = "";
+        if(keyword == null || keyword.equals("")) returnValue = "redirect:/admember/list?page="+page;
+        else returnValue = "redirect:/admember/list?page="+page+"&keyword="+keyword;
+        return returnValue;
+    }
+    @GetMapping ("/delete") 
+    public String getMemberDelete(@RequestParam Long member_no,@RequestParam Integer page, @RequestParam @Nullable String keyword,HttpSession session) {
+        AdminVO admin = (AdminVO)session.getAttribute("loginUser");
+        if(admin == null) { // 로그인 상태가 아니라면
+            return "redirect:/"; // 로그인 페이지로
+        }
+        else if (admin.getAi_grade() != 99) { // 로그인 했는데 마스터가 아니라면
+            return "redirect:/main"; // 메인페이지로
+        }
+        aService.deleteMember(member_no);
+        String returnValue = "";
+        if(keyword == null || keyword.equals("")) returnValue = "redirect:/admember/list?page="+page;
+        else returnValue = "redirect:/admember/list?page="+page+"&keyword="+keyword;
+        return returnValue;
+    }
 }

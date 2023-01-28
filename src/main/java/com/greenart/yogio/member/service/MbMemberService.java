@@ -85,6 +85,12 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     //   resultMap.put("message", "탈퇴처리된 회원입니다");
     //   resultMap.put("code", HttpStatus.BAD_REQUEST);
     // }
+    else if(loginUser.getMiStatus()!=0) {
+      resultMap.put("status", false);
+      resultMap.put("message", "활동이 정지되거나 탈퇴처리된 회원입니다");
+      resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+
     else {
       resultMap.put("status", true);
       resultMap.put("message", "로그인 되었습니다");
