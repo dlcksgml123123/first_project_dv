@@ -1,5 +1,6 @@
 package com.greenart.yogio.mypage.order.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
@@ -14,13 +15,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "order_info")
 public class MpOrderInfoEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,6 @@ public class MpOrderInfoEntity {
   @Column(name = "oi_menu_amount")        private Integer oiMenuAmount;  
   @Column(name = "oi_status")             private Integer oiStatus;  
   @Column(name = "oi_order_num")          private Integer oiOrderNum;  
-  @Column(name = "oi_order_dt")           private Date oiOrderDt;  
-  @Column(name = "oi_finish_dt")          private Date oiFinishDt;  
+  @Column(name = "oi_order_dt")           private LocalDate oiOrderDt;  
+  @Column(name = "oi_finish_dt")          private LocalDate oiFinishDt;  
 }

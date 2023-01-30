@@ -7,5 +7,5 @@ import com.greenart.yogio.mypage.order.entity.MpPlusMenuEntity;
 
 @Repository
 public interface MpPlusMenuRepository extends JpaRepository<MpPlusMenuEntity, Long> {
-  
+  MpPlusMenuEntity findByPmSeq(Long pmSeq);
 }

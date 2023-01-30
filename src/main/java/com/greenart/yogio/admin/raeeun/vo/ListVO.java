@@ -1,4 +1,4 @@
-package com.greenart.yogio.mypage.order.vo;
+package com.greenart.yogio.admin.raeeun.vo;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MpOrderInfoVO {
-  private @JsonIgnore Long oiSeq;
+public class ListVO {
+  private Long oiSeq;
   private String oiOrderNum;
   private @JsonIgnore Long miSeq;
   private String mniName;
   private Integer menuAmount;
   private Integer menuPrice;
   private @JsonIgnore Long mcSeq;
-  private @JsonIgnore Integer oiStatus;
-  private List<MpMypageOptionChoiceEntity> optionList;
+  private Integer oiStatus;
+  private List<OptionVO> optionList;
   
-  public MpOrderInfoVO(MpMypageMenuChoiceEntity menu) {
+  public ListVO (MpMypageMenuChoiceEntity menu) {
     this.oiSeq = menu.getOiSeq(); 
     this.oiOrderNum = menu.getOiOrderNum(); 
     this.miSeq = menu.getMiSeq();
@@ -36,3 +36,5 @@ public class MpOrderInfoVO {
     this.oiStatus = menu.getOiStatus(); 
   }
 }
+
+
