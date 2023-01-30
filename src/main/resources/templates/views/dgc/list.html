@@ -16,7 +16,7 @@
         h1 {text-align: center;}
         th {background-color: rgb(43, 28, 28); color: aliceblue; padding: 10px;}
         td {text-align: center; border-bottom: 1px solid #ccc; padding: 10px;}
-        table {border-collapse: collapse; width: 1500px; margin: 10px auto;}
+        table {border-collapse: collapse; width: 1800px; margin: 10px auto;}
         .search_area, .pager_area {text-align: center;}
         .box {border-radius: 5px; display: inline-block; padding: 5px; font-size: 12px; color: aqua;}
         .normal {background-color: rgb(8, 197, 222); display: inline-block;padding: 5px;font-size: 12px;color: #fff;}
@@ -86,7 +86,7 @@
         })
     </script>
     <div class="search_area">
-        <form action="/admin/list" method="get" id="search_form">
+        <form action="/admember/list" method="get" id="search_form">
             <input type="text" name="keyword" placeholder="아이디" th:value="${keyword}"><button>검색</button>
         </form>
     </div>

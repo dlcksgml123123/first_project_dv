@@ -26,6 +26,14 @@ content-type: application/json
    "miPhone" : "01090009244"
 }
 #################################################
+
+POST http://localhost:9244/member/dupchkId HTTP/1.1
+content-type: application/json
+
+{
+   "miId" : "user30"
+}
+##################################################
 POST http://localhost:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 

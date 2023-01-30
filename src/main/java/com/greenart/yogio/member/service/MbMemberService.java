@@ -101,6 +101,21 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     return resultMap;
   }
 
+  public Map<String, Object> dupchkMemberId(MbMemberVO data) { //아이디중복조회
+    Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
+    if(m_repo.countByMiId(data.getMiId())!=0) { 
+        resultMap.put("status", false);
+        resultMap.put("message",data.getMiId()+"은/는 이미 등록된 아이디 입니다");
+        resultMap.put("code", HttpStatus.BAD_REQUEST);
+    }
+    else {
+        resultMap.put("status", true);
+        resultMap.put("message",data.getMiId()+"은/는 사용 가능한 아이디 입니다");
+        resultMap.put("code", HttpStatus.OK);
+    }
+    return resultMap;
+    } 
+
   public Map<String, Object> searchMemberId(MbMemberVO data) { //아이디찾기
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
     // 사용자 전화번호 받아서 리스트에 있는 것과 비교하여 해당 전화번호에 맞는 아이디 찾기

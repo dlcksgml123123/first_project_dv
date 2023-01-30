@@ -1,5 +1,9 @@
 package com.greenart.yogio.member.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,6 +11,7 @@ import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 
 @Repository
 public interface MbMemberInfoRepository extends JpaRepository<MbMemberInfoEntity, Long>{
+    public Page<MbMemberInfoEntity> findByMiIdContains(String keyword, Pageable pageable);
     public Integer countByMiId(String miId);
     public Integer countByMiEmail(String miEmail);
     public Integer countByMiPhone(String miPhone);

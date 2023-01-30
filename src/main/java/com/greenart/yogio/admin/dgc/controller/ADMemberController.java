@@ -39,8 +39,9 @@ public class ADMemberController {
     return "/dgc/add";
   }
   @GetMapping("/list")
-    public String getAdminList(Model model, Pageable pageable){
-        model.addAttribute("result",aService.getMemberList(pageable));
+    public String getAdminList(Model model, Pageable pageable, @RequestParam @Nullable String keyword){
+        if(keyword == null) keyword = "";
+        model.addAttribute("result",aService.getMemberList(pageable, keyword));
         return "/dgc/list";
     }
     @GetMapping("/update/status")

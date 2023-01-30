@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.greenart.yogio.admin.dgc.vo.ADMemberAddVO;
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.member.repository.MbMemberInfoRepository;
+import com.greenart.yogio.member.vo.MbMemberVO;
 import com.greenart.yogio.utils.MbAESAlgorithm;
 
 @Service
@@ -86,8 +87,9 @@ public class ADMemberService {
    return resultMap;
   }
 
-  public Map<String,Object> getMemberList(Pageable pageable){
-    Page<MbMemberInfoEntity> page = m_repo.findAll(pageable);
+  public Map<String,Object> getMemberList(Pageable pageable, String keyword){
+    // Page<MbMemberInfoEntity> page = m_repo.findAll(pageable);
+    Page<MbMemberInfoEntity> page = m_repo.findByMiIdContains(keyword, pageable);
     Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("status", true);
     resultMap.put("list", page.getContent());

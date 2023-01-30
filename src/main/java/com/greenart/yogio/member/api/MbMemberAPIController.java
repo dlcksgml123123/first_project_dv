@@ -37,6 +37,12 @@ public class MbMemberAPIController {
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
+  @PostMapping("/dupchkId") //아이디중복체크
+  public ResponseEntity<Object> memberChkId(@RequestBody MbMemberVO data) {
+    Map<String, Object> resultMap = mService.dupchkMemberId(data);
+    return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
+  }
+
   @PostMapping("/searchId") //아이디찾기
   public ResponseEntity<Object> memberSearchId(@RequestBody MbMemberVO data) {
     Map<String, Object> resultMap = mService.searchMemberId(data);
