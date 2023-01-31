@@ -26,7 +26,7 @@ import com.greenart.yogio.mypage.order.service.MpMemberOrderService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-public class MpMemberInfoController {
+public class MpMemberAPIController {
   @Autowired MpMemberInfoRepository mRepo;
   @Autowired MpMemberService mService;
   @Autowired MpMemberOrderService order;

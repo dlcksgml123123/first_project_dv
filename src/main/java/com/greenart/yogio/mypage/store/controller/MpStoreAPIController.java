@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/mypage")
-public class MpStoreController {
+public class MpStoreAPIController {
   @Autowired MpStoreService sService;
   @Autowired MpReviewService rService;
   @Autowired MpMemberOrderService order;
