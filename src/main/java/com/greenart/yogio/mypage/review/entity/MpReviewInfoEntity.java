@@ -1,5 +1,6 @@
 package com.greenart.yogio.mypage.review.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.annotations.ColumnDefault;
