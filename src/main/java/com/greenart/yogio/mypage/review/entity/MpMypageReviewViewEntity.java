@@ -7,6 +7,8 @@ import org.hibernate.annotations.Immutable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Immutable
 @Table (name = "mypage_review_view")
 public class MpMypageReviewViewEntity implements Serializable {
-  @Id
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column (name = "re_seq") private Long reSeq;
   @Column (name = "si_name") private String siName;
   @Column (name = "re_score") private Integer reScore;
@@ -34,7 +36,7 @@ public class MpMypageReviewViewEntity implements Serializable {
   @Column (name = "si_uri") private String siUri;
   @Column (name = "mni_name") private String mniName;
   @Column (name = "mi_seq") private Long miSeq;
-  @Column (name = "oi_order_num") private Integer oiOrderNum;
+  @Column (name = "oi_order_num") private String oiOrderNum;
   @Column (name = "ri_name") private String riName;
   @Column (name = "ri_order") private Integer riOrder;
 }

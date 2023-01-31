@@ -1,6 +1,7 @@
 package com.greenart.yogio.admin.dgc.service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +9,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.greenart.yogio.admin.dgc.repository.ADReviewRepository;
+import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.member.repository.MbMemberInfoRepository;
 import com.greenart.yogio.member.review.entity.MbReviewEntity;
 import com.greenart.yogio.member.review.entity.MbReviewImageEntity;
 import com.greenart.yogio.member.review.repository.MbReviewImageRepository;
+import com.greenart.yogio.mypage.review.entity.MpMypageReviewViewEntity;
 
 @Service
 public class ADReviewService {
-  @Autowired MbReviewImageRepository r_repo;
+  @Autowired ADReviewRepository r_repo;
+  // @Autowired MbMemberInfoRepository m_repo;
   public Map<String,Object> getReviewList(Pageable pageable, String keyword){
-    Page<MbReviewImageEntity> page = r_repo.findByRiSeqContains(keyword, pageable);
+    Page<MpMypageReviewViewEntity> page = r_repo.findAll(pageable);
+    // MbMemberInfoEntity member = m_repo.findByOiSeq(data.getOiSeq());
+    // Page<MpMypageReviewViewEntity> page = r_repo.findByReSeq(keyword, pageable);
     Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("status", true);
     resultMap.put("list", page.getContent());
