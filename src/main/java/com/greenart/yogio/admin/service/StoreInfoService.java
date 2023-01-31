@@ -17,19 +17,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.greenart.yogio.admin.entity.BusinessInfoEntity;
 import com.greenart.yogio.admin.entity.DeliveryInfoEntity;
 import com.greenart.yogio.admin.entity.OwnerInfoEntity;
+import com.greenart.yogio.admin.entity.OwnerNotinceImgEntity;
 import com.greenart.yogio.admin.entity.StoreCateJoinEntity;
 import com.greenart.yogio.admin.entity.StoreCategoryEntity;
+import com.greenart.yogio.admin.entity.StoreDetailInfoEntity;
 import com.greenart.yogio.admin.entity.StoreInfoEntity;
+import com.greenart.yogio.admin.repository.BusinessRepostitory;
 import com.greenart.yogio.admin.repository.DeliveryInfoRepository;
 import com.greenart.yogio.admin.repository.OwnerInfoRepostitory;
+import com.greenart.yogio.admin.repository.OwnerNoticeImgRepostiory;
 import com.greenart.yogio.admin.repository.StoreCateJoinRepostiory;
 import com.greenart.yogio.admin.repository.StoreCategoryRepository;
+import com.greenart.yogio.admin.repository.StoreDetailInfoRepostitory;
 import com.greenart.yogio.admin.repository.StoreInfoRepository;
-import com.greenart.yogio.admin.vo.StoreInfoVO;
 import com.greenart.yogio.admin.vo.owner.OwnerInfoVO;
 import com.greenart.yogio.admin.vo.owner.OwnerUpdateVO;
+import com.greenart.yogio.admin.vo.store.StoreDetailInfoVO;
+import com.greenart.yogio.admin.vo.store.StoreInfoVO;
 import com.greenart.yogio.storesearch.entity.SsStoreCateJoinEntoty;
 
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +48,11 @@ public class StoreInfoService  {
     @Autowired StoreInfoRepository storeInfoRepository;
     @Autowired StoreCateJoinRepostiory storeCateJoinRepostiory;
     @Autowired StoreCategoryRepository storeCategoryRepository;
+    @Autowired StoreDetailInfoRepostitory storeDetailInfoRepostitory;
+    @Autowired OwnerNoticeImgRepostiory ownerNoticeImgRepostiory;
+    @Autowired BusinessRepostitory businessRepostitory;
     @Value("${file.image.store}") String store_img_path;
+    @Value("${file.image.notice}") String notice_img_path;
 
     public Map<String,Object> addStore (StoreInfoVO data, HttpSession session){
       Map<String,Object> map = new LinkedHashMap<String, Object>();
@@ -53,7 +64,7 @@ public class StoreInfoService  {
     String originFileName = file.getOriginalFilename();
     String [] split = originFileName.split("\\.");
     String ext = split[split.length - 1];
-    String filename = " ";
+    String filename = "";
     for(int i = 0; i<split.length-1; i++) {
         filename += split[i];
     }
@@ -68,6 +79,7 @@ public class StoreInfoService  {
     }
     DeliveryInfoEntity dEntity = new DeliveryInfoEntity(null,data.getDiDistance(),data.getDiDeliveryPrice(),data.getDiTime());
     deliveryInfoRepository.save(dEntity);
+
     data.setSiDiSeq(dEntity.getDiSeq());
     StoreInfoEntity entity = new StoreInfoEntity(null,data.getSiName(),filename,data.getSiMinOrderPrice(),
     data.getSiDiscountPrice(),data.getSiDiscountCondition(),data.getSiDiSeq(),data.getSiCleanInfo(),saveFilename);
@@ -144,5 +156,40 @@ public class StoreInfoService  {
       public void deleteStore (Long store_no) {
         storeInfoRepository.deleteById(store_no);
     }
+
+    public Map<String,Object> addStoreDetail (StoreDetailInfoVO data, HttpSession session){
+      Map<String,Object> map = new LinkedHashMap<String, Object>();
+    OwnerInfoVO owner = (OwnerInfoVO)session.getAttribute("loginUser");
+    // StoreCategoryEntity centity = storeCategoryRepository.findByScNameContains(data.getScName());
+    // Optional <OwnerInfoEntity> oentity = ownerInfoRepostitory.findById(owner.getOwiSeq());
+    MultipartFile file = data.getFile();
+    Path folderLocation = Paths.get(notice_img_path);
+    String originFileName = file.getOriginalFilename();
+    String [] split = originFileName.split("\\.");
+    String ext = split[split.length - 1];
+    String filename = "";
+    for(int i = 0; i<split.length-1; i++) {
+        filename += split[i];
+    }
+    String saveFilename = "";
+    Calendar c = Calendar.getInstance();
+    saveFilename += c.getTimeInMillis()+"."+ext;
+    Path targetFile = folderLocation.resolve(saveFilename);
+    try{
+    Files.copy(file.getInputStream(), targetFile,StandardCopyOption.REPLACE_EXISTING);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    BusinessInfoEntity bentity = new BusinessInfoEntity(null, data.getBiName(), data.getBiOwner(), data.getBiBusinessNumber());
+    businessRepostitory.save(bentity);
+    StoreDetailInfoEntity entity =  new StoreDetailInfoEntity(null, owner.getOwiSiSeq(),data.getSdiOpenClose(), data.getSdiPhone(),data.getSdiAdress(), 
+    bentity.getBiSeq(), data.getSdiPayment(), data.getSdiPacking(), data.getSdiOrigin(), data.getSdiOwnerNotice());
+    storeDetailInfoRepostitory.save(entity);
+    OwnerNotinceImgEntity ownerentity = new OwnerNotinceImgEntity(null, entity.getSdiSeq(), filename, null);
+    ownerNoticeImgRepostiory.save(ownerentity);
+    map.put("status", true);
+    map.put("message", "가게 추가에 성공했습니다.");
+    return map;
+  }
 
 }

@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.greenart.yogio.admin.entity.StoreInfoEntity;
 import com.greenart.yogio.admin.service.StoreCategoryService;
 import com.greenart.yogio.admin.service.StoreInfoService;
-import com.greenart.yogio.admin.vo.StoreInfoVO;
 import com.greenart.yogio.admin.vo.admin.AdminVO;
 import com.greenart.yogio.admin.vo.owner.OwnerInfoVO;
+import com.greenart.yogio.admin.vo.store.StoreDetailInfoVO;
+import com.greenart.yogio.admin.vo.store.StoreInfoVO;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpSession;
@@ -99,4 +100,21 @@ public class StoreInfoController {
         storeInfoService.deleteStore(store_no);
         return "redirect:/store/all/list";
     }
+     @GetMapping("/detail/add")
+    public String getAdminAdd() {
+        return "/store/detail";
+    }
+     @PostMapping("/detail/add")
+    public String postAddAdmin(StoreDetailInfoVO data, Model model, HttpSession session,Pageable pageable) {
+        // model.addAttribute("result", storeCategoryService.getCateList(pageable));
+        OwnerInfoVO owner = (OwnerInfoVO)session.getAttribute("loginUser");
+       Map<String,Object> map = storeInfoService.addStoreDetail(data, session);
+        if (owner.getOwiSiSeq() == null) {
+            return "redirect:/";
+        }
+    
+       model.addAttribute("inputdata",data);
+       model.addAttribute("message",map.get("message"));
+        return "redirect:/omain";
+        }
 }
