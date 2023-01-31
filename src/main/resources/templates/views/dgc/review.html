@@ -32,6 +32,7 @@
         <thead>
             <th>리뷰번호</th>
             <th>가게이름</th>
+            <th>음식이름</th>
             <th>리뷰내용</th>
             <th>평점</th>
             <th>작성자</th>
@@ -42,9 +43,10 @@
             <tr th:each="review : ${result.list} "> 
                 <td th:text="${review.reSeq}"></td>
                 <td th:text="${review.siName}"></td>
+                <td th:text="${review.mniName}"></td>
                 <td th:text="${review.reContent}"></td>
                 <td th:text="${review.reScore}"></td>
-                <td th:text="${review.miSeq}"></td>
+                <td th:text="${review.miNickname}"></td>
                 <td th:text="${review.reRegDt}"></td>
                 
                 <!-- <td>
@@ -61,13 +63,13 @@
                         <button style="font-weight: bolder;">탈퇴처리로 변경</button></a>
                 </td>  -->
                 <td>
-                    <a th:href="@{/adreview/delete(review_no=${review.ReSeq}, page=${result.currentPage},keyword=${keyword})}">
+                    <a th:href="@{/adreview/delete(review_no=${review.reSeq}, page=${result.currentPage},keyword=${keyword})}">
                         <button id="btn" style="color: red; font-size: large; font-weight: bold;">리뷰 삭제</button></a>
                 </td>
             </tr>
         </tbody>
     </table>
-        <script>
+        <!-- <script>
         document.getElementById("btn").addEventListener("click",function(e){
             e.preventDefault();// 이게 설정되어 있으면 form이 작동안함
             // 체크박스의 상태가 체크되어 있지 않다면
@@ -81,7 +83,7 @@
                 document.getElementById("leave").submit();
             }
         })
-    </script>
+    </script> -->
     <div class="search_area">
         <form action="/adreview/list" method="get" id="search_form">
             <input type="text" name="keyword" placeholder="작성자" th:value="${keyword}"><button>검색</button>

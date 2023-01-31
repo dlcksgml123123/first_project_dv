@@ -9,20 +9,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.greenart.yogio.admin.dgc.entity.ADReviewEntity;
 import com.greenart.yogio.admin.dgc.repository.ADReviewRepository;
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.member.repository.MbMemberInfoRepository;
 import com.greenart.yogio.member.review.entity.MbReviewEntity;
 import com.greenart.yogio.member.review.entity.MbReviewImageEntity;
 import com.greenart.yogio.member.review.repository.MbReviewImageRepository;
+import com.greenart.yogio.member.review.repository.MbReviewRepository;
 import com.greenart.yogio.mypage.review.entity.MpMypageReviewViewEntity;
 
 @Service
 public class ADReviewService {
+  @Autowired MbReviewRepository m_repo;
   @Autowired ADReviewRepository r_repo;
   // @Autowired MbMemberInfoRepository m_repo;
   public Map<String,Object> getReviewList(Pageable pageable, String keyword){
-    Page<MpMypageReviewViewEntity> page = r_repo.findAll(pageable);
+    Page<ADReviewEntity> page = r_repo.findAll(pageable);
     // MbMemberInfoEntity member = m_repo.findByOiSeq(data.getOiSeq());
     // Page<MpMypageReviewViewEntity> page = r_repo.findByReSeq(keyword, pageable);
     Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
@@ -34,4 +37,7 @@ public class ADReviewService {
     resultMap.put("reviewList", page);
     return resultMap;
   }
+  public void deleteReview (Long review_no) {
+    m_repo.deleteById(review_no);
+}
 }
