@@ -37,7 +37,7 @@ public class AdminController {
     }
     @GetMapping("/add")
     public String getAdminAdd() {
-        return "/owner/add";
+        return "/admin/add";
     }
     @PostMapping("/login")
     public String postAdminLogin(AdminLoginVO login , HttpSession session, Model model){
@@ -66,6 +66,7 @@ public class AdminController {
        model.addAttribute("message",map.get("message"));
         return "/admin/add";
         }
+
     @GetMapping("/update/status")
     public String getAdminUpdateStatus (@RequestParam Integer value,@RequestParam Long admin_no,
     @RequestParam Integer page, @RequestParam @Nullable String keyword , HttpSession session) {

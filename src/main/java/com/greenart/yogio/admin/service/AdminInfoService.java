@@ -55,6 +55,7 @@ public class AdminInfoService {
             resultMap.put("message", "로그인되었습니다.");
             resultMap.put("login", new AdminVO(entity));
         }
+        
         return resultMap;
 }
  public Map<String, Object> addAdmin(AdminAddVO data) {

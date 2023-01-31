@@ -28,7 +28,8 @@
                 </div>
             </div>
         <div id="menu">
-            <a href="/store/list">가게 관리</a>
+            <a th:href="@{/store/list/admin(store_no=${session.loginUser.owiSiSeq})}">가게관리</a>
+            <a href="/store/add">가게 등록</a>
                  <!-- <a href="/artist/list">아티스트 관리</a>
                 <a href="/artist/group/list">아티스트 그룹 관리</a>
                 <a href="/ent/list">기획사 정보 관리</a>

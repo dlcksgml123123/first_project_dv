@@ -7,5 +7,5 @@ import com.greenart.yogio.admin.entity.StoreCategoryEntity;
 
 @Repository
 public interface StoreCategoryRepository  extends JpaRepository <StoreCategoryEntity ,Long>{
-    
+    public StoreCategoryEntity findByScNameContains(String scName);
 }
