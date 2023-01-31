@@ -2,6 +2,7 @@
 package com.greenart.yogio.admin.vo.owner;
 
 
+
 import com.greenart.yogio.admin.entity.OwnerInfoEntity;
 
 import lombok.Data;

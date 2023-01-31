@@ -46,7 +46,7 @@ public class MpMemberOrderService {
   @Autowired MpMypageOrderPriceByOiSeqRepository priceOiSeqRepo;
 
   // 멤버별 상세한 주문 내역 출력
-  public Map<String, Object> showOrderList(MbMemberInfoEntity memberInfo, HttpSession session, Pageable pageable) {
+  public Map<String, Object> showOrderList(HttpSession session, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
     MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
@@ -179,7 +179,7 @@ public class MpMemberOrderService {
   
 
   // 멤버별 간단한 주문 내역 출력
-  public Map<String, Object> showBriefOrderList(MbMemberInfoEntity memberInfo, HttpSession session, @PageableDefault (size = 8) Pageable page) {
+  public Map<String, Object> showBriefOrderList( HttpSession session, @PageableDefault (size = 8) Pageable page) {
     Map<String, Object> map = new LinkedHashMap<>();
     MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
@@ -272,9 +272,7 @@ public class MpMemberOrderService {
   // 주문 번호를 통해 주문내역 출력
   public Map<String, Object> showOrder(String orderNum) {
     Map<String, Object> map = new LinkedHashMap<>();
-    Map<String, Object> map2 = new LinkedHashMap<>();
     List<Object> list = new ArrayList<Object>();
-    List<Map<String, Object>> orderlist = new ArrayList<Map<String, Object>>();
 
     // 입력된 주문번호와 일치하는 메뉴 선택 리스트로 저장
     List<MpMypageMenuChoiceEntity> mlist = menuChoiceRepo.findByOiOrderNum(orderNum);
@@ -290,40 +288,58 @@ public class MpMemberOrderService {
       MpMenuCategoryEntity menuCate = menuCateRepo.findByMcSeq(mlist.get(0).getMcSeq());
       // 카테고리 정보를 통해 가게 정보 저장
       MpStoreInfoEntity store = storeRepo.findBySiSeq(menuCate.getStore().getSiSeq());
-      map2.put("storeName", store.getSiName());
+      map.put("storeName", store.getSiName());
       MpOrderInfoEntity order = oRepo.findByOiSeq(mlist.get(0).getOiSeq());
-      map2.put("orderDate", order.getOiOrderDt());
-      map2.put("finishDate", order.getOiFinishDt());
+      map.put("orderDate", order.getOiOrderDt());
+      map.put("finishDate", order.getOiFinishDt());
       // 가격 정보를 출력할 수 있는 엔터티 들고와서
       MpMypageOrderPriceByOrderNumEntity price = priceRepo.findByOiOrderNum(mlist.get(0).getOiOrderNum());
       // 옵션가격이 있는 경우
       if (price.getTotalOptionPrice() != null) {
         // 합계 금액을 출력
-        map2.put("price", price.getTotalMenuPrice() + price.getTotalOptionPrice());
+        map.put("price", price.getTotalMenuPrice() + price.getTotalOptionPrice());
       }
       // 옵션가격이 없는 경우
       else {
         // 메뉴 가격만 출력
-        map2.put("price", price.getTotalMenuPrice());
+        map.put("price", price.getTotalMenuPrice());
       }
       // 반복문을 통해 주문한 메뉴 아래에 옵션 저장
       for (int i = 0; i < mlist.size(); i++) {
-        // 주문한 메뉴 리스트에 저장
-        list.add(mlist.get(i));
-        // 저장된 메뉴의 옵션 리스트에 저장해서
-        List<MpMypageOptionChoiceEntity> olist = optionChoiceRepo.findByOiSeq(mlist.get(i).getOiSeq());
-        if (!olist.isEmpty()) {
-          // 옵션 선택이 있는 경우, 옵션리스트 리스트에 저장
-          list.add(olist);
+        List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(mlist.get(i).getOiSeq());
+        MpOrderInfoVO vo = new MpOrderInfoVO();
+        if (option.isEmpty()) {
+          vo = MpOrderInfoVO.builder()
+          .oiSeq(mlist.get(i).getOiSeq())
+          .oiOrderNum(mlist.get(i).getOiOrderNum())
+          .miSeq(mlist.get(i).getMiSeq())
+          .mniName(mlist.get(i).getMniName())
+          .menuAmount(mlist.get(i).getMenuAmount())
+          .menuPrice(mlist.get(i).getMenuPrice())
+          .mcSeq(mlist.get(i).getMcSeq())
+          .oiStatus(mlist.get(i).getOiStatus())
+          .optionList(null)
+          .build();
         }
+        else {
+          vo = MpOrderInfoVO.builder()
+          .oiSeq(mlist.get(i).getOiSeq())
+          .oiOrderNum(mlist.get(i).getOiOrderNum())
+          .miSeq(mlist.get(i).getMiSeq())
+          .mniName(mlist.get(i).getMniName())
+          .menuAmount(mlist.get(i).getMenuAmount())
+          .menuPrice(mlist.get(i).getMenuPrice())
+          .mcSeq(mlist.get(i).getMcSeq())
+          .oiStatus(mlist.get(i).getOiStatus())
+          .optionList(optionChoiceRepo.findByOiSeq(mlist.get(i).getOiSeq()))
+          .build();
+        }
+        // 리스트에 메뉴와 옵션을 저장
+        list.add(vo);
       }
       // 주문메뉴와 옵션이 저장된 리스트 map 에 저장
-      map2.put("order", list);
-
-      orderlist.add(map2);
-
+      map.put("menu", list);
       map.put("status", true);
-      map.put("order", orderlist);
     }
     return map;
   }

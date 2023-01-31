@@ -11,11 +11,14 @@ import com.greenart.yogio.mypage.store.entity.MpMenuInfoEntity;
 
 @Repository
 public interface MpOrderInfoRepository extends JpaRepository<MpOrderInfoEntity, Long>{
-MpOrderInfoEntity findByMember(MbMemberInfoEntity member);
+  MpOrderInfoEntity findByMember(MbMemberInfoEntity member);
 
   List<MpOrderInfoEntity> findAllByMember(MbMemberInfoEntity member);
 
   MpOrderInfoEntity findByMenu(MpMenuInfoEntity menu);
 
-  MpOrderInfoEntity findByOiSeq (Long oiSeq);
+  MpOrderInfoEntity findByOiSeq(Long oiSeq);
+  
+  List<MpOrderInfoEntity> findAllByOiOrderNum(String orderNum);
+
 }

@@ -1,7 +1,6 @@
 package com.greenart.yogio.mypage.order.vo;
 
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.greenart.yogio.mypage.order.entity.MpMypageMenuChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOptionChoiceEntity;
@@ -31,6 +30,4 @@ public class MpWishListVO {
     this.menuPrice = menu.getMenuPrice();
     this.menuAmount = menu.getMenuAmount();
   }
-
-
 }

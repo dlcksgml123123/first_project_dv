@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/mypage")
-public class MpStoreController {
+public class MpStoreAPIController {
   @Autowired MpStoreService sService;
   @Autowired MpReviewService rService;
   @Autowired MpMemberOrderService order;
@@ -44,9 +44,8 @@ public class MpStoreController {
   
   // 주문 내역 출력
   @GetMapping("/order")
-  public ResponseEntity<Object> getOrderList(HttpSession session, MbMemberInfoEntity memberInfo, Pageable pageable) {
-    Map<String, Object> map = order.showOrderList(memberInfo, session, pageable);
-    // map.put("order", order.showOrderList(memberInfo, session, pageable));
+  public ResponseEntity<Object> getOrderList(HttpSession session,Pageable pageable) {
+    Map<String, Object> map = order.showOrderList(session, pageable);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
@@ -86,10 +85,9 @@ public class MpStoreController {
 
   // 간단한 주문 내역 출력
   @GetMapping("/briefOrder")
-  public ResponseEntity<Object> getBriefOrderList(HttpSession session, MbMemberInfoEntity memberInfo,
+  public ResponseEntity<Object> getBriefOrderList(HttpSession session,
       Pageable pageable) {
-    Map<String, Object> map = order.showBriefOrderList(memberInfo, session, pageable);
-    memberInfo = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    Map<String, Object> map = order.showBriefOrderList(session, pageable);
 
     // map.put("order", order.showBriefOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
