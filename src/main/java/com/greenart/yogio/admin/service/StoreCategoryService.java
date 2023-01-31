@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,12 @@ import com.greenart.yogio.admin.vo.StoreCategoryVO;
 public class StoreCategoryService {
     @Value("${file.image.cate}") String cate_img_path;
     @Autowired StoreCategoryRepository storeCategoryRepository;
-        public Map<String,Object> getCateList(Pageable pageable){
+    public Map<String,Object> getCateList(Pageable pageable){
         Page<StoreCategoryEntity> page= storeCategoryRepository.findAll(pageable);
+        // List<StoreCategoryEntity> cateList = storeCategoryRepository.findAll();
         Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
         resultMap.put("status", true);
-        resultMap.put("cateList", page);
+        resultMap.put("cateList", page.getContent());
         resultMap.put("total", page.getTotalElements());
         resultMap.put("totalpage", page.getTotalPages());
         resultMap.put("currentPage", page.getNumber());

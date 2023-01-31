@@ -25,6 +25,7 @@ public class StoreInfoVO {
    private Integer diDeliveryPrice;
    private String  diTime;
    private Long    owiSiSeq;
+   private String   scName;
 
     
 }

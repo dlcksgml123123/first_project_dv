@@ -53,6 +53,7 @@ import com.greenart.yogio.storeInfo.service.SiStoreInfoListService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoReviewService;
 import com.greenart.yogio.storeInfo.service.SiStoreInfoService;
 import com.greenart.yogio.storeInfo.vo.SiMenuListVO;
+import com.greenart.yogio.storeInfo.vo.SiMenuVO;
 import com.greenart.yogio.storeInfo.vo.SiStoreInfoVO;
 
 import jakarta.annotation.Nullable;
@@ -113,27 +114,6 @@ public class SiStoreAPIController {
       return new ResponseEntity<>(map,HttpStatus.OK);
 
     }
-  //   @GetMapping("/store/detail/")
-  //   public Map<String, Object> getStoreDetail(
-  //   @PageableDefault(size=5) Pageable pageable) {
-  //   Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-  //   Page<SiStoreInfoDetailEntity> page = vrRepo.getStoreDetail(pageable);
-  //   resultMap.put("total", page.getTotalPages());
-  //   resultMap.put("curentpage",page.getNumber());
-  //   resultMap.put("list",page);
-  //   return resultMap;
-  // }
-  //   @GetMapping("/store/list/")
-  //   public Map<String, Object> getStoreList(
-  //   @PageableDefault(size=5) Pageable pageable, @RequestParam @Nullable String keyword) {
-  //     if(keyword == null) {keyword = "";}
-  //   Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-  //   List<SiStoreInfoListEntity> page = silRepo.getStoreList(keyword, pageable);
-  //   resultMap.put("totalpage", silRepo.getStorePageCount(keyword));
-  //   resultMap.put("totalCount",page.size());
-  //   resultMap.put("list",page);
-  //   return resultMap;
-  // }
   @GetMapping("/store/list")
   public Map<String, Object> getStoreList(@RequestParam @Nullable String keyword, @PageableDefault (size=5,sort = "siSeq" ,direction = Sort.Direction.ASC) Pageable pageable) {
     if (keyword== null)  keyword = "";
@@ -199,26 +179,8 @@ public class SiStoreAPIController {
     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+URLEncoder.encode(exportName, "UTF-8")+"\"")
     .body(r);
     }
-  //  int i = 0; i < page.size(); i++
-
-    // @GetMapping("/menu/list")
-    // public Map<String,Object> getMenuList(@PageableDefault(size=5) Pageable pageable) {
-    //   Map<String,Object>  map = new LinkedHashMap<String, Object>();
-    //   Page <SiMenuPlusJoinEntity> page = siMenuPlusJoinRepository.findAll(pageable);
-    //   List<SiMenuListVO> menuList = new ArrayList<>();
-    //   for(SiMenuPlusJoinEntity a : page.getContent()) {
-    //     menuList.add(new SiMenuListVO(a));
-    //     }
-
-    //   System.out.println(menuList);
-    //   map.put("status", true);
-    //   map.put("list", menuList); 
-    //   return map;
-    // }
-    // List<SiStoreInfoPlusMenuEntity> pList = siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq());
-
     @GetMapping("/menu/list")
-    public Map<String, Object> getMenu(@RequestParam Long siseq) {
+    public Map<String, Object> getMenuList(@RequestParam Long siseq) {
       Map<String,Object> map = new LinkedHashMap<>();
       List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siseq);
       List<Object> list = new ArrayList<Object>();
@@ -230,6 +192,20 @@ public class SiStoreAPIController {
         mniDisCount(mList.get(i).getMniDiscount()).mniPrice(mList.get(i).getMniPrice()).
         plusmenu(siStoreInfoPlusMenuRepository.findByMniSeq(mList.get(i).getMniSeq())).build();
         list.add(vo);
+      }
+      map.put("list", list);
+      return map;
+        
+    }
+    @GetMapping("/menu/")
+    public Map<String, Object> getMenu(@RequestParam Long siseq) {
+      Map<String,Object> map = new LinkedHashMap<>();
+      List<SiStoreInfoMainMenuEntity> mList = siStoreInfoMainMenuRepository.findBySiSeq(siseq);
+      List<SiMenuVO> list = new ArrayList<SiMenuVO>();
+      for (SiStoreInfoMainMenuEntity data: mList){
+        SiMenuVO obj = new SiMenuVO();
+        obj.copyValues(data);
+        list.add(obj);
       }
       map.put("list", list);
       return map;

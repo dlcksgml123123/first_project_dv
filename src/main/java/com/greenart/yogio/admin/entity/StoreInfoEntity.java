@@ -34,9 +34,9 @@ public class StoreInfoEntity {
     @Column(name = "si_discount_price") private Integer siDiscountPrice;
     @Column(name = "si_discount_condition") private String siDiscountCondition;
     @Column(name = "si_di_seq") private Long siDiSeq;
+    // @OneToOne @JoinColumn(name="si_di_seq") DeliveryInfoEntity delivery;
     @Column(name = "si_clean_info") @ColumnDefault("1") private Integer siCleanInfo;
     @Column(name = "si_file_name") @JsonIgnore private String siFileName;
-    // @OneToOne @JoinColumn(name="si_di_seq") DeliveryInfoEntity delivery;
 
     // public StoreInfoEntity(StoreInfoEntity data){
     //     this.siSeq = data.getSiSeq();

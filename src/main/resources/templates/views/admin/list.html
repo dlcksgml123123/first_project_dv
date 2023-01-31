@@ -62,7 +62,7 @@
             </tr>
         </tbody>
     </table>
-        <script>
+        <!-- <script>
         document.getElementById("btn").addEventListener("click",function(e){
             e.preventDefault();// 이게 설정되어 있으면 form이 작동안함
             // 체크박스의 상태가 체크되어 있지 않다면
@@ -76,7 +76,7 @@
                 document.getElementById("leave").submit();
             }
         })
-    </script>
+    </script> -->
     <div class="search_area">
         <form action="/admin/list" method="get" id="search_form">
             <input type="text" name="keyword" placeholder="아이디" th:value="${keyword}"><button>검색</button>
