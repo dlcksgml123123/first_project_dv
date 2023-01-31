@@ -57,26 +57,27 @@ public class MenuController {
     public Map<String, Object> putMenuAdd(MenuVO data, @RequestPart @Nullable MultipartFile file){
         Map<String, Object> map = new LinkedHashMap<String, Object>();
         Path folderLocation = Paths.get(menu_img_path);
-         String originFileName = file.getOriginalFilename();
-        String [] split = originFileName.split("\\."); 
-        String ext = split[split.length -1];
-        String filename = "";
-        for (int i = 0; i<split.length-1; i++ ){
-            filename += split[i];
+        if(file != null) {
+            String originFileName = file.getOriginalFilename();
+            String [] split = originFileName.split("\\."); 
+            String ext = split[split.length -1];
+            String filename = "";
+            for (int i = 0; i<split.length-1; i++ ){
+                filename += split[i];
+            }
+            String saveFilename = "menu_";
+            Calendar c = Calendar.getInstance();
+            saveFilename += c.getTimeInMillis()+"."+ext;
+            Path targetFile = folderLocation.resolve(saveFilename);
+        try {
+            Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String saveFilename = "menu_";
-        Calendar c = Calendar.getInstance();
-        saveFilename += c.getTimeInMillis()+"."+ext;
-        Path targetFile = folderLocation.resolve(saveFilename);
-      try {
-        Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      
-      data.setMni_img(filename);
-      data.setMni_filename(saveFilename);
-      
+        
+        data.setMni_img(filename);
+        data.setMni_filename(saveFilename);
+        }
       OiMenuCategoryEntity mcEntity = mcRepo.findByMcNameAndMcSiSeq(data.getMc_name(), data.getMc_si_seq());
         if(mcEntity == null) {
             OiStoreInfoEntity store = (OiStoreInfoEntity)siRepo.findBySiSeq(data.getMc_si_seq());
