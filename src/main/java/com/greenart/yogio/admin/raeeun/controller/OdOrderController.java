@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.greenart.yogio.admin.raeeun.service.OdOrderService;
@@ -21,8 +20,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/order")
 public class OdOrderController {
-  @Autowired
-  OdOrderService order;
+  @Autowired OdOrderService order;
   
   @GetMapping("/list")
   public String getOrderList(Model model, @RequestParam @Nullable String keyword, HttpSession session, Pageable pageable) {

@@ -1,9 +1,12 @@
 package com.greenart.yogio.mypage.order.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -345,10 +348,11 @@ public class MpMemberOrderService {
   }
 
 
-  // 주문 번호를 통해 주문표 출력
+  // 로그인된 멤버의 주문표 출력
   public Map<String, Object> showWishList (HttpSession session) {
     Map<String, Object> map = new LinkedHashMap<>();
     MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // System.out.println(member);
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -359,68 +363,143 @@ public class MpMemberOrderService {
 
       // 회원번호와 일치하는 메뉴 선택 리스트로 저장
       List<MpMypageMenuChoiceEntity> mlist = menuChoiceRepo.findByMiSeq(member.getMiSeq());
+      map.put("miseq", member.getMiSeq());
       if (mlist.isEmpty()) {
         map.put("status", false);
         map.put("message", "주문표가 비어있습니다.");
-      }
-      Integer totalPrice = 0;
-      // 반복문으로 메뉴 선택 리스트를 돌면서
-      for (int m = 0; m < mlist.size(); m++) {
-        // 만약 메뉴 선택된 상태가 장바구니 상태라면
-        if (mlist.get(m).getOiStatus() == 1) {
-          // 첫번째 주문의 메뉴 카테고리를 들고와서 카테고리 정보찾고,
-          MpMenuCategoryEntity menuCate = menuCateRepo.findByMcSeq(mlist.get(m).getMcSeq());
-          // 카테고리 정보를 통해 가게 정보 저장
-          MpStoreInfoEntity store = storeRepo.findBySiSeq(menuCate.getStore().getSiSeq());
-          map2.put("storeName", store.getSiName());
-          
-          // 첫번째 주문의 oiSeq를 통해 옵션을 찾아서 리스트에 저장하고
-          List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq());
-          // 첫번째 주문의 oiSeq를 통해 가격정보를 찾아서 변수에 저장한다
-          MpMypageOrderPriceByOiSeqEntity price = priceOiSeqRepo.findByOiSeq(mlist.get(m).getOiSeq());
-          MpWishListVO wish = new MpWishListVO();
-          // 만약 옵션리스트가 비어있다면 옵션이 선택되지 않았으므로, 
-          // 옵션은 null로 저장하고, 가격도 메뉴 가격만 저장한다
-          if (option.isEmpty()) {
-            wish = MpWishListVO.builder().oiSeq(mlist.get(m).getOiSeq())
-            .oiOrderNum(mlist.get(m).getOiOrderNum())
-            .mniName(mlist.get(m).getMniName())
-            .menuPrice(mlist.get(m).getMenuPrice())
-            .menuAmount(mlist.get(m).getMenuAmount())
-            .option(null)
-            .menuOrderPrice(price.getOiSeqPrice()).build(); 
+      } 
+      else {
+        Integer totalPrice = 0;
+        // 반복문으로 메뉴 선택 리스트를 돌면서
+        for (MpMypageMenuChoiceEntity menu : mlist) {
+          // 만약 메뉴 선택된 상태가 장바구니 상태라면
+          if (menu.getOiStatus() == 0) {
+            // 첫번째 주문의 메뉴 카테고리를 들고와서 카테고리 정보찾고,
+            MpMenuCategoryEntity menuCate = menuCateRepo.findByMcSeq(menu.getMcSeq());
+            // 카테고리 정보를 통해 가게 정보 저장
+            MpStoreInfoEntity store = storeRepo.findBySiSeq(menuCate.getStore().getSiSeq());
+            map2.put("storeName", store.getSiName());
+            // 첫번째 주문의 oiSeq를 통해 옵션을 찾아서 리스트에 저장하고
+            List<MpMypageOptionChoiceEntity> option = optionChoiceRepo.findByOiSeq(menu.getOiSeq());
+            // 첫번째 주문의 oiSeq를 통해 가격정보를 찾아서 변수에 저장한다
+            MpMypageOrderPriceByOiSeqEntity price = priceOiSeqRepo.findByOiSeq(menu.getOiSeq());
+            map.put("option", option);
+            map.put("price", price);
+            MpWishListVO wish = new MpWishListVO();
+            // 만약 옵션리스트가 비어있다면 옵션이 선택되지 않았으므로, 
+            // 옵션은 null로 저장하고, 가격도 메뉴 가격만 저장한다
+            if (option.isEmpty()) {
+              wish = MpWishListVO.builder().oiSeq(menu.getOiSeq())
+                  .oiOrderNum(menu.getOiOrderNum())
+                  .mniName(menu.getMniName())
+                  .menuPrice(menu.getMenuPrice())
+                  .menuAmount(menu.getMenuAmount())
+                  .option(null)
+                  .menuOrderPrice(price.getOiSeqPrice()).build();
+            }
+            // 만약 옵션리스트가 있다면 저장하고
+            // 가격은 메뉴와 옵션의 가격이 더해진 가격을 저장한다.
+            else {
+              wish = MpWishListVO.builder().oiSeq(menu.getOiSeq())
+                  .oiOrderNum(menu.getOiOrderNum())
+                  .mniName(menu.getMniName())
+                  .menuPrice(menu.getMenuPrice())
+                  .menuAmount(menu.getMenuAmount())
+                  .option(optionChoiceRepo.findByOiSeq(menu.getOiSeq()))
+                  .menuOrderPrice(price.getOiSeqPrice()).build();
+            }
+            // 리스트에 저장한다.
+            list.add(wish);
+            // 합계 금액을 출력
+            totalPrice += price.getOiSeqPrice();
           }
-          // 만약 옵션리스트가 있다면 저장하고
-          // 가격은 메뉴와 옵션의 가격이 더해진 가격을 저장한다.
-          else {
-            wish = MpWishListVO.builder().oiSeq(mlist.get(m).getOiSeq())
-            .oiOrderNum(mlist.get(m).getOiOrderNum())
-            .mniName(mlist.get(m).getMniName())
-            .menuPrice(mlist.get(m).getMenuPrice())
-            .menuAmount(mlist.get(m).getMenuAmount())
-            .option(optionChoiceRepo.findByOiSeq(mlist.get(m).getOiSeq()))
-            .menuOrderPrice(price.getOiSeqPrice()).build(); 
-          }
-          // 리스트에 저장한다.
-          list.add(wish);
-          // 합계 금액을 출력
-          totalPrice += price.getOiSeqPrice();
+
+          // map에 주문정보를 저장한다.
+          map2.put("menu", list);
         }
         // 만약 list가 비어있다면, 장바구니상태인 주문 내역이 없는 것이므로 
         if (list.isEmpty()) {
           Map<String, Object> map3 = new LinkedHashMap<String, Object>();
           map3.put("status", false);
-          map3.put("message", "주문표가 비어있습니다.");
+          map3.put("message", "주문표가 비어있습니다2.");
           return map3;
         }
-        // map에 주문정보를 저장한다.
-        map2.put("menu", list);
+        map2.put("totalPrice", totalPrice);
+        // 주문메뉴와 옵션이 저장된 리스트 map 에 저장
+        return map2;
       }
-      map2.put("totalPrice", totalPrice);
-      // 주문메뉴와 옵션이 저장된 리스트 map 에 저장
-      return map2;
-      }    
+    }
     return map;
   }
   
+
+  // 주문 상태 수정 - 주문완료에서 배달 완료로
+  public Map<String, Object> updateOrderStatus2(String orderNum) {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    List<MpOrderInfoEntity> entity = oRepo.findAllByOiOrderNum(orderNum);
+    if (entity.isEmpty()) {
+      map.put("status", false);
+      map.put("message", "주문완료된 주문이 없습니다.");
+    } else {
+      for (int i = 0; i < entity.size(); i++) {
+        entity.get(i).setOiStatus(2);
+        entity.get(i).setOiFinishDt(LocalDate.now());
+        oRepo.save(entity.get(i));
+      }
+      map.put("status", true);
+      map.put("message", "배달완료되었습니다.");
+    }
+    return map;
+  }
+
+  // 주문 상태 수정 - 장바구니에서 주문 완료로
+  public Map<String, Object> updateOrderStatus1(HttpSession session) {
+    Map<String, Object> map = new LinkedHashMap<>();
+    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    if (member == null) {
+      map.put("status", false);
+      map.put("message", "로그인 후 이용하실 수 있습니다.");
+    } else {
+      // 로그인한 회원과 일치하는 메뉴 선택 리스트로 저장
+      List<MpOrderInfoEntity> order = oRepo.findAllByMember(member);
+      if (order.isEmpty()) {
+        map.put("status", false);
+        map.put("message", "장바구니가 비어있습니다.");
+      }
+      LocalDate today = LocalDate.now();
+      // 숫자의 경우 아스키코드로 변환시 48~57이 0~9로 표현.
+      // 로직의 randim.ints() 메소드의 첫번째 파라미터를 48로 지정
+      int leftLimit = 48; // numeral '0'
+      // 두번째 파라미터는 알파벳의 제일끝이 122이므로 알파벳만 출력할때와 같이 122+1로 셋팅
+      int rightLimit = 122; // letter 'z'
+      // 길이 제한
+      int length = 10;
+      Random random = new Random();
+      String orderNum = random.ints(leftLimit, rightLimit + 1)
+      // 알파벳과 숫자만 출력하기위해 filter() 메소드를 활용해서 아스키코드의 범위를 제한
+      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+      // 문자열 길이를 limit()메소드로 제한
+      .limit(length)
+      //  collect() 메소드로 StringBuilder 객체를 생성
+      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+      //  StringBuilder 객체를 toString() 으로 문자열로 변환
+      .toString();
+      // 반복문으로 메뉴 선택 리스트를 돌면서
+      for (int m = 0; m < order.size(); m++) {
+        
+        // 만약 선택된 주문정보의 상태가 장바구니 상태라면
+        if (order.get(m).getOiStatus() == 0) {
+          // 선택된 주문 정보의 상태를 주문완료로 고친후
+          order.get(m).setOiStatus(1);
+          order.get(m).setOiOrderDt(today);
+          order.get(m).setOiOrderNum(orderNum);
+          // 저장
+          oRepo.save(order.get(m));
+        }
+      }
+      map.put("status", true);
+      map.put("message", "주문 완료되었습니다.");
+    }
+    return map;
+  }
 }
