@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.6/axios.min.js" integrity="sha512-RUkwGPgBmjCwqXpCRzpPPmGl0LSFp9v5wXtmG41+OS8vnmXybQX5qiG5adrIhtO03irWCXl+z0Jrst6qeaLDtQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     h1 {text-align: center;}
     th {padding: 10px;}
@@ -18,6 +19,9 @@
   <th:block th:if="${result.status ==  false}">
     <p>주문 내역이 없습니다.</p>
   </th:block>
+  <div style="text-align: right; font-size: 25px; position: relative; right: 200px;" >
+    <a href="/main">메인 페이지로</a>
+  </div>
   <div style="text-align: right; font-size: 25px; position: relative; right: 200px;" >
     <a href="/order/menu/add">주문 내역 추가</a>
   </div>
@@ -50,16 +54,17 @@
           <td th:text="${order.finishDate}"></td>
           <td th:text="${order.price}"></td>
           <td>
-            <a th:href="@{/order/delete(orderNum=${order.orderNum}, keyword=${keyword})}" onclick="deleteconfirm">삭제</a>
             <script>
-                function deleteconfirm() {
-                    if (!confirm("삭제 하시겠습니까?")) {
-                        alert("취소(아니오)를 누르셨습니다.");
-                    } else {
-                        alert("삭제하였습니다.");
+                function deleteconfirm(no) {
+                    if (!confirm("삭제 하시겠습니까?")) {return;} 
+                    else {
+                      axios.get("http://localhost:9244/order/delete?orderNum="+no+"&keyword=")
+                      .then(alert("삭제하였습니다."))
                     }
                 }
             </script>
+            <!-- <a th:href="@{/order/delete(orderNum=${order.orderNum}, keyword=${keyword})}" onclick="deleteconfirm">삭제</a> -->
+            <button th:onclick="deleteconfirm([[${order.orderNum}]])">삭제</button>
           </td>
           <td>
             <!-- <th:block th:if="${order.oiStatus == 0}"><span class="box wishList">장바구니</span></th:block> -->

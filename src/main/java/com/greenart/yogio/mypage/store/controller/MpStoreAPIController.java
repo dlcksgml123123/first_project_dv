@@ -93,10 +93,10 @@ public class MpStoreAPIController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
+  // 장바구니 출력
   @GetMapping("/wishList")
   public ResponseEntity<Object> getWishList(HttpSession session) {
     Map<String, Object> map = order.showWishList(session);
-    // map.put("order", order.showBriefOrderList(memberInfo, session, pageable));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

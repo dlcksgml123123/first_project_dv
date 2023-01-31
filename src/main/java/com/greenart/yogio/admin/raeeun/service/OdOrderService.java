@@ -1,14 +1,14 @@
 package com.greenart.yogio.admin.raeeun.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +29,14 @@ import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOrderNumRe
 import com.greenart.yogio.mypage.order.repository.MpOrderInfoRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuChoiceRepository;
 import com.greenart.yogio.mypage.order.repository.MpPlusMenuRepository;
+import com.greenart.yogio.mypage.store.entity.MpMenuCateJoinEntity;
 import com.greenart.yogio.mypage.store.entity.MpMenuCategoryEntity;
 import com.greenart.yogio.mypage.store.entity.MpMenuInfoEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
+import com.greenart.yogio.mypage.store.repository.MpMenuCateJoinRepository;
 import com.greenart.yogio.mypage.store.repository.MpMenuCategoryRepository;
 import com.greenart.yogio.mypage.store.repository.MpMenuInfoRepository;
 import com.greenart.yogio.mypage.store.repository.MpStoreInfoRepository;
-
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class OdOrderService {
@@ -46,6 +46,7 @@ public class OdOrderService {
   @Autowired MpMypageMenuChoiceRepository menuChoiceRepo;
   @Autowired MpStoreInfoRepository storeRepo;
   @Autowired MpMenuCategoryRepository menuCateRepo;
+  @Autowired MpMenuCateJoinRepository menuCateJoinRepo;
   @Autowired MpMypageOrderPriceByOrderNumRepository priceRepo;
   @Autowired MpMenuInfoRepository menuRepo;
   @Autowired MpPlusMenuRepository plustRepo;
@@ -187,11 +188,6 @@ public class OdOrderService {
   // 주문 내역 추가
   public Map<String, Object> addMenu(OrderAddVO data) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-
-    // 선택한 메뉴 번호로 메뉴 정보를 저장
-    MpMenuInfoEntity menu = menuRepo.findByMniSeq(data.getOiMniSeq());
-    MbMemberInfoEntity member = memberRepo.findByMiSeq(data.getOiMiSeq());
-
     if (data.getOiMniSeq() == null) {
       map.put("status", false);
       map.put("message", "메뉴를 입력해 주세요.");
@@ -202,32 +198,72 @@ public class OdOrderService {
       map.put("status", false);
       map.put("message", "메뉴 수량을 입력해 주세요.");
     } else if (data.getOiStatus() == null) {
-      map.put("status", false);
-      map.put("message", "주문 상태를 입력해 주세요.");
+        map.put("status", false);
+        map.put("message", "주문 상태를 입력해 주세요.");
     }
-    // 만약에 모든 정보가 다 입력이 되었고, oiStatus가 0이라면 장바구니 상태이므로
-    else if (data.getOiStatus() == 0) {
-      // 주문 entity 새로 생성
-      MpOrderInfoEntity order = MpOrderInfoEntity.builder()
-          .menu(menu).member(member)
-          .oiStatus(data.getOiStatus())
-          .oiMenuAmount(data.getOiMenuAmount())
-          .oiOrderNum(null)
-          .oiOrderDt(null)
-          .oiFinishDt(null).build();
+      //  모든 정보가 다 입력이 되었다면,
+      else {
+        // 입력된 데이터의 가게정보와 이미 입력된 데이터의 가게정보가 같은지 체크 필요
+          // 입력된 데이터의 가게 정보
+            // 입력한 메뉴 번호로 메뉴 정보를 저장
+            MpMenuInfoEntity menu = menuRepo.findByMniSeq(data.getOiMniSeq());
+            // 입력한 회원 번호로 회원 정보를 저장
+            MbMemberInfoEntity member = memberRepo.findByMiSeq(data.getOiMiSeq());
+            // 입력된 메뉴 정보의 카테고리 조인 정보 저장
+            MpMenuCateJoinEntity menuCateJoin = menuCateJoinRepo.findByMenu(menu);
+            // 입력된 메뉴 정보의 카테고리 정보 저장
+            MpMenuCategoryEntity mecuCate = menuCateRepo.findByMcSeq(menuCateJoin.getMenuCate().getMcSeq());
+            // 입력된 메뉴 정보의 가게 정보 저장
+            MpStoreInfoEntity storeInfo = storeRepo.findBySiSeq(mecuCate.getStore().getSiSeq());
+          // 이미 존재하는 가게 정보 
+            // 입력된 데이터의 회원 번호와 일치하는 메뉴 선택 정보 찾기
+            List<MpMypageMenuChoiceEntity> existMenuchoice = menuChoiceRepo.findByMiSeq(data.getOiMiSeq());
+        Boolean check = true;
+        // 이미 회원 번호로 등록된 주문 정보가 있을 때
+        if (!existMenuchoice.isEmpty()) {
+          for (int i = 0; i < existMenuchoice.size(); i++) {
+            if (existMenuchoice.get(i).getOiStatus() == 0) {
+              // 주문의 메뉴 카테고리를 들고와서 카테고리 정보찾고,
+              MpMenuCategoryEntity existMenuCate = menuCateRepo.findByMcSeq(existMenuchoice.get(i).getMcSeq());
+              // 카테고리 정보를 통해 가게 정보 저장
+              MpStoreInfoEntity existStore = storeRepo.findBySiSeq(existMenuCate.getStore().getSiSeq());
+              // 입력된 메뉴의 가게 번호와 회원에게 이미 입력되있는 가게 번호가 일치하지 않는다면
+              if (storeInfo.getSiSeq() != existStore.getSiSeq()) {
+                // false 값을 반환
+                check = false;
+                // 반목문에서 빠져나감
+                break;
+              }
+            }
+          }
+        }
+        else {check = true;}
+        // oiStatus가 0이라면 장바구니 상태이고, 가게 번호가 일치한다면
+        if (data.getOiStatus() == 0 && check) {
+          // 주문 entity 새로 생성
+          MpOrderInfoEntity order = MpOrderInfoEntity.builder()
+              .menu(menu).member(member)
+              .oiStatus(data.getOiStatus())
+              .oiMenuAmount(data.getOiMenuAmount())
+              .oiOrderNum(null)
+              .oiOrderDt(null)
+              .oiFinishDt(null).build();
 
-      // 저장
-      oRepo.save(order);
+          // 저장
+          oRepo.save(order);
 
-      // 저장된 메뉴 map에 저장
-      map.put("status", true);
-      map.put("menu", order);
-    }
-
-    // 만약 oiStatus가 1이고, 결제 완료 상태라면
-    else if (data.getOiStatus() == 1) {
-      // 주문 entity 새로 생성
-      MpOrderInfoEntity order = MpOrderInfoEntity.builder()
+          // 저장된 메뉴 map에 저장
+          map.put("status", true);
+          map.put("message", "장바구니가 저장되었습니다.");
+        }
+        else if (data.getOiStatus() == 0 && !check) {
+          map.put("status", false);
+          map.put("message", "같은 가게의 메뉴만 장바구니에 담을 수 있습니다.");
+        }
+        // 만약 oiStatus가 1이고, 결제 완료 상태라면
+        else if (data.getOiStatus() == 1) {
+          // 주문 entity 새로 생성
+          MpOrderInfoEntity order = MpOrderInfoEntity.builder()
           .menu(menu).member(member)
           .oiStatus(data.getOiStatus())
           .oiMenuAmount(data.getOiMenuAmount())
@@ -235,17 +271,17 @@ public class OdOrderService {
           .oiOrderDt(data.getOiOrderDt())
           .oiFinishDt(null).build();
 
-      // 저장
-      oRepo.save(order);
+          // 저장
+          oRepo.save(order);
 
-      // 저장된 메뉴 map에 저장
-      map.put("status", true);
-      map.put("menu", order);
-    }
-    // 나머지 경우 -> 즉, 배달까지 완료된 상태라면
-    else {
-      // 주문 entity 새로 생성
-      MpOrderInfoEntity order = MpOrderInfoEntity.builder()
+          // 저장된 메뉴 map에 저장
+          map.put("status", true);
+          map.put("message", "주문완료 정보가 저장되었습니다.");
+        }
+        // 나머지 경우 -> 즉, 배달까지 완료된 상태라면
+        else {
+          // 주문 entity 새로 생성
+          MpOrderInfoEntity order = MpOrderInfoEntity.builder()
           .menu(menu).member(member)
           .oiStatus(data.getOiStatus())
           .oiMenuAmount(data.getOiMenuAmount())
@@ -253,9 +289,12 @@ public class OdOrderService {
           .oiOrderDt(data.getOiOrderDt())
           .oiFinishDt(data.getOiFinishDt()).build();
 
-      // 저장
-      oRepo.save(order);
-    }
+          // 저장
+          oRepo.save(order);
+          map.put("status", true);
+          map.put("message", "배달완료 정보가 저장되었습니다.");
+        }
+      }
     return map;
   }
 
@@ -286,15 +325,15 @@ public class OdOrderService {
       plusChoiceRepo.save(option);
       // 저장된 메뉴 map에 저장
       map.put("status", true);
-      map.put("option", option);
+      map.put("message", "옵션이 저장되었습니다.");
     }
     return map;
     }
 
-
   // 주문 상태 수정
   public void updateOrderStatus(Integer value, String orderNum) {
     List<MpOrderInfoEntity> entity = oRepo.findAllByOiOrderNum(orderNum);
+    // 장바구니로 정보 수정
     if (value == 0) {
       for (int i = 0; i < entity.size(); i++) {
         entity.get(i).setOiStatus(value);
@@ -303,19 +342,43 @@ public class OdOrderService {
         entity.get(i).setOiFinishDt(null);
         oRepo.save(entity.get(i));
       }
-    } else if (value == 1) {
+    } 
+    // 주문 완료로 정보 수정 
+    else if (value == 1) {
+      LocalDate today = LocalDate.now();
+        // 숫자의 경우 아스키코드로 변환시 48~57이 0~9로 표현.
+        // 로직의 randim.ints() 메소드의 첫번째 파라미터를 48로 지정
+        int leftLimit = 48; // numeral '0'
+        // 두번째 파라미터는 알파벳의 제일끝이 122이므로 알파벳만 출력할때와 같이 122+1로 셋팅
+        int rightLimit = 122; // letter 'z'
+        // 길이 제한
+        int length = 10;
+        Random random = new Random();
+        String newOrderNum = random.ints(leftLimit, rightLimit + 1)
+        // 알파벳과 숫자만 출력하기위해 filter() 메소드를 활용해서 아스키코드의 범위를 제한
+        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+        // 문자열 길이를 limit()메소드로 제한
+        .limit(length)
+        //  collect() 메소드로 StringBuilder 객체를 생성
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        //  StringBuilder 객체를 toString() 으로 문자열로 변환
+        .toString();
       for (int i = 0; i < entity.size(); i++) {
         entity.get(i).setOiStatus(value);
+        entity.get(i).setOiOrderDt(today);
+        entity.get(i).setOiOrderNum(newOrderNum);
         oRepo.save(entity.get(i));
       }
-    } else {
+    }
+    // 배달 완료로 정보수정
+    else {
       for (int i = 0; i < entity.size(); i++) {
         entity.get(i).setOiStatus(value);
+        entity.get(i).setOiFinishDt(LocalDate.now());
         oRepo.save(entity.get(i));
       }
     }
   }
-
 
   // 주문 내역 삭제
   public void deleteOrder(String orderNum) {
