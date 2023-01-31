@@ -19,19 +19,14 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Immutable
-@Table(name = "view_review")
+@Table(name = "admin_review_view")
 public class ADReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "re_seq")                   private Long reSeq;
-    @Column(name = "re_reg_dt")                private Date reRegDt;
-    @Column(name = "re_score")                 private Integer reScore;
-    @Column(name = "re_content")               private String reContent;
-    @Column(name = "re_oi_seq")                private Long reOiSeq;
-    @Column(name = "re_taste_score")           private Integer reTasteScore;
-    @Column(name = "re_quantity_score")        private Integer reQuantityScore;
-    @Column(name = "re_delivery_score")        private Integer reDeliveryScore;
-    @Column(name = "ri_seq")                   private Long riSeq;
-    @Column(name = "ri_re_seq")                private Long riReSeq;
-    @Column(name = "ri_name")                  private Long riName;
-    @Column(name = "ri_order")                 private Long riOrder;
+    @Column(name = "re_seq")                private Long reSeq;
+    @Column(name = "si_name")               private String siName;
+    @Column(name = "mni_name")              private String mniName;
+    @Column(name = "re_content")            private String reContent;
+    @Column(name = "re_score")              private Integer reScore;
+    @Column(name = "mi_nickname")           private String miNickname;
+    @Column(name = "re_reg_dt")             private Date reRegDt;
 }

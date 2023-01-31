@@ -1,6 +1,6 @@
 create view view_review
 as (
-select * 
+select a.ri_seq
 from review_info as a
 join review_img as b
 on a.re_seq = b.ri_re_seq
