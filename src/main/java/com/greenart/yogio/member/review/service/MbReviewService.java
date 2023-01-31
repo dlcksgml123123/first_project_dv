@@ -59,8 +59,9 @@ public class MbReviewService {
       resultMap.put("code",HttpStatus.BAD_REQUEST);
     }
      else {
+        
         MbReviewEntity review = MbReviewEntity.builder()
-        .reRegDt(day)
+        .reRegDt(new Date())
         .reScore(data.getScore())
         .reContent(data.getContent())
         .reOiSeq(data.getOiSeq())
@@ -69,13 +70,14 @@ public class MbReviewService {
         .reDeliveryScore(data.getDeliveryScore())
         .build();
         r_repo.save(review);
-
-        MbReviewImageEntity image = MbReviewImageEntity.builder()
-        .riName(data.getName())
-        .riOrder(data.getOrder())
-        .riReSeq(review)
-        .build();
-          i_repo.save(image);
+        if (data.getName() != null) {
+          MbReviewImageEntity image = MbReviewImageEntity.builder()
+          .riName(data.getName())
+          .riOrder(data.getOrder())
+          .riReSeq(review)
+          .build();
+            i_repo.save(image);
+        }
 
           resultMap.put("status", true);
           resultMap.put("message", "리뷰가 등록되었습니다");
