@@ -1,4 +1,4 @@
-package com.greenart.yogio.admin.vo;
+package com.greenart.yogio.admin.vo.store;
 
 import org.springframework.web.multipart.MultipartFile;
 

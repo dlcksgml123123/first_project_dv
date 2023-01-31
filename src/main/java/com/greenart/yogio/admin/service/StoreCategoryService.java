@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.greenart.yogio.admin.entity.StoreCategoryEntity;
 import com.greenart.yogio.admin.repository.StoreCategoryRepository;
-import com.greenart.yogio.admin.vo.StoreCategoryVO;
+import com.greenart.yogio.admin.vo.store.StoreCategoryVO;
 
 @Service
 public class StoreCategoryService {
@@ -42,12 +42,12 @@ public class StoreCategoryService {
     String originFileName = file.getOriginalFilename();
     String [] split = originFileName.split("\\.");
     String ext = split[split.length - 1];
-    String filename = " ";
+    String filename = "";
     for(int i = 0; i<split.length-1; i++) {
         filename += split[i];
     }
 
-    String saveFilename = " ";
+    String saveFilename = "";
     Calendar c = Calendar.getInstance();
     saveFilename += c.getTimeInMillis()+"."+ext;
     Path targetFile = folderLocation.resolve(saveFilename);

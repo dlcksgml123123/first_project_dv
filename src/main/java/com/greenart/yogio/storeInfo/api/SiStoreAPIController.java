@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,6 +77,7 @@ public class SiStoreAPIController {
     @Autowired SiStoreInfoRepository siStoreInfoRepository;
     @Value("${file.image.store}") String store_img_path;
     @Value("${file.image.menu}") String menu_img_path;
+
 
     @PutMapping("/store/add") 
     public ResponseEntity<Object> putStoreInfo(SiStoreInfoVO data ,@RequestPart MultipartFile file) {
@@ -151,7 +153,7 @@ public class SiStoreAPIController {
   //   resultMap.put("list",page);
   //   return resultMap;
   // }
-  @GetMapping("/images/{uri}") 
+  @GetMapping("/store/images/{uri}") 
    public ResponseEntity<Resource> getImage ( @PathVariable String uri,  HttpServletRequest request ) throws Exception { 
     Path folderLocation = Paths.get(store_img_path);
     String filename = sService.getFilenameByUri(uri);

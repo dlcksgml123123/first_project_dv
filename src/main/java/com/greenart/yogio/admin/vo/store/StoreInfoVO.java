@@ -1,4 +1,4 @@
-package com.greenart.yogio.admin.vo;
+package com.greenart.yogio.admin.vo.store;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +26,7 @@ public class StoreInfoVO {
    private String  diTime;
    private Long    owiSiSeq;
    private String   scName;
+   
 
     
 }

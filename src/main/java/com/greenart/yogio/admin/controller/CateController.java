@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.greenart.yogio.admin.service.StoreCategoryService;
-import com.greenart.yogio.admin.vo.StoreCategoryVO;
+import com.greenart.yogio.admin.vo.store.StoreCategoryVO;
 
 @Controller
 public class CateController {
