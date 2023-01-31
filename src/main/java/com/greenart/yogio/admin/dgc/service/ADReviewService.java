@@ -23,11 +23,11 @@ import com.greenart.yogio.mypage.review.entity.MpMypageReviewViewEntity;
 public class ADReviewService {
   @Autowired MbReviewRepository m_repo;
   @Autowired ADReviewRepository r_repo;
+  @Autowired MbMemberInfoRepository i_repo;
   // @Autowired MbMemberInfoRepository m_repo;
   public Map<String,Object> getReviewList(Pageable pageable, String keyword){
-    Page<ADReviewEntity> page = r_repo.findAll(pageable);
-    // MbMemberInfoEntity member = m_repo.findByOiSeq(data.getOiSeq());
-    // Page<MpMypageReviewViewEntity> page = r_repo.findByReSeq(keyword, pageable);
+    // Page<ADReviewEntity> page = r_repo.findAll(pageable);
+    Page<ADReviewEntity> page = r_repo.findByMiNicknameContains(keyword, pageable);
     Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
     resultMap.put("status", true);
     resultMap.put("list", page.getContent());
