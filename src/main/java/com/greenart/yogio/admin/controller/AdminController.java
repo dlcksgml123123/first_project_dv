@@ -2,7 +2,6 @@ package com.greenart.yogio.admin.controller;
 
 
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -10,17 +9,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.greenart.yogio.admin.service.AdminInfoService;
 import com.greenart.yogio.admin.service.OwnerInfoService;
 import com.greenart.yogio.admin.vo.AdminAddVO;
 import com.greenart.yogio.admin.vo.AdminLoginVO;
 import com.greenart.yogio.admin.vo.StoreCategoryVO;
-
 import jakarta.servlet.http.HttpSession;
-import net.bytebuddy.TypeCache.Sort;
+
+
 @Controller
 // @RequestMapping(value = "/admin", method = RequestMethod.POST)
 public class AdminController {
@@ -43,7 +40,7 @@ public class AdminController {
         }
         else{
             model.addAttribute("message", map.get("message"));
-            return "/index";
+            return "/index"; 
         }
     }
     @GetMapping("/admin/add")
