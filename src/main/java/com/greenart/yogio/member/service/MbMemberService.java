@@ -80,11 +80,7 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
       resultMap.put("message", "아이디 또는 비밀번호 오류입니다");
       resultMap.put("code", HttpStatus.BAD_REQUEST);
     }
-    // else if(loginUser.getMiStatus()==3) {
-    //   resultMap.put("status", false);
-    //   resultMap.put("message", "탈퇴처리된 회원입니다");
-    //   resultMap.put("code", HttpStatus.BAD_REQUEST);
-    // }
+
     else if(loginUser.getMiStatus()!=0) {
       resultMap.put("status", false);
       resultMap.put("message", "활동이 정지되거나 탈퇴처리된 회원입니다");
@@ -97,7 +93,6 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
       resultMap.put("code", HttpStatus.ACCEPTED);
       resultMap.put("loginUser", loginUser);
     }
-
     return resultMap;
   }
 
@@ -155,35 +150,47 @@ public Map<String, Object> loginMember(MbLoginVO data) { //로그인
     return resultMap;
   }
   
-  public Map<String, Object> deleteMember(MbMemberVO data, HttpSession session) throws Exception{ //회원탈퇴
+  public Map<String, Object> deleteMember(Long miSeq) { //회원탈퇴
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-    MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
-    MbMemberInfoEntity User = null;
-    User = m_repo.findTop1ByMiPwd(MbAESAlgorithm.Encrypt(data.getMiPwd()));
-    if(loginUser == null) {
+    MbMemberInfoEntity User = m_repo.findByMiSeq(miSeq);
+    if(User == null) {
       resultMap.put("status", false);
-      resultMap.put("message", "로그인 후 사용가능합니다");
+      resultMap.put("message", "해당 회원이 존재하지 않습니다.");
       resultMap.put("code",HttpStatus.BAD_REQUEST);
-      return resultMap;
     }
-    else if(User==null) {
-      resultMap.put("status", false);
-      resultMap.put("message", "잘못된 비밀번호입니다");
-      resultMap.put("code",HttpStatus.BAD_REQUEST);
-    } 
-    else if(!loginUser.getMiPwd().equals(User.getMiPwd())) {
-      resultMap.put("status", false);
-      resultMap.put("message", "잘못된 비밀번호입니다");
-      resultMap.put("code",HttpStatus.BAD_REQUEST);
-    } 
-    else {
+    // MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
+    // MbMemberInfoEntity User = null;
+    // User = m_repo.findTop1ByMiPwd(MbAESAlgorithm.Encrypt(data.getMiPwd()));
+    // MbMemberInfoEntity loginUser = null; 
+    // try {
+    //   loginUser = m_repo.findTop1ByMiIdAndMiPwd(
+    //   data.getMiId(), MbAESAlgorithm.Encrypt(data.getMiPwd())
+    //   );
+    // }catch(Exception e) {e.printStackTrace();}
+    // if(loginUser == null) {
+    //   resultMap.put("status", false);
+    //   resultMap.put("message", "로그인 후 사용가능합니다");
+    //   resultMap.put("code",HttpStatus.BAD_REQUEST);
+    //   return resultMap;
+    // }
+    // else if(User==null) {
+    //   resultMap.put("status", false);
+    //   resultMap.put("message", "잘못된 비밀번호입니다");
+    //   resultMap.put("code",HttpStatus.BAD_REQUEST);
+    // } 
+    // else if(!loginUser.getMiPwd().equals(User.getMiPwd())) {
+    //   resultMap.put("status", false);
+    //   resultMap.put("message", "잘못된 비밀번호입니다");
+    //   resultMap.put("code",HttpStatus.BAD_REQUEST);
+    // } 
+    // else {
       // loginUser.setMiStatus(3); //상태값 변경
       // m_repo.save(loginUser); //변경한 값 저장
-      m_repo.delete(loginUser);
+      m_repo.delete(User);
       resultMap.put("status", true);
       resultMap.put("message", "회원정보가 삭제 되었습니다");
       resultMap.put("code",HttpStatus.OK);
-    }
+    // }
     return resultMap;
   }
 }
