@@ -1,6 +1,5 @@
 package com.greenart.yogio.mypage.review.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -14,28 +13,27 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.review.entity.MpMypageReviewViewEntity;
 import com.greenart.yogio.mypage.review.entity.MpReviewInfoEntity;
 import com.greenart.yogio.mypage.review.repository.MpMypageReviewViewRepository;
 import com.greenart.yogio.mypage.review.repository.MpReviewInfoRepository;
 import com.greenart.yogio.mypage.review.repository.MpStoreReviewCountVIewRepository;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @Service
 public class MpReviewService {
+  @Autowired MpMemberInfoRepository memberRepo;
   @Autowired MpStoreReviewCountVIewRepository reviewCntRepo;
-  @Autowired
-  MpMypageReviewViewRepository reviewViewRepo;
-  @Autowired
-  MpReviewInfoRepository reivewRepo;
+  @Autowired MpMypageReviewViewRepository reviewViewRepo;
+  @Autowired MpReviewInfoRepository reivewRepo;
   
   // review 리스트 출력 (등록일 내림차순)
-  public Map<String, Object> showReviewList(MbMemberInfoEntity memberInfo, HttpSession session,
-  @PageableDefault(size=8, sort = "reRegDt", direction = Sort.Direction.DESC) Pageable pageable) {
+  public Map<String, Object> showReviewList(Long miSeq, @PageableDefault(size=8, sort = "reRegDt", direction = Sort.Direction.DESC) Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) miSeq.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -57,10 +55,12 @@ public class MpReviewService {
     return map;
   }
   
+  // review 삭제
   @Transactional
-  public Map<String, Object> deleteReview(HttpSession session, MbMemberInfoEntity memberInfo, Long reSeq) {
+  public Map<String, Object> deleteReview(Long miSeq, Long reSeq) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
     MpReviewInfoEntity review = reivewRepo.findByReSeq(reSeq);
     if (review == null) {
       map.put("status", false);
