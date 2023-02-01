@@ -20,5 +20,6 @@ public interface MbMemberInfoRepository extends JpaRepository<MbMemberInfoEntity
     public MbMemberInfoEntity findByMiPhone(String miPhone);
     public MbMemberInfoEntity findTop1ByMiIdAndMiPwd(String miId, String miPwd);
     public MbMemberInfoEntity findByMiIdAndMiPhone(String miId, String miPhone);
+    public MbMemberInfoEntity findByMiSeq(Long miSeq);
 }
   

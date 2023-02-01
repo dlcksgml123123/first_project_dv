@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.yogio.lchwork.entity.OiCartViewEntity;
 import com.greenart.yogio.lchwork.entity.OiDeliveryInfoEntity;
+import com.greenart.yogio.lchwork.entity.OiOrderInfoEntity;
 // import com.greenart.yogio.lchwork.entity.OiMemberInfoEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentCompleteEntity;
 import com.greenart.yogio.lchwork.entity.OiPaymentEndEntity;
@@ -25,12 +26,14 @@ import com.greenart.yogio.lchwork.entity.OiPaymentInfoEntity;
 import com.greenart.yogio.lchwork.repository.OiCartViewRepository;
 import com.greenart.yogio.lchwork.repository.OiDeliveryInfoRepository;
 import com.greenart.yogio.lchwork.repository.OiMemberInfoRepository;
+import com.greenart.yogio.lchwork.repository.OiOrderInfoRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentCompleteRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentEndRepository;
 import com.greenart.yogio.lchwork.repository.OiPaymentInfoRepository;
 import com.greenart.yogio.lchwork.service.PaymentInfoService;
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
 import com.greenart.yogio.member.service.MbMemberService;
+import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.member.service.MpMemberService;
 import com.greenart.yogio.mypage.order.entity.MpMypageMenuChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOptionChoiceEntity;
@@ -62,6 +65,9 @@ public class OrderController {
     @Autowired MpMypageOrderPriceByOiSeqRepository priceOiSeqRepo;
     @Autowired OiCartViewRepository cartRepo;
     @Autowired OiDeliveryInfoRepository diRepo;
+    @Autowired OiOrderInfoRepository oiRepo;
+    @Autowired OiPaymentEndRepository payEndRepo;
+    @Autowired MpMemberInfoRepository memberRepo;
     // @Autowired OiPaymentCompleteRepository payRepo;
     // @RequestParam @Nullable String piRequirement,
     // @RequestParam Integer piPayWay,,@RequestParam Long piOiSeq
@@ -92,24 +98,45 @@ public class OrderController {
     // }
     
     @GetMapping("/end")
-    public Map<String, Object> showPayEndInfo(HttpSession session,  @RequestParam String orderNum ){
+    public Map<String, Object> showPayEndInfo(/*HttpSession session*/@RequestParam Long miSeq, @RequestParam String orderNum){
+        // Map<String, Object> map = new LinkedHashMap<String, Object>();
+        // MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
+        
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
-        if(loginMember == null) {
-            map.put("message", "로그인상태가 아닙니다.");
-            return map;
-        }
-        OiPaymentEndEntity data = peRepo.findByOiOrderNumAndMiSeq(orderNum, loginMember.getMiSeq());
-
+        // MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
+        OiPaymentEndEntity data = payEndRepo.findByOiOrderNumAndMiSeq(orderNum, miSeq);
         if(data == null) {
             map.put("message", "조회할 결제정보가 없음");
-            // map.put("code", HttpStatus.BAD_REQUEST);
+            map.put("code", HttpStatus.BAD_REQUEST);
         }
         else {
             map.put("message", "결제정보 조회성공");
             map.put("data", data);
-            // map.put("code", HttpStatus.OK);
+            map.put("code", HttpStatus.OK);
         }
+
+        // if(loginMember == null) {
+        //     map.put("message", "로그인상태가 아닙니다.");
+        //     return map;
+        // }
+        // OiOrderInfoEntity orderinfo = oiRepo.findByOiMiseq(loginMember.getMiSeq());
+        // List<OiOrderInfoEntity> orderinfo = oiRepo.findByOiMiseq(miSeq);
+        // List<OiPaymentEndEntity> payment = new ArrayList<OiPaymentEndEntity>();
+        // for(OiOrderInfoEntity order : orderinfo) {
+        //   OiPaymentEndEntity data = peRepo.findByOiOrderNumAndMiSeq(order.getOiOrderNum() , miSeq);
+        //   if(data != null)
+        //     payment.add(data);
+        // }
+
+        // if(data == null) {
+            // map.put("message", "조회할 결제정보가 없음");
+            // map.put("code", HttpStatus.BAD_REQUEST);
+        // }
+        // else {
+            // map.put("message", "결제정보 조회성공");
+            // map.put("data", payment);
+            // map.put("code", HttpStatus.OK);
+        // }
         return map;
     }
 
@@ -152,7 +179,7 @@ public class OrderController {
 
 
 
-    // 주문 번호를 통해 주문표 출력
+    // 주문 번호를 통해 주문표 출력 수정전
     @GetMapping("/order")
     public Map<String, Object> showWishList (HttpSession session) {
         Map<String, Object> map = new LinkedHashMap<>();

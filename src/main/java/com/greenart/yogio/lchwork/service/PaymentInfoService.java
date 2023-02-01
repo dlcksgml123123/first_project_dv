@@ -59,21 +59,21 @@ public class PaymentInfoService {
     //     }
     //     return map;
     // }
-    public Map<String, Object> showPayEndInfo(HttpSession session, String orderNum ){ 
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
-        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
-        OiPaymentEndEntity data = payEndRepo.findByOiOrderNumAndMiSeq(orderNum, loginMember.getMiSeq());
-        if(data == null) {
-            map.put("message", "조회할 결제정보가 없음");
-            map.put("code", HttpStatus.BAD_REQUEST);
-        }
-        else {
-            map.put("message", "결제정보 조회성공");
-            map.put("data", data);
-            map.put("code", HttpStatus.OK);
-        }
-        return map;
-    }
+    // public Map<String, Object> showPayEndInfo(HttpSession session, String orderNum ){ -컨트롤러에 바로
+    //     Map<String, Object> map = new LinkedHashMap<String, Object>();
+    //     MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
+    //     OiPaymentEndEntity data = payEndRepo.findByOiOrderNumAndMiSeq(orderNum, loginMember.getMiSeq());
+    //     if(data == null) {
+    //         map.put("message", "조회할 결제정보가 없음");
+    //         map.put("code", HttpStatus.BAD_REQUEST);
+    //     }
+    //     else {
+    //         map.put("message", "결제정보 조회성공");
+    //         map.put("data", data);
+    //         map.put("code", HttpStatus.OK);
+    //     }
+    //     return map;
+    // }
 
     
 

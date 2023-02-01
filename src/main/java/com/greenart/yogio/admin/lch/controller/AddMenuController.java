@@ -3,6 +3,9 @@ package com.greenart.yogio.admin.lch.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import io.micrometer.common.lang.Nullable;
 public class AddMenuController {
     @Autowired OiStoreInfoRepository siRepo;
     @Autowired AddMenuService addService;
+    
 
     @GetMapping("/add")
     public String getMenuAdd() {
@@ -53,4 +57,33 @@ public class AddMenuController {
         }
 
     } 
+
+    // 메뉴 리스트
+    @GetMapping("/menulist")
+    public String getMenuMenulist(Model model, @RequestParam @Nullable Long storeNum,
+    @PageableDefault(size=10, sort="mniSeq",direction = Sort.Direction.ASC) Pageable pageable
+    ){
+        model.addAttribute("result", addService.getMenuList(storeNum, pageable));
+        model.addAttribute("storeNum", storeNum);
+        return "lch/menulist";
+    }
+    // 메뉴 삭제
+    @GetMapping("/menudelete")
+    public String getMenudelete(@RequestParam Long menu_no) {
+        addService.deleteMenu(menu_no);
+        return "lch/menulist";
+    }
+    // 디테일 메뉴
+    @GetMapping("/menudetail")
+    public String getMenudetail(@RequestParam Long menu_no, @RequestParam @Nullable Integer page, @RequestParam String keyword, Model model) {
+        if(page == null) page = 0;
+        if(keyword == null) keyword = "";
+        Map<String, Object> map = addService.selectMenuInfo(menu_no);
+        map.put("message", null);
+        model.addAttribute("menu", map);
+        model.addAttribute("page", page);
+        model.addAttribute("keyword", keyword);
+        return "lch/menudetail";
+    }
+    
 }
