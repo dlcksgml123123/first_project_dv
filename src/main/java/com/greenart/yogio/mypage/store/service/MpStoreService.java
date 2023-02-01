@@ -9,24 +9,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.member.repository.MpStoreLikesRepository;
 import com.greenart.yogio.mypage.store.entity.MpMypageStoreLikesViewEntity;
 import com.greenart.yogio.mypage.store.entity.MpStoreCategoryEntity;
 import com.greenart.yogio.mypage.store.repository.MpMypageStoreLikesViewRepository;
 import com.greenart.yogio.mypage.store.repository.MpStoreCategoryRepository;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class MpStoreService {
   @Autowired MpStoreLikesRepository sLikeRepo;
   @Autowired MpMypageStoreLikesViewRepository sLikeViewRepo;
   @Autowired MpStoreCategoryRepository storeCateRepo;
-
+  @Autowired MpMemberInfoRepository memberRepo;
+  
   // 찜한 가게 목록 출력하는 메서드
-  public Map<String, Object> showLikedStore(HttpSession session, Pageable pageable) {
+  public Map<String, Object> showLikedStore(Long miSeq, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity login = memberRepo.findByMiSeq(miSeq);
     if (login == null) {
       map.put("stauts", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");

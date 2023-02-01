@@ -2,7 +2,6 @@ package com.greenart.yogio.mypage.order.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.mypage.member.repository.MpMemberInfoRepository;
 import com.greenart.yogio.mypage.order.entity.MpMypageMenuChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOptionChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOrderPriceByOiSeqEntity;
@@ -25,8 +25,6 @@ import com.greenart.yogio.mypage.order.repository.MpMypageOptionChoiceRepository
 import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOiSeqRepository;
 import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOrderNumRepository;
 import com.greenart.yogio.mypage.order.repository.MpOrderInfoRepository;
-import com.greenart.yogio.mypage.order.repository.MpPlusMenuChoiceRepository;
-import com.greenart.yogio.mypage.order.repository.MpPlusMenuRepository;
 import com.greenart.yogio.mypage.order.vo.MpOrderInfoVO;
 import com.greenart.yogio.mypage.order.vo.MpWishListVO;
 import com.greenart.yogio.mypage.store.entity.MpMenuCategoryEntity;
@@ -34,13 +32,11 @@ import com.greenart.yogio.mypage.store.entity.MpStoreInfoEntity;
 import com.greenart.yogio.mypage.store.repository.MpMenuCategoryRepository;
 import com.greenart.yogio.mypage.store.repository.MpStoreInfoRepository;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class MpMemberOrderService {
   @Autowired MpOrderInfoRepository oRepo;
-  @Autowired MpPlusMenuChoiceRepository choiceRepo;
-  @Autowired MpPlusMenuRepository plusMenuRepo;
+  @Autowired MpMemberInfoRepository memberRepo;
   @Autowired MpMypageOptionChoiceRepository optionChoiceRepo;
   @Autowired MpMypageMenuChoiceRepository menuChoiceRepo;
   @Autowired MpStoreInfoRepository storeRepo;
@@ -49,9 +45,10 @@ public class MpMemberOrderService {
   @Autowired MpMypageOrderPriceByOiSeqRepository priceOiSeqRepo;
 
   // 멤버별 상세한 주문 내역 출력
-  public Map<String, Object> showOrderList(HttpSession session, Pageable pageable) {
+  public Map<String, Object> showOrderList(Long miSeq, Pageable pageable) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+     MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -182,9 +179,10 @@ public class MpMemberOrderService {
   
 
   // 멤버별 간단한 주문 내역 출력
-  public Map<String, Object> showBriefOrderList( HttpSession session, @PageableDefault (size = 8) Pageable page) {
+  public Map<String, Object> showBriefOrderList( Long miSeq, @PageableDefault (size = 8) Pageable page) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) miSeq.getAttribute("loginUser");
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -255,8 +253,10 @@ public class MpMemberOrderService {
               }
             }
             map2.put("list", list);
+            map2.put("status", true);
+            map2.put("message", "주문내역 조회완료");
           }
-          else {
+          else if(list.size() == 0) {
             map2.put("status", false);
             map2.put("message", "주문내역 없음");
           }
@@ -349,9 +349,10 @@ public class MpMemberOrderService {
 
 
   // 로그인된 멤버의 주문표 출력
-  public Map<String, Object> showWishList (HttpSession session) {
+  public Map<String, Object> showWishList (Long miSeq) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) miSeq.getAttribute("loginUser");
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
     // System.out.println(member);
     if (member == null) {
       map.put("status", false);
@@ -453,9 +454,10 @@ public class MpMemberOrderService {
   }
 
   // 주문 상태 수정 - 장바구니에서 주문 완료로
-  public Map<String, Object> updateOrderStatus1(HttpSession session) {
+  public Map<String, Object> updateOrderStatus1(Long miSeq) {
     Map<String, Object> map = new LinkedHashMap<>();
-    MbMemberInfoEntity member = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity member = (MbMemberInfoEntity) miSeq.getAttribute("loginUser");
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
     if (member == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용하실 수 있습니다.");
@@ -483,10 +485,10 @@ public class MpMemberOrderService {
       //  collect() 메소드로 StringBuilder 객체를 생성
       .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
       //  StringBuilder 객체를 toString() 으로 문자열로 변환
-      .toString();
+          .toString();
+      int check = 0;
       // 반복문으로 메뉴 선택 리스트를 돌면서
       for (int m = 0; m < order.size(); m++) {
-        
         // 만약 선택된 주문정보의 상태가 장바구니 상태라면
         if (order.get(m).getOiStatus() == 0) {
           // 선택된 주문 정보의 상태를 주문완료로 고친후
@@ -495,10 +497,17 @@ public class MpMemberOrderService {
           order.get(m).setOiOrderNum(orderNum);
           // 저장
           oRepo.save(order.get(m));
+          check++;
         }
       }
-      map.put("status", true);
-      map.put("message", "주문 완료되었습니다.");
+      if (check != 0) {
+        map.put("status", true);
+        map.put("message", "주문 완료되었습니다.");
+      }
+      else {
+        map.put("status", false);
+        map.put("message", "장바구니가 비어있습니다.");
+      }
     }
     return map;
   }

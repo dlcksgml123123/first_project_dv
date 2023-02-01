@@ -14,17 +14,17 @@ import com.greenart.yogio.mypage.member.vo.MpLoginUserVO;
 import com.greenart.yogio.mypage.member.vo.MpUpdateMemberVO;
 import com.greenart.yogio.mypage.uitls.AESAlgorithm;
 
-import jakarta.servlet.http.HttpSession;
-
 @Service
 public class MpMemberService {
-  @Autowired
-  MpMemberInfoRepository mRepo;
+  @Autowired MpMemberInfoRepository mRepo;
+  
   // 회원정보 수정(비밀번호, 닉네임, 주소, 전화번호)
-  public Map<String, Object> updateMember(MpUpdateMemberVO data, HttpSession session) throws Exception{
+  public Map<String, Object> updateMember(MpUpdateMemberVO data, Long miSeq) throws Exception{
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    // session의 loginUser 값을 login으로 저장
-    MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity login = mRepo.findByMiSeq(miSeq);
+
+    // miSeq의 loginUser 값을 login으로 저장
+    // MbMemberInfoEntity login = (MbMemberInfoEntity) session.getAttribute("loginUser");
     // 로그인 데이터 없음 = 로그인 한 적이 없다.
     if (login == null) {
       map.put("status", false);
@@ -143,9 +143,10 @@ public class MpMemberService {
   }
   
   // 마이페이지 정보 출력
-  public Map<String, Object> showMemberInfo(HttpSession session) {
+  public Map<String, Object> showMemberInfo(Long miSeq) {
     Map<String, Object> map = new LinkedHashMap<String, Object>();
-    MbMemberInfoEntity loginMember = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    // MbMemberInfoEntity loginMember = (MbMemberInfoEntity) session.getAttribute("loginUser");
+    MbMemberInfoEntity loginMember = mRepo.findByMiSeq(miSeq);
     if (loginMember == null) {
       map.put("status", false);
       map.put("message", "로그인 후 이용가능한 서비스입니다.");

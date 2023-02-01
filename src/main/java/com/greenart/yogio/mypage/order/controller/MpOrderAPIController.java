@@ -16,15 +16,11 @@ import com.greenart.yogio.admin.raeeun.service.OdOrderService;
 import com.greenart.yogio.admin.raeeun.vo.OrderAddVO;
 import com.greenart.yogio.mypage.order.service.MpMemberOrderService;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 @RequestMapping("/order")
 public class MpOrderAPIController {
-  @Autowired
-  OdOrderService order;
-  @Autowired
-  MpMemberOrderService mOrder;
+  @Autowired OdOrderService order;
+  @Autowired MpMemberOrderService mOrder;
 
   // 메뉴 추가
   @PostMapping("/add/menu")
@@ -49,8 +45,8 @@ public class MpOrderAPIController {
   
   // 장바구니 -> 주문완료 상태 변경
   @GetMapping("/update/status1")
-  public ResponseEntity<Object> getOrderUpdateStatus1(HttpSession session) {
-    Map<String, Object> map = mOrder.updateOrderStatus1(session);
+  public ResponseEntity<Object> getOrderUpdateStatus1(@RequestParam Long miSeq) {
+    Map<String, Object> map = mOrder.updateOrderStatus1(miSeq);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

@@ -23,7 +23,7 @@ public class OdOrderController {
   @Autowired OdOrderService order;
   
   @GetMapping("/list")
-  public String getOrderList(Model model, @RequestParam @Nullable String keyword, HttpSession session, Pageable pageable) {
+  public String getOrderList(Model model, @RequestParam @Nullable String keyword, Long miSeq, Pageable pageable) {
     if (keyword == null) {
       keyword = "";
     }
@@ -33,7 +33,7 @@ public class OdOrderController {
   }
 
   @GetMapping("/detail")
-  public String getDetailOrder(Model model, @RequestParam @Nullable String keyword, HttpSession session,
+  public String getDetailOrder(Model model, @RequestParam @Nullable String keyword, Long miSeq,
       String orderNum) {
     if (keyword == null) {
       keyword = "";
