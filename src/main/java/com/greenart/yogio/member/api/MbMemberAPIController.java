@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,9 +32,9 @@ public class MbMemberAPIController {
       return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }
     @PostMapping("/login") //로그인
-    public ResponseEntity<Object> memberLogin(@RequestBody MbLoginVO data, HttpSession session) {
+    public ResponseEntity<Object> memberLogin(@RequestBody MbLoginVO data/* , HttpSession session*/) {
     Map<String, Object> resultMap = mService.loginMember(data);
-    session.setAttribute("loginUser", resultMap.get("loginUser"));
+    // session.setAttribute("loginUser", resultMap.get("loginUser"));
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
@@ -55,10 +56,10 @@ public class MbMemberAPIController {
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 
-  @PostMapping("/deleteMember") //회원탈퇴
-  public ResponseEntity<Object> memberDelete(@RequestBody MbMemberVO data, HttpSession session) throws Exception{
-    Map <String ,Object> resultMap = mService.deleteMember(data, session);
-    // session.setAttribute("loginUser", resultMap.get("loginUser"));
+  @DeleteMapping("/deleteMember") //회원탈퇴
+  public ResponseEntity<Object> memberDelete(@RequestParam Long miSeq) throws Exception{
+    Map <String ,Object> resultMap = mService.deleteMember(miSeq);
+   // session.setAttribute("loginUser", resultMap.get("loginUser"));
     return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
   }
 }

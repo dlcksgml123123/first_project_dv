@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.greenart.yogio.member.entity.MbMemberInfoEntity;
+import com.greenart.yogio.member.repository.MbMemberInfoRepository;
 import com.greenart.yogio.member.review.entity.MbOrderInfoEntity;
 import com.greenart.yogio.member.review.entity.MbReviewEntity;
 import com.greenart.yogio.member.review.entity.MbReviewImageEntity;
@@ -25,12 +26,26 @@ public class MbReviewService {
     @Autowired MbReviewRepository r_repo;
     @Autowired MbReviewImageRepository i_repo;
     @Autowired MbOrderInfoRepository o_repo;
-    public Map<String, Object> addReview(MbReviewVO data, HttpSession session) { //리뷰쓰기
+    @Autowired MbMemberInfoRepository m_repo;
+    public Map<String, Object> addReview(MbReviewVO data , Long miSeq) { //리뷰쓰기
      Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
-     MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
+    //  MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
      MbOrderInfoEntity order = o_repo.findByOiSeq(data.getOiSeq());
+     MbMemberInfoEntity User = m_repo.findByMiSeq(miSeq);
      
-   //   loginUser.getMiSeq().equals(o_repo.findByOiMiSeq());
+     if(User == null) {
+      resultMap.put("status", false);
+      resultMap.put("message", "해당 회원이 존재하지 않습니다.");
+      resultMap.put("code",HttpStatus.BAD_REQUEST);
+    }
+     
+     else if(!User.getMiSeq().equals(order.getOiMiSeq())) {
+      resultMap.put("status", false);
+      resultMap.put("message", "잘못된 접근입니다");
+      resultMap.put("code",HttpStatus.BAD_REQUEST);
+     }
+
+     else {
      
      Date day = new Date();
      Calendar today = Calendar.getInstance();
@@ -40,14 +55,14 @@ public class MbReviewService {
      Long diffSec = (today.getTimeInMillis() - regDt.getTimeInMillis())/1000;
      Long diffDay = diffSec / (24 * 60 * 60);
 
-     if(loginUser == null) {
-        resultMap.put("status", false);
-        resultMap.put("message", "로그인 후 사용가능합니다");
-        resultMap.put("code",HttpStatus.BAD_REQUEST);
-        return resultMap;
-     }
+    //  if(loginUser == null) {
+    //     resultMap.put("status", false);
+    //     resultMap.put("message", "로그인 후 사용가능합니다");
+    //     resultMap.put("code",HttpStatus.BAD_REQUEST);
+    //     return resultMap;
+    //  }
      
-     else if(r_repo.countByReOiSeq(data.getOiSeq())>=1) {
+     if(r_repo.countByReOiSeq(data.getOiSeq())>=1) {
         resultMap.put("status", false);
         resultMap.put("message", "이미 리뷰가 등록되었습니다");
         resultMap.put("code",HttpStatus.BAD_REQUEST);
@@ -59,7 +74,6 @@ public class MbReviewService {
       resultMap.put("code",HttpStatus.BAD_REQUEST);
     }
      else {
-        
         MbReviewEntity review = MbReviewEntity.builder()
         .reRegDt(new Date())
         .reScore(data.getScore())
@@ -83,6 +97,7 @@ public class MbReviewService {
           resultMap.put("message", "리뷰가 등록되었습니다");
           resultMap.put("code", HttpStatus.CREATED);
         }
+      }
         return resultMap;
     }
 }
