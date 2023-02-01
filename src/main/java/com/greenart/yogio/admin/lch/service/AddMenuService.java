@@ -7,13 +7,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.greenart.yogio.admin.lch.entity.MenuListViewEntity;
+import com.greenart.yogio.admin.lch.repository.MenuListViewRepository;
 import com.greenart.yogio.lchwork.entity.OiMenuCateJoinEntity;
 import com.greenart.yogio.lchwork.entity.OiMenuCategoryEntity;
 import com.greenart.yogio.lchwork.entity.OiMenuInfoEntity;
@@ -26,6 +31,7 @@ import com.greenart.yogio.lchwork.service.StoreMenuService;
 import com.greenart.yogio.lchwork.vo.MenuVO;
 
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -35,6 +41,7 @@ public class AddMenuService {
     @Autowired OiMenuInfoRepository mniRepo;
     @Autowired OiMenuCateJoinRepository mcjRepo;
     @Autowired StoreMenuService storeMenuService;
+    @Autowired MenuListViewRepository menulistRepo;
     @Value("${file.image.menu}") String menu_img_path;
 
     public Map < String, Object > addMenuInfo(MenuVO data, MultipartFile file) {
@@ -105,5 +112,72 @@ public class AddMenuService {
 
         }
         return map;
+    }
+    // 메뉴 리스트 
+    public Map<String, Object> getMenuList(Long storeNum, Pageable pageable) {
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        if (storeNum == null) {
+            Page<MenuListViewEntity> menu = menulistRepo.findAll(pageable);
+            map.put("list", menu.getContent());
+            map.put("total", menu.getTotalElements());
+            map.put("totalPage", menu.getTotalPages());
+            map.put("currentPage", menu.getNumber());
+        }
+        else {
+        Page<MenuListViewEntity> page = menulistRepo.findBySiSeq(storeNum, pageable);
+            map.put("list", page.getContent());
+            map.put("total", page.getTotalElements());
+            map.put("totalPage", page.getTotalPages());
+            map.put("currentPage", page.getNumber());
+        }
+        return map;
+    }
+    // 메뉴 삭제
+    @Transactional
+    public void deleteMenu(Long menu_no) {
+        mniRepo.deleteById(menu_no);
+    }
+    // 디테일 메뉴
+    public Map<String, Object> selectMenuInfo(Long menu_no) {
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        Optional<OiMenuInfoEntity> entityOpt = mniRepo.findById(menu_no);
+        if(entityOpt.isEmpty()) {
+            resultMap.put("status", false);
+        }
+        else {
+            resultMap.put("status", true);
+            resultMap.put("no", entityOpt.get().getMniSeq());
+            resultMap.put("name", entityOpt.get().getMniName());
+            resultMap.put("price", entityOpt.get().getMniPrice());
+            resultMap.put("discount", entityOpt.get().getMniDiscount());
+        }
+        return resultMap;
+    }
+    // 메뉴 수정
+    public Map<String, Object> updateMenuInfo(Long no, String name) {
+        Map<String,Object> resultMap = new LinkedHashMap<String, Object>();
+        Optional<OiMenuInfoEntity> entityOpt = mniRepo.findById(no);
+        if(entityOpt.isEmpty()) {
+            resultMap.put("updated", true);
+            resultMap.put("no", no);
+            resultMap.put("name", name);
+            resultMap.put("message", "잘못된 장르 정보입니다.");
+        }
+        else if(entityOpt.get().getMniName().equalsIgnoreCase(name)) {
+            resultMap.put("updated", false);
+            resultMap.put("no", no);
+            resultMap.put("name", name);
+            resultMap.put("message", "기존 설정된 이름으로 변경 불가능합니다.");
+        }
+        else if(mniRepo.countByMniName(name) != 0) {
+            resultMap.put("updated", false);
+            resultMap.put("no", no);
+            resultMap.put("name", name);
+            resultMap.put("message", name+"메뉴는 이미 존재합니다.");
+        }
+        else {
+            // OiMenuInfoEntity entity = OiMenuInfoEntity.builder().mniSeq(no).mniName(name).mniPrice(null)
+        }
+        return resultMap;
     }
 }

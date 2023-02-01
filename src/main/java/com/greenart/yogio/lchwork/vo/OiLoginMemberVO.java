@@ -10,13 +10,13 @@ import lombok.Data;
 public class OiLoginMemberVO {
     private String miPhone;
     private String miAddress;
-    private String siName;
+    // private String siName;
 
     public OiLoginMemberVO(MbMemberInfoEntity entity) {
         this.miPhone = entity.getMiPhone();
         this.miAddress = entity.getMiAddress();
     }
-    public OiLoginMemberVO(OiStoreInfoEntity entity) {
-        this.siName = entity.getSiName();
-    }
+    // public OiLoginMemberVO(OiStoreInfoEntity entity) {
+    //     this.siName = entity.getSiName();
+    // }
 }
