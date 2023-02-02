@@ -38,7 +38,7 @@
             <tr th:each="owner : ${result.ownerList}" id="leave"> 
                 <td th:text="${owner.owiSeq}"></td>
                 <td th:text="${owner.owiId}"></td>
-                <td th:text="${owner.owiNickname}"></td>
+                <td th:text="${owner.owiNickName}"></td>
                 <td th:text="${owner.owiPhone}"></td>
                 <td th:text="${owner.owiEmail}"></td>
                 <td>
@@ -80,10 +80,10 @@
             <!-- @{URL/{page}(page=${i})}  -->
             <!-- @{/admin/list/{page}(page=${i})} /admin/list/0 /admin/list/1 /admin/list/2 -->
             <th:block th:if="${keyword == null || keyword == ''}">
-                <a th:href="@{/admin/list(page=${i})}" th:text="${i+1}"></a>
+                <a th:href="@{/owner/list(page=${i})}" th:text="${i+1}"></a>
             </th:block>
             <th:block th:if="${keyword != null && keyword != ''}">
-                <a th:href="@{/admin/list(page=${i},keyword=${keyword})}" th:text="${i+1}"></a>
+                <a th:href="@{/owner/list(page=${i},keyword=${keyword})}" th:text="${i+1}"></a>
             </th:block>
             </th:block>
         </th:block>

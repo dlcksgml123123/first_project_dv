@@ -14,7 +14,7 @@ private String owiId;
 private String owiPwd;
 private String owiEmail;
 private String owiPhone;
-private String owiNickname;
+private String owiNickName;
 private Long owiSiSeq;
 
 public OwnerInfoVO(OwnerInfoEntity entity){
@@ -23,7 +23,7 @@ this.owiId = entity.getOwiId();
 this.owiPwd = entity.getOwiId();
 this.owiEmail = entity.getOwiEmail();
 this.owiPhone = entity.getOwiPhone();
-this.owiNickname = entity.getOwiNickname();
+this.owiNickName = entity.getOwiNickName();
 this.owiSiSeq = entity.getOwiSiSeq();
 
 }

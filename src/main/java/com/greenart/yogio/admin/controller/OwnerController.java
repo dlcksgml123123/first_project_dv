@@ -1,5 +1,6 @@
 package com.greenart.yogio.admin.controller;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.greenart.yogio.admin.entity.OwnerInfoEntity;
+import com.greenart.yogio.admin.repository.OwnerInfoRepostitory;
 import com.greenart.yogio.admin.service.OwnerInfoService;
 import com.greenart.yogio.admin.vo.admin.AdminVO;
 import com.greenart.yogio.admin.vo.owner.OwnerAddVO;
@@ -24,6 +28,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/owner")
 public class OwnerController {
     @Autowired OwnerInfoService ownerInfoService;
+    @Autowired OwnerInfoRepostitory ownerInfoRepostitory;
     @GetMapping("/list")
     public String getOwnerList (Model model,Pageable pageable) {
         model.addAttribute("result", ownerInfoService.getOwnerList(pageable));
@@ -33,7 +38,8 @@ public class OwnerController {
     public String getOwnerAdd() {
         return "/owner/add";
     }
-    @PostMapping("/login")
+
+  @PostMapping("/login")
     public String postOwnerLogin(OwnerLoginVO login , HttpSession session, Model model){
         Map<String,Object> map = ownerInfoService.loginOwner(login);
          if((boolean)map.get("status")) {

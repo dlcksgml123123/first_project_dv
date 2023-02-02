@@ -21,7 +21,7 @@ import com.greenart.yogio.admin.vo.owner.OwnerUpdateVO;
 @Service
 public class OwnerInfoService {
     @Autowired OwnerInfoRepostitory ownerInfoRepostitory;
-        public Map<String, Object> loginOwner(OwnerLoginVO login) {
+       public Map<String, Object> loginOwner(OwnerLoginVO login) {
         Map<String,Object> resultMap= new LinkedHashMap<String, Object>();
         OwnerInfoEntity entity =  ownerInfoRepostitory.findByOwiIdAndOwiPwd(login.getOwi_id(), login.getOwi_pwd());
         if (entity == null) {
@@ -69,7 +69,7 @@ public class OwnerInfoService {
         }
         else {
             OwnerInfoEntity entity = OwnerInfoEntity.builder().owiId(data.getOwiId()).owiPwd(data.getOwiPwd()).
-            owiNickname(data.getOwiNickname()).owiEmail(data.getOwiEmail()).owiPhone(data.getOwiPhone()).build();
+            owiNickName(data.getOwiNickname()).owiEmail(data.getOwiEmail()).owiPhone(data.getOwiPhone()).build();
             ownerInfoRepostitory.save(entity);
             map.put("status", true);
             map.put("message", "사장님 등록 신청 완료");
@@ -125,7 +125,7 @@ public class OwnerInfoService {
         else { 
             OwnerInfoEntity e  =  entity.get();
             e.setOwiPwd(data.getPwd());
-            e.setOwiNickname(data.getNickname());
+            e.setOwiNickName(data.getNickname());
             e.setOwiEmail(data.getEmail());
             e.setOwiPhone(data.getPhone());
             ownerInfoRepostitory.save(e);

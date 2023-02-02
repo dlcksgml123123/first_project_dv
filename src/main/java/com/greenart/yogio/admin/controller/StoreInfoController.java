@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.greenart.yogio.admin.entity.OwnerInfoEntity;
 import com.greenart.yogio.admin.entity.StoreInfoEntity;
+import com.greenart.yogio.admin.service.OwnerInfoService;
 import com.greenart.yogio.admin.service.StoreCategoryService;
 import com.greenart.yogio.admin.service.StoreInfoService;
 import com.greenart.yogio.admin.vo.admin.AdminVO;
 import com.greenart.yogio.admin.vo.owner.OwnerInfoVO;
+import com.greenart.yogio.admin.vo.owner.OwnerLoginVO;
 import com.greenart.yogio.admin.vo.store.StoreDetailInfoVO;
 import com.greenart.yogio.admin.vo.store.StoreInfoVO;
 
@@ -28,13 +31,14 @@ import jakarta.servlet.http.HttpSession;
 public class StoreInfoController {
     @Autowired StoreCategoryService storeCategoryService;
     @Autowired StoreInfoService storeInfoService;
+    @Autowired OwnerInfoService ownerInfoService;
       @GetMapping("/add")
     public String getAdminAdd(Model model, HttpSession session, Pageable pageable) {
         // Map<String,Object> map = new LinkedHashMap<String, Object>();
         model.addAttribute("result", storeCategoryService.getCateList(pageable));
         return "/store/add";
     }
-     @PostMapping("/add")
+    @PostMapping("/add")
     public String postAddAdmin(StoreInfoVO data, Model model, HttpSession session,Pageable pageable) {
         model.addAttribute("result", storeCategoryService.getCateList(pageable));
        Map<String,Object> map = storeInfoService.addStore(data, session);
