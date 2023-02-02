@@ -59,7 +59,7 @@ public class OwnerInfoService {
             map.put("message", "비밀번호를 입력하세요");
         }
 
-           else if (data.getOwiNickname() == null || data.getOwiNickname().equals("")) {
+           else if (data.getOwiNickName() == null || data.getOwiNickName().equals("")) {
             map.put("status", false);
             map.put("message", "이름을 입력하세요");
         }
@@ -69,7 +69,7 @@ public class OwnerInfoService {
         }
         else {
             OwnerInfoEntity entity = OwnerInfoEntity.builder().owiId(data.getOwiId()).owiPwd(data.getOwiPwd()).
-            owiNickName(data.getOwiNickname()).owiEmail(data.getOwiEmail()).owiPhone(data.getOwiPhone()).build();
+            owiNickName(data.getOwiNickName()).owiEmail(data.getOwiEmail()).owiPhone(data.getOwiPhone()).build();
             ownerInfoRepostitory.save(entity);
             map.put("status", true);
             map.put("message", "사장님 등록 신청 완료");

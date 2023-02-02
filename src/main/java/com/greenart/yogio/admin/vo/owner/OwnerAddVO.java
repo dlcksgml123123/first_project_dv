@@ -8,5 +8,5 @@ private String owiId;
 private String owiPwd;
 private String owiEmail;
 private String owiPhone;
-private String owiNickname;
+private String owiNickName;
 }

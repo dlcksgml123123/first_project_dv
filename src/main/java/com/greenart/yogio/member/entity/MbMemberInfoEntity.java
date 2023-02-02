@@ -25,7 +25,7 @@ public class MbMemberInfoEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mi_seq") private Long miSeq ;
     @Column(name = "mi_id") private String miId;
-    @JsonIgnore
+    // @JsonIgnore
     @Column(name = "mi_pwd") private String miPwd;
     @Column(name = "mi_email") private String miEmail;
     @Column(name = "mi_phone") private String miPhone;
