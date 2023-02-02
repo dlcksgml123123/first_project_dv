@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class MbMemberAPIController {
     @Autowired MbMemberService mService;
     @PutMapping("/join") //회원가입
-    public ResponseEntity<Object> memberJoin(@RequestBody MbMemberInfoEntity data) {
+    public ResponseEntity<Object> memberJoin(@RequestBody MbMemberVO data) {
       Map<String, Object> resultMap = mService.addMember(data);
       return new ResponseEntity<Object>(resultMap, (HttpStatus)resultMap.get("code"));
     }

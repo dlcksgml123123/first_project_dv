@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class MbMemberService {
    @Autowired MbMemberInfoRepository m_repo;
-   public Map<String, Object> addMember(MbMemberInfoEntity data) { //회원가입
+   public Map<String, Object> addMember(MbMemberVO data) { //회원가입
     Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
     String id_pattern = "^[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$";
     String pwd_pattern = "^[a-zA-Z0-9!@#$%^&*()-_=+]*$";
@@ -60,7 +60,19 @@ public class MbMemberService {
         String encPwd = MbAESAlgorithm.Encrypt(data.getMiPwd());
         data.setMiPwd(encPwd);
       }  catch(Exception e) {e.printStackTrace();}
-      m_repo.save(data);
+      if (data.getMiStatus() == null) {
+        data.setMiStatus(0);
+      }
+      MbMemberInfoEntity member = MbMemberInfoEntity.builder()
+        .miId(data.getMiId())
+        .miPwd(data.getMiPwd())
+        .miEmail(data.getMiEmail())
+        .miPhone(data.getMiPhone())
+        .miNickname(data.getMiNickname())
+        .miAddress(data.getMiAddress())
+        .miStatus(data.getMiStatus())
+        .build();
+      m_repo.save(member);
       resultMap.put("status", true);
       resultMap.put("message", "회원이 등록되었습니다");
       resultMap.put("code", HttpStatus.CREATED);
