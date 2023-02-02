@@ -49,4 +49,41 @@ public class MpOrderAPIController {
     Map<String, Object> map = mOrder.updateOrderStatus1(miSeq);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
+
+  // 메뉴 수량 수정
+  @GetMapping("/update/menu/amount")
+  public ResponseEntity<Object> getOrderAmountUpdate(@RequestParam Long miSeq, @RequestParam Long oiSeq,
+      @RequestParam Integer amount) {
+    Map<String, Object> map = mOrder.updateOrderAmount(oiSeq, amount, miSeq);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+ 
+  // 옵션 수량 수정
+  @GetMapping("/update/option/amount")
+  public ResponseEntity<Object> getOptionAmountUpdate(@RequestParam Long miSeq, @RequestParam Long pmcSeq, 
+      @RequestParam Integer amount) {
+    Map<String, Object> map = mOrder.updateOptionAmount(pmcSeq, amount, miSeq);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
+  // 장바구니 내역 전부 삭제
+  @GetMapping("/delete/wishListAll")
+  public ResponseEntity<Object> getdeletewishListAll(@RequestParam Long miSeq) {
+    Map<String, Object> map = mOrder.deleteWishListAll(miSeq);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+ 
+  // 장바구니 내역 일부 삭제
+  @GetMapping("/delete/wishList")
+  public ResponseEntity<Object> getdeletewishList(@RequestParam Long miSeq, @RequestParam Long oiSeq) {
+    Map<String, Object> map = mOrder.deleteWishList(miSeq, oiSeq);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
+  // 주문내역 삭제
+  @GetMapping("/delete/order")
+  public ResponseEntity<Object> getDeleteOrder(@RequestParam String orderNum) {
+    Map<String, Object> map = mOrder.deleteOrder(orderNum);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 }

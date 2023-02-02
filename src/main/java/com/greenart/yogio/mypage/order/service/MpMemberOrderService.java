@@ -20,7 +20,9 @@ import com.greenart.yogio.mypage.order.entity.MpMypageOptionChoiceEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOrderPriceByOiSeqEntity;
 import com.greenart.yogio.mypage.order.entity.MpMypageOrderPriceByOrderNumEntity;
 import com.greenart.yogio.mypage.order.entity.MpOrderInfoEntity;
+import com.greenart.yogio.mypage.order.entity.MpPlusMenuChoiceEntity;
 import com.greenart.yogio.mypage.order.repository.MpMypageMenuChoiceRepository;
+import com.greenart.yogio.mypage.order.repository.MpPlusMenuChoiceRepository;
 import com.greenart.yogio.mypage.order.repository.MpMypageOptionChoiceRepository;
 import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOiSeqRepository;
 import com.greenart.yogio.mypage.order.repository.MpMypageOrderPriceByOrderNumRepository;
@@ -35,6 +37,7 @@ import com.greenart.yogio.mypage.store.repository.MpStoreInfoRepository;
 
 @Service
 public class MpMemberOrderService {
+  @Autowired MpPlusMenuChoiceRepository plusRepo;
   @Autowired MpOrderInfoRepository oRepo;
   @Autowired MpMemberInfoRepository memberRepo;
   @Autowired MpMypageOptionChoiceRepository optionChoiceRepo;
@@ -453,6 +456,7 @@ public class MpMemberOrderService {
     return map;
   }
 
+
   // 주문 상태 수정 - 장바구니에서 주문 완료로
   public Map<String, Object> updateOrderStatus1(Long miSeq) {
     Map<String, Object> map = new LinkedHashMap<>();
@@ -478,13 +482,13 @@ public class MpMemberOrderService {
       int length = 10;
       Random random = new Random();
       String orderNum = random.ints(leftLimit, rightLimit + 1)
-      // 알파벳과 숫자만 출력하기위해 filter() 메소드를 활용해서 아스키코드의 범위를 제한
-      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-      // 문자열 길이를 limit()메소드로 제한
-      .limit(length)
-      //  collect() 메소드로 StringBuilder 객체를 생성
-      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-      //  StringBuilder 객체를 toString() 으로 문자열로 변환
+          // 알파벳과 숫자만 출력하기위해 filter() 메소드를 활용해서 아스키코드의 범위를 제한
+          .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+          // 문자열 길이를 limit()메소드로 제한
+          .limit(length)
+          //  collect() 메소드로 StringBuilder 객체를 생성
+          .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+          //  StringBuilder 객체를 toString() 으로 문자열로 변환
           .toString();
       int check = 0;
       // 반복문으로 메뉴 선택 리스트를 돌면서
@@ -503,12 +507,162 @@ public class MpMemberOrderService {
       if (check != 0) {
         map.put("status", true);
         map.put("message", "주문 완료되었습니다.");
-      }
-      else {
+      } else {
         map.put("status", false);
         map.put("message", "장바구니가 비어있습니다.");
       }
     }
     return map;
   }
+
+
+  // 주문 메뉴 수량 업데이트
+  public Map<String, Object> updateOrderAmount(Long oiSeq, Integer amount, Long miSeq) {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    MpOrderInfoEntity orderMenu = oRepo.findByOiSeq(oiSeq);
+    if (orderMenu == null) {
+      map.put("status", false);
+      map.put("message", "해당 메뉴는 주문에 존재하지 않습니다.");
+    } else if (orderMenu.getMember().getMiSeq() != member.getMiSeq()) {
+      map.put("status", false);
+      map.put("message", "로그인한 사용자의 장바구니 메뉴만 수정 가능합니다.");
+    } else {
+      orderMenu.setOiMenuAmount(amount);
+      oRepo.save(orderMenu);
+      map.put("status", true);
+      map.put("message", "수량이 수정되었습니다");
+      map.put("oiSeq", orderMenu.getOiSeq());
+    }
+    return map;
+  }
+
+
+  // 주문 옵션 수량 업데이트
+  public Map<String, Object> updateOptionAmount(Long pmcSeq, Integer amount, Long miSeq) {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    MpPlusMenuChoiceEntity optionMenu = plusRepo.findByPmcSeq(pmcSeq);
+    if (optionMenu == null) {
+      map.put("status", false);
+      map.put("message", "해당 옵션은 주문에 존재하지 않습니다.");
+    } else if (optionMenu.getOrder().getMember().getMiSeq() != member.getMiSeq()) {
+      map.put("status", false);
+      map.put("message", "로그인한 사용자의 장바구니 메뉴만 수정 가능합니다.");
+    } else {
+      optionMenu.setPmcAmount(amount);
+      plusRepo.save(optionMenu);
+      map.put("status", true);
+      map.put("message", "수량이 수정되었습니다");
+      map.put("pmcSeq", optionMenu.getPmcSeq());
+    }
+    return map;
+  }
+
+
+  // 장바구니 내역 전체 삭제
+  public Map<String, Object> deleteWishListAll(Long miSeq) {
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    // 로그인한 회원과 일치하는 메뉴 선택 리스트로 저장
+    List<MpOrderInfoEntity> order = oRepo.findAllByMember(member);
+    // 만약 리스트가 비어있다면, 장바구니가 없으므로 메시지 출력
+    if (order.isEmpty()) {
+      map.put("status", false);
+      map.put("message", "장바구니가 비어있습니다.");
+    }
+    Integer check = 0;
+    // 반복문으로 메뉴 선택 리스트를 돌면서
+    for (int m = 0; m < order.size(); m++) {
+      // 만약 선택된 주문정보의 상태가 장바구니 상태라면
+      if (order.get(m).getOiStatus() == 0) {
+        // 선택된 주문 정보의 옵션정보를 리스트에 저장
+        List<MpPlusMenuChoiceEntity> option = plusRepo.findByOrder(order.get(m));
+        if (!option.isEmpty()) {
+          for (int i = 0; i < option.size(); i++) {
+            // 메뉴에 걸린 옵션 정보를 삭제
+            plusRepo.delete(option.get(i));
+          }
+        }
+        // 선택된 주문 정보를 삭제
+        oRepo.deleteById(order.get(m).getOiSeq());
+        check++;
+      }
+    }
+    if (check != 0) {
+      map.put("status", true);
+      map.put("message", "장바구니를 삭제했습니다.");
+    } else {
+      map.put("status", false);
+      map.put("message", "장바구니가 비어있습니다.");
+    }
+    return map;
+  }
+  
+  // 장바구니 내역 일부 삭제
+  public Map<String, Object> deleteWishList(Long miSeq, Long oiSeq) {
+    MbMemberInfoEntity member = memberRepo.findByMiSeq(miSeq);
+    // 주문 seq와 일치하는 주문 메뉴 정보 저장
+    MpOrderInfoEntity orderMenu = oRepo.findByOiSeq(oiSeq);
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    if (orderMenu == null) {
+      map.put("status", false);
+      map.put("message", "장바구니가 비어있습니다.");
+    }
+    // 만약 선택된 주문정보의 상태가 장바구니 상태이고, 주문한 사람과 로그인한 사람이 일치한다면
+    else if (orderMenu.getOiStatus() == 0 && orderMenu.getMember().getMiSeq() == member.getMiSeq()) {
+      // 주문된 메뉴의 옵션 정보 저장
+      List<MpPlusMenuChoiceEntity> option = plusRepo.findByOrder(orderMenu);
+      // 옵션 정보가 있다면
+      if (!option.isEmpty()) {
+        for (int i = 0; i < option.size(); i++) {
+          // 메뉴에 걸린 옵션 정보를 삭제
+          plusRepo.delete(option.get(i));
+        }
+      }
+      // 선택된 주문 정보를 삭제
+      oRepo.deleteById(orderMenu.getOiSeq());
+      map.put("status", true);
+      map.put("message", "장바구니를 삭제했습니다.");
+    }
+    else if (orderMenu.getMember().getMiSeq() != member.getMiSeq()) {
+      map.put("status", false);
+      map.put("message", "장바구니에 담은 회원만 장바구니를 삭제할 수 있습니다.");
+    }
+    else {
+      map.put("status", false);
+      map.put("message", "장바구니가 비어있습니다.");
+    }
+    return map;
+  }
+  
+  // 주문 내역 삭제
+  public Map<String, Object> deleteOrder(String orderNum) {
+     Map<String, Object> map = new LinkedHashMap<String, Object>();
+    // 주문번호가 일치하는 내역을 찾아서 저장
+    List<MpOrderInfoEntity> entity = oRepo.findAllByOiOrderNum(orderNum);
+    if (entity.isEmpty()) {
+      map.put("status", false);
+      map.put("message", "주문번호가 일치하는 주문내역이 없습니다.");
+    }
+    else {
+      // 내역 안의 메뉴정보를 전부 삭제
+      for (int i = 0; i < entity.size(); i++) {
+        oRepo.deleteById(entity.get(i).getOiSeq());
+        // 메뉴정보에 걸린 옵션 정보를 찾아서 저장
+        List<MpPlusMenuChoiceEntity> option = plusRepo.findByOrder(entity.get(i));
+        // 만약 옵션 선택이 있다면,
+        if (!option.isEmpty()) {
+          // 옵션의 수만큼 반복문을 돌려 옵션 삭제
+          for (int j = 0; j < option.size(); j++) {
+            plusRepo.delete(option.get(j));
+          }
+        }
+      }
+      map.put("status", true);
+      map.put("message", "주문내역이 삭제되었습니다.");
+    }
+    return map;
+  }
+  
 }

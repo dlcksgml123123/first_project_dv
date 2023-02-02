@@ -11,4 +11,7 @@ import com.greenart.yogio.mypage.order.entity.MpPlusMenuChoiceEntity;
 @Repository
 public interface MpPlusMenuChoiceRepository extends JpaRepository<MpPlusMenuChoiceEntity, Long> {
   List<MpPlusMenuChoiceEntity> findByOrder(MpOrderInfoEntity order);
+
+  MpPlusMenuChoiceEntity findByPmcSeq(Long pmcSeq);
+
 }
