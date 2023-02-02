@@ -1,4 +1,4 @@
-package com.greenart.yogio.admin.entity;
+package com.greenart.yogio.storeInfo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +16,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "store_category")
-public class StoreCategoryEntity {
+@Table(name = "owner_notice_img")
+public class SiOwnerNotinceImgEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sc_seq")  private Long scSeq;
-    @Column(name = "sc_name") private String scName;
-    @Column(name = "sc_image") private String scImage;
-    @Column(name = "sc_file_name") private String scFileName;
+    @Column(name="oni_seq") private Long oniSeq;
+    @Column(name="oni_sdi_seq") private Long oniSdiSeq;
+    @Column(name="oni_img_path") private String oniImgPath;
+    @Column(name="oni_img_seq") private Integer oniImgSeq;
+    @Column(name="oni_file_name") private String oniFileName;
+
     
 }

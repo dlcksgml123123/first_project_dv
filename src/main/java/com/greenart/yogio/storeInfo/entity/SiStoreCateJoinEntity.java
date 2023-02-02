@@ -1,4 +1,4 @@
-package com.greenart.yogio.admin.entity;
+package com.greenart.yogio.storeInfo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,16 +12,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "store_category")
-public class StoreCategoryEntity {
+@Table(name = "store_cate_join")
+@Builder
+public class SiStoreCateJoinEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sc_seq")  private Long scSeq;
-    @Column(name = "sc_name") private String scName;
-    @Column(name = "sc_image") private String scImage;
-    @Column(name = "sc_file_name") private String scFileName;
+    @Column(name = "scs_seq") private Long scsSeq;
+    @Column(name = "scs_sc_seq") private Long scsScSeq;
+    @Column(name = "scs_si_seq") private Long scsSiSeq;
     
 }
