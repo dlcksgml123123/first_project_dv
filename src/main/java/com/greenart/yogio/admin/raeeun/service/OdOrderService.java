@@ -255,6 +255,7 @@ public class OdOrderService {
           // 저장된 메뉴 map에 저장
           map.put("status", true);
           map.put("message", "장바구니가 저장되었습니다.");
+          map.put("oiSeq", order.getOiSeq());
         }
         else if (data.getOiStatus() == 0 && !check) {
           map.put("status", false);
@@ -277,6 +278,7 @@ public class OdOrderService {
           // 저장된 메뉴 map에 저장
           map.put("status", true);
           map.put("message", "주문완료 정보가 저장되었습니다.");
+          map.put("oiSeq", order.getOiSeq());
         }
         // 나머지 경우 -> 즉, 배달까지 완료된 상태라면
         else {
@@ -293,6 +295,7 @@ public class OdOrderService {
           oRepo.save(order);
           map.put("status", true);
           map.put("message", "배달완료 정보가 저장되었습니다.");
+          map.put("oiSeq", order.getOiSeq());  
         }
       }
     return map;
@@ -310,22 +313,19 @@ public class OdOrderService {
       map.put("status", false);
       map.put("message", "옵션번호를 입력해주세요");
     }
-    else if (data.getPmcAmount() == null) {
-      map.put("status", false);
-      map.put("message", "옵션수량을 입력해주세요");
-    }
     else {
       MpOrderInfoEntity order = oRepo.findByOiSeq(data.getPmcOiSeq());
       // 선택한 옵션 번호로 옵션 메뉴의 정보를 저장
       MpPlusMenuEntity optionMenu = plustRepo.findByPmSeq(data.getPmcPmSeq());
       // 옵션 선택 테이블 새로 생성
       MpPlusMenuChoiceEntity option = MpPlusMenuChoiceEntity.builder().
-      plusMenu(optionMenu).pmcAmount(data.getPmcAmount()).order(order).build();
+      plusMenu(optionMenu).pmcAmount(1).order(order).build();
       // 옵션 선택 저장
       plusChoiceRepo.save(option);
       // 저장된 메뉴 map에 저장
       map.put("status", true);
       map.put("message", "옵션이 저장되었습니다.");
+      map.put("pmcSeq", option.getPmcSeq());
     }
     return map;
     }
