@@ -30,7 +30,7 @@ public class OwnerInfoEntity {
     @Column(name="owi_pwd")  @JsonIgnore private String owiPwd;
     @Column(name="owi_email") private String owiEmail;
     @Column(name="owi_phone") private String owiPhone;
-    @Column(name="owi_nickname") private String owiNickname;
+    @Column(name="owi_nickname") private String owiNickName;
     @Column(name="owi_si_seq") private Long owiSiSeq;
     @Column(name="owi_status") @ColumnDefault ("2") private Integer owiStatus;
     

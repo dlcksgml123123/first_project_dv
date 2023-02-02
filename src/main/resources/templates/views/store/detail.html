@@ -32,6 +32,10 @@
                     </tr>
                     <tr>
                         <td>가게 주소</td>
+                        <td colspan="2" style="width: 9cm;"><input style="width: 9cm;" type="text" name="sdiAdress" id="address_kakao" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>가게 상세주소</td>
                         <td colspan="2" style="width: 9cm;"><input style="width: 9cm;" type="text" name="sdiAdress" id="sdiAdress"></td>
                     </tr>
                     <tr>
@@ -89,6 +93,20 @@
                     </tr>
                 </tbody>
             </table>
+            <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+            <script>
+            window.onload = function(){
+            document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
+        //카카오 지도 발생
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                document.querySelector("input[name=sdiAdress]").focus(); //상세입력 포커싱
+            }
+        }).open();
+    });
+}
+</script>
         </form>
     </div>
 </body>

@@ -19,8 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name="store_info_plusmenu")
 public class SiStoreInfoPlusMenuEntity {
     @Id
-    @Column(name = "pm_seq") @JsonIgnore
-    private Long pmSeq;
+    @Column(name = "pm_seq") private Long pmSeq;
     @Column(name="mni_seq") private Long mniSeq;
     @Column(name="pc_name") private String pcName;
     @Column(name="pc_multi_choice") private Integer pcMultiChoice;
