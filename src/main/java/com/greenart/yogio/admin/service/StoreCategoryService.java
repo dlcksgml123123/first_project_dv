@@ -56,7 +56,7 @@ public class StoreCategoryService {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    StoreCategoryEntity entity = StoreCategoryEntity.builder().scName(data.getScName()).scImage(filename).build();
+    StoreCategoryEntity entity = StoreCategoryEntity.builder().scName(data.getScName()).scImage(filename).scFileName(saveFilename).build();
     storeCategoryRepository.save(entity);
 
     }

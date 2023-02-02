@@ -1,4 +1,4 @@
-package com.greenart.yogio.admin.entity;
+package com.greenart.yogio.storeInfo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "store_category")
-public class StoreCategoryEntity {
+public class SiStoreCategoryEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sc_seq")  private Long scSeq;
     @Column(name = "sc_name") private String scName;
