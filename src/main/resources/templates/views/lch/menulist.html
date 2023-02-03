@@ -22,7 +22,7 @@
                     <td th:text="${menulist.mniSeq}"></td>
                     <td th:text="${menulist.siSeq}"></td>
                     <td>
-                        <a th:href="@{/menuoption/menulist(mniSeq=${menulist.mniSeq}, page=${result.currentPage})}" th:text="${menulist.mniName}"></a>
+                        <a th:href="@{/menuoption/menulist(page=${0},mniSeq=${menulist.mniSeq})}" th:text="${menulist.mniName}"></a>
                     </td>
                     <td th:text="${menulist.mniPrice}"></td>
                     <td th:text="${menulist.mniDiscount}"></td>
