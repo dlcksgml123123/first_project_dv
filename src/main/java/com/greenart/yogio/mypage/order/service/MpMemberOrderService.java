@@ -2,6 +2,8 @@ package com.greenart.yogio.mypage.order.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,10 +67,11 @@ public class MpMemberOrderService {
       // 메뉴 옵션은 메뉴 주문 번호 별로 출력 해야함 
 
       // map을 저장할 수 있는 리스트 생성
-      List<Map<String,Object>> orderlist = new ArrayList<Map<String,Object>>();
-
+      List<Map<String, Object>> orderlist = new ArrayList<Map<String, Object>>();
+      
       // 멤버 변수를 통해 멤버가 주문한 메뉴 정보를 List에 저장
       List<MpMypageMenuChoiceEntity> mList = menuChoiceRepo.findByMiSeq(member.getMiSeq());
+      // mList.sort(Comparator.comparing(MpMypageMenuChoiceEntity::getDate).reversed());
       // 만약 주문한 메뉴 정보 리스트가 없다면, 주문내역이 없다는 메세지 출력
       if (mList.isEmpty()) {
         map2.put("status", false);
@@ -81,7 +84,6 @@ public class MpMemberOrderService {
           if (mList.get(m).getOiStatus() == 2) {
             // 주문번호를 통해 주문한 메뉴정보를 조회해서 meList에 다시 저장 (주문 번호 별로 엮여있음)
             List<MpMypageMenuChoiceEntity> meList = menuChoiceRepo.findByOiOrderNum(mList.get(m).getOiOrderNum());
-            
             // 임의의 변수를 지정
             int count = 0;
             // 반복문을 통해, 리스트 안에 저장된 값의 주문번호가 새로 저장될 값의 주문번호가 일치하는 경우가 있다면,
