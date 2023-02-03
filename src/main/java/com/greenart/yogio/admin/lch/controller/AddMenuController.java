@@ -61,7 +61,7 @@ public class AddMenuController {
     // 메뉴 리스트
     @GetMapping("/menulist")
     public String getMenuMenulist(Model model, @RequestParam @Nullable Long storeNum,
-    @PageableDefault(size=10, sort="mniSeq",direction = Sort.Direction.ASC) Pageable pageable
+    @PageableDefault(size=10, sort="mniSeq",direction = Sort.Direction.DESC) Pageable pageable
     ){
         model.addAttribute("result", addService.getMenuList(storeNum, pageable));
         model.addAttribute("storeNum", storeNum);
