@@ -20,11 +20,10 @@ import io.micrometer.common.lang.Nullable;
 public class MenuOptionController {
     @Autowired MenuOptionService meoptionservice;
     @GetMapping("/menulist")
-    public String getMenuInfo(Model model, @RequestParam @Nullable String keyword,
+    public String getMenuInfo(Model model, @RequestParam @Nullable Long mniSeq,
     @PageableDefault(size=10,sort = "mniSeq", direction = Sort.Direction.ASC) Pageable pageable){
-        if(keyword==null) keyword ="";
-        model.addAttribute("result", meoptionservice.AllList(keyword, pageable));
-        model.addAttribute("keyword",keyword);
+        model.addAttribute("result", meoptionservice.AllList(mniSeq, pageable));
+        model.addAttribute("mniSeq", mniSeq);
         return "/menuoption/list";
     }
 }
