@@ -11,4 +11,5 @@ import com.greenart.yogio.lchwork.entity.OiMenuInfoEntity;
 public interface OiMenuInfoRepository extends JpaRepository<OiMenuInfoEntity, Long>{
     public List<OiMenuInfoEntity> findByMniImg(String uri);
     public Integer countByMniName(String mniName);
+    public OiMenuInfoEntity findByMniName(String mniName);
 }   

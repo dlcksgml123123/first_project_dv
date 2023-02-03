@@ -43,6 +43,7 @@ public class AddMenuService {
     @Autowired StoreMenuService storeMenuService;
     @Autowired MenuListViewRepository menulistRepo;
     @Value("${file.image.menu}") String menu_img_path;
+    
 
     public Map < String, Object > addMenuInfo(MenuVO data, MultipartFile file) {
         Map < String, Object > map = new LinkedHashMap < String, Object > ();
@@ -70,47 +71,128 @@ public class AddMenuService {
             map.put("saveFilename", saveFilename);
         }
         OiMenuCategoryEntity mcEntity = mcRepo.findByMcNameAndMcSiSeq(data.getMc_name(), data.getMc_si_seq());
-        if (mcEntity == null) {
-            System.out.println("mcsiseq : "+data.getMc_si_seq());
-            OiStoreInfoEntity store = siRepo.findBySiSeq(data.getMc_si_seq());
-            if (store == null) {
-                map.put("status", false);
-                map.put("message", "등록된 가게가 없습니다.");
-            } 
-            else {
+        OiStoreInfoEntity store = siRepo.findBySiSeq(data.getMc_si_seq());
+        OiMenuInfoEntity menu = mniRepo.findByMniName(data.getMni_name());
+        if(store.getSiSeq() == null) {
+            map.put("status", false);
+            map.put("message", "등록된 가게가 없습니다.");
+        }
+        else {
+            if(mcEntity == null) {
                 mcEntity = new OiMenuCategoryEntity(
-                    null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
+                null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
                 );
                 mcRepo.save(mcEntity);
 
-                OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+                if(menu.getMniName() == null) {
+                    menu = new OiMenuInfoEntity(
                     null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
-                );
-                System.out.println(mniEntity);
-                mniRepo.save(mniEntity);
+                    );
+                    mniRepo.save(menu);
 
-                OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-                    null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-                );
-                mcjRepo.save(mcjEntity);
-                map.put("status", true);
-                map.put("message", "메뉴등록이 되었습니다.");
+                    OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                    null, mcEntity.getMcSeq(), menu.getMniSeq());
+                    mcjRepo.save(mcjEntity);
+                }
+                else {
+                    OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                    null, mcEntity.getMcSeq(), menu.getMniSeq());
+                    mcjRepo.save(mcjEntity);
+                }
+
             }
-        } else {
-            OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
-                null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
-            );
-            mniRepo.save(mniEntity);
-            OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
-                null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
-            );
-            mcjRepo.save(mcjEntity);
+            else {
+                if(menu.getMniName() == null) {
+                    menu = new OiMenuInfoEntity(
+                    null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+                    );
+                    mniRepo.save(menu);
+
+                    OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                    null, mcEntity.getMcSeq(), menu.getMniSeq());
+                    mcjRepo.save(mcjEntity);
+                }
+                else {
+                    OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+                    null, mcEntity.getMcSeq(), menu.getMniSeq());
+                    mcjRepo.save(mcjEntity);
+                }
+            }
             map.put("status", true);
             map.put("message", "메뉴등록이 되었습니다.");
-
-
-
         }
+        // if (mcEntity == null) {
+            
+        //     if (store.getSiSeq() == null) {
+        //         map.put("status", false);
+        //         map.put("message", "등록된 가게가 없습니다.");
+        //     } 
+        //     else {
+                
+                // mcEntity = new OiMenuCategoryEntity(
+                //     null, data.getMc_name(), data.getMc_explanation(), data.getMc_si_seq()
+                // );
+        //         mcRepo.save(mcEntity);
+
+        //         if(menu.getMniName() == null){
+        //         OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+        //             null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+        //         );
+        //         mniRepo.save(mniEntity);
+
+        //         OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+        //             null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+        //         );
+        //         mcjRepo.save(mcjEntity);
+
+        //         map.put("status", true);
+        //         map.put("message", "메뉴등록이 되었습니다.");
+        //         }
+        //         else {
+        //             OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+        //             null, mcEntity.getMcSeq(), menu.getMniSeq());
+        //             mcjRepo.save(mcjEntity);
+        //             map.put("status", true);
+        //             map.put("message", "메뉴등록이 되었습니다.");
+        //         }
+                
+        //     }
+        // } 
+        // else {
+        //     if(menu.getMniName() == null){
+        //         OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+        //             null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+        //         );
+        //         mniRepo.save(mniEntity);
+
+        //         OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+        //             null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+        //         );
+        //         mcjRepo.save(mcjEntity);
+
+        //         map.put("status", true);
+        //         map.put("message", "메뉴등록이 되었습니다.");
+        //         }
+        //         else {
+        //             OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+        //             null, mcEntity.getMcSeq(), menu.getMniSeq());
+        //             mcjRepo.save(mcjEntity);
+        //             map.put("status", true);
+        //             map.put("message", "메뉴등록이 되었습니다.");
+        //         }
+            // OiMenuInfoEntity mniEntity = new OiMenuInfoEntity(
+            //     null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
+            // );
+            // mniRepo.save(mniEntity);
+
+            // OiMenuCateJoinEntity mcjEntity = new OiMenuCateJoinEntity(
+            //     null, mcEntity.getMcSeq(), mniEntity.getMniSeq()
+            // );
+            // mcjRepo.save(mcjEntity);
+
+            // map.put("status", true);
+            // map.put("message", "메뉴등록이 되었습니다.");
+        // }
         return map;
     }
     // 메뉴 리스트 
