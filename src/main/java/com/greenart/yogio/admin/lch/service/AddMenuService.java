@@ -84,7 +84,7 @@ public class AddMenuService {
                 );
                 mcRepo.save(mcEntity);
 
-                if(menu.getMniName() == null) {
+                if(menu == null) {
                     menu = new OiMenuInfoEntity(
                     null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
                     );
@@ -102,7 +102,7 @@ public class AddMenuService {
 
             }
             else {
-                if(menu.getMniName() == null) {
+                if(menu == null) {
                     menu = new OiMenuInfoEntity(
                     null, data.getMni_img(), data.getMni_name(), data.getMni_discount(), data.getMni_price(), data.getMni_filename()
                     );
