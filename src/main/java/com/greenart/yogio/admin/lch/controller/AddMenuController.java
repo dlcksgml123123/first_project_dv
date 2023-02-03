@@ -71,7 +71,7 @@ public class AddMenuController {
     @GetMapping("/menudelete")
     public String getMenudelete(@RequestParam Long menu_no) {
         addService.deleteMenu(menu_no);
-        return "lch/menulist";
+        return "redirect:/menu/menulist";
     }
     // 디테일 메뉴
     @GetMapping("/menudetail")
