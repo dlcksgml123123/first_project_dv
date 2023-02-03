@@ -38,10 +38,10 @@
                     <tr>
                         <td>세스코인증</td>
                         <td colspan="2"> 
-                            <select name="type" id="type">
+                            <select name="siCleanInfo" id="siCleanInfo">
                                 <th:block th:if="${inputdata != null}">
-                                    <option value="0" th:selected="${inputdata.siCleanInfo ==1}">세스코매장</option>
-                                    <option value="1" th:selected="${inputdata.siCleanInfo ==99}">일반매장</option>
+                                    <option value="0" th:selected="${inputdata.siCleanInfo ==0}">세스코매장</option>
+                                    <option value="1" th:selected="${inputdata.siCleanInfo ==1}">일반매장</option>
                                 </th:block>
                                 <th:block th:if="${inputdata == null}">
                                     <option value="0">세스코매장</option>

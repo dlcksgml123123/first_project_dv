@@ -12,8 +12,7 @@
         <table border="1">
          <form action="/store/update" method="post" enctype="multipart/form-data">
              <tbody>
-                    
-                    <input type="text" name="siSeq" th:value="${store_detail.siSeq}" >
+                    <input type="text" name="siSeq" th:value="${store_detail.siSeq}" hidden >
                     <tr>
                         <td>가게이름</td>
                         <td>
@@ -52,6 +51,14 @@
                             </select>
                         </td>
                     </tr>
+                    <!-- <tr>
+                        <td>카테고리</td>
+                        <td colspan="2">       
+                        <select name="scName" id="scName">
+                            <option th:each="category : ${result.cateList}" th:value="${category.scName}" th:text="${category.scName}"></option>
+                        </select>
+                        </td>
+                    </tr> -->
                      <tr>
                         <td>배달거리</td>
                         <td colspan="2"><input type="number" name="diDistance"></td>
