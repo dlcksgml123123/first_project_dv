@@ -49,29 +49,29 @@ public class OiMemberController {
     //     session.invalidate();
     //     return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     // }
-    @GetMapping("/logout")
-    public HashMap<String, Object> memberLogout(HttpSession session) {
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        session.invalidate();
-        hashMap.put("message", "로그아웃 성공");
-        return hashMap;
-    }
+    // @GetMapping("/logout")
+    // public HashMap<String, Object> memberLogout(HttpSession session) {
+    //     HashMap<String, Object> hashMap = new HashMap<String, Object>();
+    //     session.invalidate();
+    //     hashMap.put("message", "로그아웃 성공");
+    //     return hashMap;
+    // }
 
-    @GetMapping("/phoneaddress1")
-    public Map<String, Object> memberInfo(HttpSession session) {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
-        MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
-        if(loginMember == null) {
-            map.put("status", false);
-            map.put("message", "로그인 후 이용 가능 서비스");
-        }
-        else {
-            OiLoginMemberVO memberDetail = new OiLoginMemberVO(loginMember);
-            map.put("status", true);
-            map.put("memberInfo", memberDetail);
-        }
-        return map;
-    }
+    // @GetMapping("/phoneaddress1")
+    // public Map<String, Object> memberInfo(HttpSession session) {
+    //     Map<String, Object> map = new LinkedHashMap<String, Object>();
+    //     MbMemberInfoEntity loginMember = (MbMemberInfoEntity)session.getAttribute("loginUser");
+    //     if(loginMember == null) {
+    //         map.put("status", false);
+    //         map.put("message", "로그인 후 이용 가능 서비스");
+    //     }
+    //     else {
+    //         OiLoginMemberVO memberDetail = new OiLoginMemberVO(loginMember);
+    //         map.put("status", true);
+    //         map.put("memberInfo", memberDetail);
+    //     }
+    //     return map;
+    // }
 
     @GetMapping("/phoneaddress")
     public Map<String, Object> phoneAddressInfo(/*HttpSession session*/Long miSeq) {

@@ -32,7 +32,7 @@ public class AddMenuController {
     public String getMenuAdd() {
         return "/lch/add";
     }
-    
+    // 메뉴 추가
     @PostMapping("/add")
     public String postMenuAdd(
     MenuVO data, @RequestPart @Nullable MultipartFile file, Model model 
@@ -53,7 +53,7 @@ public class AddMenuController {
             return "/lch/add";
         }
         else {
-            return "redirect:/";
+            return "/lch/add";
         }
 
     } 
