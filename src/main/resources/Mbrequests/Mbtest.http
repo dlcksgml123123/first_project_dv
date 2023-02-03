@@ -34,12 +34,12 @@ content-type: application/json
    "miId" : "user30"
 }
 ##################################################
-POST http://localhost:9244/member/searchPwd HTTP/1.1
+POST http://192.168.0.9:9244/member/searchPwd HTTP/1.1
 content-type: application/json
 
 {
-   "miId" : "user19",
-   "miPhone" : "01090029244"
+   "miId" : "user1",
+   "miPhone" : "01012345678"
 }
 #################################################
 POST http://localhost:9244/member/deleteMember HTTP/1.1
@@ -49,13 +49,13 @@ content-type: application/json
   "miPwd" : "92449244"
 }
 #################################################
-PUT http://192.168.0.9:9244/review/write?miSeq=4 HTTP/1.1
+PUT http://192.168.0.9:9244/review/write?miSeq=2 HTTP/1.1
 content-type: application/json
 
 {
 "score" : 5, 
 "content" : "적당해요", 
-"oiSeq" : 6, 
+"oiSeq" : "7GTCHSzMiT", 
 "tasteScore" : 5, 
 "quantityScore" : 5, 
 "deliveryScore" : 5

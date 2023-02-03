@@ -30,7 +30,7 @@ public class MbReviewService {
     public Map<String, Object> addReview(MbReviewVO data , Long miSeq) { //리뷰쓰기
      Map<String ,Object> resultMap = new LinkedHashMap<String, Object>();
     //  MbMemberInfoEntity loginUser = (MbMemberInfoEntity)session.getAttribute("loginUser");
-     MbOrderInfoEntity order = o_repo.findByOiSeq(data.getOiSeq());
+     MbOrderInfoEntity order = o_repo.findTop1ByOiOrderNumContains(data.getOiSeq());
      MbMemberInfoEntity User = m_repo.findByMiSeq(miSeq);
      
      if(User == null) {
@@ -62,7 +62,7 @@ public class MbReviewService {
     //     return resultMap;
     //  }
      
-     if(r_repo.countByReOiSeq(data.getOiSeq())>=1) {
+     if(r_repo.countByReOiSeq(order.getOiSeq())>=1) {
         resultMap.put("status", false);
         resultMap.put("message", "이미 리뷰가 등록되었습니다");
         resultMap.put("code",HttpStatus.BAD_REQUEST);
@@ -78,7 +78,7 @@ public class MbReviewService {
         .reRegDt(new Date())
         .reScore(data.getScore())
         .reContent(data.getContent())
-        .reOiSeq(data.getOiSeq())
+        .reOiSeq(order.getOiSeq())
         .reTasteScore(data.getTasteScore())
         .reQuantityScore(data.getQuantityScore())
         .reDeliveryScore(data.getDeliveryScore())

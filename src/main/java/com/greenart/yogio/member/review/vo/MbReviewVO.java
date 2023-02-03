@@ -14,7 +14,7 @@ public class MbReviewVO {
   private Date regDt;         //regDt;
   private Integer   score;         //reScore;
   private String    content;       //reContent;
-  private Long      oiSeq;         //reOiSeq;
+  private String      oiSeq;         //reOiSeq;
   private Integer   tasteScore;    //reTasteScore;
   private Integer   quantityScore; //reQuantityScore;
   private Integer   deliveryScore; //reDeliveryScore;
@@ -24,7 +24,6 @@ public class MbReviewVO {
     this.regDt = new Date();
     this.score = rentity.getReScore();
     this.content = rentity.getReContent();
-    this.oiSeq = rentity.getReOiSeq();
     this.tasteScore = rentity.getReTasteScore();
     this.quantityScore = rentity.getReQuantityScore();
     this.deliveryScore = rentity.getReDeliveryScore();
